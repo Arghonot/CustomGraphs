@@ -119,7 +119,7 @@ MonoBehaviour:
   m_Name: Go To Position
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: 40, y: -296}
+  position: {x: 40, y: -264}
   ports:
     keys:
     - inPort
@@ -193,6 +193,8 @@ MonoBehaviour:
   outPort: 0
   AreaToUse: wanderArea
   RandomPositionName: wanderposition
+  UseNavmesh: 1
+  WalkRadius: -10
 --- !u!114 &114537642041275438
 MonoBehaviour:
   m_ObjectHideFlags: 0

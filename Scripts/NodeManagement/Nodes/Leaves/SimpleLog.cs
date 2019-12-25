@@ -17,6 +17,11 @@ namespace BT.Leaves
         public override BTState Run()
         {
             Debug.Log(StringToLog);
+
+            if (AIcontext.Get<bool>("ShallDebug"))
+            {
+            }
+
             return StateToReturn;
         }
     }

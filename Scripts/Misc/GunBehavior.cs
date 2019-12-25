@@ -32,8 +32,6 @@ public class GunBehavior : MonoBehaviour
         if (TimeSinceLastShoot < LoadingTime)
             return false;
 
-        print("SHOOOOOOOT");
-
         TimeSinceLastShoot = 0f;
 
         var bullet = Instantiate(Bullet);

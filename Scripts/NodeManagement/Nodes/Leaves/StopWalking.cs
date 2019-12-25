@@ -15,6 +15,7 @@ namespace BT.Leaves
             if (agent == null)
             {
                 Debug.Log("Couldn't find any agent");
+                return BTState.Failure;
             }
 
             agent.isStopped = true;

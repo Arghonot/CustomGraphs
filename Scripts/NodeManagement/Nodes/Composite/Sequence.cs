@@ -8,8 +8,15 @@ namespace BT.Composite
 {
     public class Sequence : BTNode
     {
+        public string DebugName;
+
         public override BTState Run()
         {
+            if (AIcontext.Get<bool>("ShallDebug"))
+            {
+                Debug.Log("SEQUENCE " + DebugName);
+            }
+
             NodePort inport = GetPort("inPort");
 
             List<NodePort> connections = inport.GetConnections();
@@ -21,6 +28,12 @@ namespace BT.Composite
                 if (res != null)
                 {
                     BTState result = (BTState)res;
+
+                    if (AIcontext.Get<bool>("ShallDebug"))
+                    {
+                        Debug.Log(DebugName + " Got : " + result);
+                    }
+
                     if (result == BTState.Failure)
                     {
                         return BTState.Failure;

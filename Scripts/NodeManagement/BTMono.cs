@@ -41,7 +41,7 @@ public class BTMono : MonoBehaviour
 
     }
 
-    // UNCOMMENT THIS IF YOU'RE USING AN ANIMATOR CONTROLLER
+    //UNCOMMENT THIS IF YOU'RE USING AN ANIMATOR CONTROLLER
     // YOU'LL NEED TO USE two variables (VelX AND VelY)
     //private void Update()
     //{

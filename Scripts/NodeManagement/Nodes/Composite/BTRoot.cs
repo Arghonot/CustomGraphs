@@ -13,6 +13,11 @@ namespace BT.Composite
     {
         public override BTState Run()
         {
+            if (AIcontext.Get<bool>("ShallDebug"))
+            {
+                Debug.Log("+-----------------------------+");
+            }
+
             return GetInputValue("inPort", BTState.Success);
         }
     }

@@ -25,6 +25,8 @@ public class BTExecutor : MonoBehaviour
         {
             Contexts.Add(context);
         }
+
+        print(context.Get<Team>("selfTeam"));
     }
 
     void Start()
@@ -40,7 +42,10 @@ public class BTExecutor : MonoBehaviour
         {
             foreach (var context in Contexts)
             {
-                graph.Run(context);
+                if (context.Get<bool>("Alive"))
+                {
+                    graph.Run(context);
+                }
             }
 
             yield return new WaitForEndOfFrame();

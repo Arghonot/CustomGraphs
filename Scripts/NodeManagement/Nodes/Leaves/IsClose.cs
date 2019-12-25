@@ -24,6 +24,11 @@ namespace BT.Leaves
 
             distance = Vector3.Distance(objA.position, objB.position);
 
+            if (AIcontext.Get<bool>("ShallDebug"))
+            {
+                Debug.Log("IsClose [distance]" + distance);
+            }
+
             if (distance > AIcontext.Get<float>(DistanceSource))
             {
                 return BTState.Failure;
