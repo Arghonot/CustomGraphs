@@ -44,10 +44,9 @@ namespace BT.Leaves
                 return BTState.Failure;
             }
 
-            if (navagent.pathStatus == NavMeshPathStatus.PathPartial &&
+            if (navagent.pathStatus == NavMeshPathStatus.PathPartial ||
                 dist < 3f)
             {
-                Debug.Log("PENDING");
                 return BTState.Failure;
             }
 
