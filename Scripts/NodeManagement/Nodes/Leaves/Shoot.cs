@@ -9,7 +9,7 @@ namespace BT.Leaves
     {
         public override BTState Run()
         {
-            return AIcontext.Get<GunBehavior>("Gun").Shoot() ?
+            return AIcontext.Get<Gun>("Gun").Shoot() ?
                 BTState.Success :
                 BTState.Failure;
         }
