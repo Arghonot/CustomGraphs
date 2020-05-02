@@ -4,11 +4,6 @@ using UnityEngine;
 [BlackboardType("String")]
 public class Blackboard_String : Variable
 {
-    public static string    TypeName()
-    {
-        return "welsh";
-    }
-
     public override void DrawUI()
     {
         throw new System.NotImplementedException();
@@ -16,7 +11,7 @@ public class Blackboard_String : Variable
 
     public override string GetDefaultName()
     {
-        return "StringVariable";
+        return "DefaultString";
     }
 
     public override object GetDefaultValue()
@@ -41,29 +36,23 @@ public class Blackboard_Bool : Variable
 
     public override string GetDefaultName()
     {
-        throw new System.NotImplementedException();
+        return "DefaultBool";
     }
 
     public override object GetDefaultValue()
     {
-        throw new System.NotImplementedException();
+        return (object)false;
     }
 
     public override Type GetValueType()
     {
-        throw new NotImplementedException();
+        return typeof(bool);
     }
 }
 
 [BlackboardType("Int")]
 public class Blackboard_Int : Variable
 {
-    public Blackboard_Int()
-    {
-        Debug.Log("Blackboard_Int");
-        Debug.Log(Name + "  " + (int)Value);
-    }
-
     public override void DrawUI()
     {
         throw new System.NotImplementedException();
@@ -72,7 +61,7 @@ public class Blackboard_Int : Variable
     // TODO is public necessary ?
     public override string GetDefaultName()
     {
-        return "IntVariable";
+        return "DefaultInt";
     }
 
     // TODO is public necessary ?
@@ -96,8 +85,6 @@ public abstract partial class Variable
     {
         Name = GetDefaultName();
         Value = GetDefaultValue();
-
-        Debug.Log("Variable");
     }
 
     public abstract void DrawUI();
