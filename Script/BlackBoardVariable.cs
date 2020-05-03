@@ -11,11 +11,11 @@ namespace BT
         #region PORTS
 
         [Output]
-        public int IntOutput;
+        public int _int;
         [Output]
-        public bool BoolOutput;
+        public bool _bool;
         [Output]
-        public string StringOutput;
+        public string _string;
 
         #endregion
 

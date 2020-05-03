@@ -23,7 +23,7 @@ namespace BT
 
         // TODO iterate through all the sub graphs and compile their blackboard with this current graph.
         // Also handle subgraph's subgraph -> call CompileAllBlackboard always
-        Dictionary<string, BlackBoardGraphElement>   CompileAllBlackboard()
+        Dictionary<string, Variable>   CompileAllBlackboard()
         {
             //Dictionary<string, BlackboardElement> elems =
             //    new Dictionary<string, BlackboardElement>();

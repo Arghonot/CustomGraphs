@@ -39,6 +39,7 @@ namespace BTEditor
             // Iterate through serialized properties and draw them like the Inspector (But with ports)
             SerializedProperty iterator = serializedObject.GetIterator();
             bool enterChildren = true;
+
             while (iterator.NextVisible(enterChildren))
             {
                 enterChildren = false;
@@ -49,7 +50,7 @@ namespace BTEditor
                 {
                     // with the type corresponding to the variable
                     if (iterator.name.Contains(
-                        variable.Blackboard.GetTypeFromGUID(variable.uid).ToString()))
+                        variable.Blackboard.GetTypeFromGUID(variable.uid)))
                     {
                         NodeEditorGUILayout.PropertyField(iterator, true);
                     }

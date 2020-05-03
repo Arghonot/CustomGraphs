@@ -7,73 +7,73 @@ using System;
 namespace BT
 {
 
-    public enum BlackBoardType
-    {
-        Int,
-        Bool,
-        String,
-        GameObject
-    }
+    //public enum BlackBoardType
+    //{
+    //    Int,
+    //    Bool,
+    //    String,
+    //    GameObject
+    //}
 
-    // TODO move it to another file
-    public class BlackboardElement
-    {
-        public string ValueName;
-        public BT.BlackBoardType ValueType;
-        public object value;
-    }
+    //// TODO move it to another file
+    //public class BlackboardElement
+    //{
+    //    public string ValueName;
+    //    public BT.BlackBoardType ValueType;
+    //    public object value;
+    //}
 
-    /// <summary>
-    /// This class is supposed to be used ONLY in Xnode, it contains additional datas
-    /// that aren't needed in unity's inspector or ingame.
-    /// </summary>
-    public class BlackBoardGraphElement : BlackboardElement
-    {
-        private int selectedType;
-        public int SelectedType
-        {
-            get { return selectedType; }
-            set
-            {
-                ValueType = (BT.BlackBoardType)value;
-                this.value = DefaultGenerator.CreateDefaultValue(ValueType);
-                selectedType = value;
-            }
-        }
-    }
+    ///// <summary>
+    ///// This class is supposed to be used ONLY in Xnode, it contains additional datas
+    ///// that aren't needed in unity's inspector or ingame.
+    ///// </summary>
+    //public class BlackBoardGraphElement : BlackboardElement
+    //{
+    //    private int selectedType;
+    //    public int SelectedType
+    //    {
+    //        get { return selectedType; }
+    //        set
+    //        {
+    //            ValueType = (BT.BlackBoardType)value;
+    //            this.value = DefaultGenerator.CreateDefaultValue(ValueType);
+    //            selectedType = value;
+    //        }
+    //    }
+    //}
 
-    public static class DefaultGenerator
-    {
-        public static object CreateDefaultValue(BT.BlackBoardType type)
-        {
-            switch (type)
-            {
-                case BT.BlackBoardType.Int:
-                    return (object)0;
-                case BT.BlackBoardType.Bool:
-                    return (object)true;
-                case BT.BlackBoardType.String:
-                    return (object)"DefaultString";
-                default:
-                    return (object)0;
-            }
-        }
+    //public static class DefaultGenerator
+    //{
+    //    public static object CreateDefaultValue(BT.BlackBoardType type)
+    //    {
+    //        switch (type)
+    //        {
+    //            case BT.BlackBoardType.Int:
+    //                return (object)0;
+    //            case BT.BlackBoardType.Bool:
+    //                return (object)true;
+    //            case BT.BlackBoardType.String:
+    //                return (object)"DefaultString";
+    //            default:
+    //                return (object)0;
+    //        }
+    //    }
 
-        public static string CreateDefaultName(BT.BlackBoardType type)
-        {
-            switch (type)
-            {
-                case BT.BlackBoardType.Int:
-                    return "Int";
-                case BT.BlackBoardType.Bool:
-                    return "Bool";
-                case BT.BlackBoardType.String:
-                    return "String";
-                default:
-                    return "UnknownDefault";
-            }
-        }
-    }
+    //    public static string CreateDefaultName(BT.BlackBoardType type)
+    //    {
+    //        switch (type)
+    //        {
+    //            case BT.BlackBoardType.Int:
+    //                return "Int";
+    //            case BT.BlackBoardType.Bool:
+    //                return "Bool";
+    //            case BT.BlackBoardType.String:
+    //                return "String";
+    //            default:
+    //                return "UnknownDefault";
+    //        }
+    //    }
+    //}
 
     [CreateNodeMenu("MYBT/Blackboard")]
     public class Blackboard : Node
@@ -87,7 +87,7 @@ namespace BT
         /// <summary>
         /// GUID - variables data
         /// </summary>
-        public Dictionary<string, BlackBoardGraphElement> container;
+        public Dictionary<string, Variable> container;
 
         /// <summary>
         /// GUID current name
@@ -96,78 +96,78 @@ namespace BT
 
         private void Awake()
         {
-            container = new Dictionary<string, BlackBoardGraphElement>();
+            container = new Dictionary<string, Variable>();
         }
 
         // TODO make a string[] of the possible variables, so it's not recalculated every frames
         public string[] GetVariableNames()
         {
-            return container.Select(x => x.Value.ValueName).ToArray();
+            return container.Select(x => x.Value.Name).ToArray();
         }
 
-        public bool AddVariable(string guid, BlackBoardType type)
+        public bool AddVariable(string guid, string type)
         {
             if (container.ContainsKey(name))
             {
                 return false;
             }
 
-            container.Add(guid, GetBlackBoardElement(type));
+            container.Add(guid, Variable.CreateType(type)); //GetBlackBoardElement(type));
 
             return true;
         }
 
-        BlackBoardGraphElement GetBlackBoardElement(BlackBoardType type)
-        {
-            return new BlackBoardGraphElement() {
-                ValueName = DefaultGenerator.CreateDefaultName(type),
-                ValueType = BT.BlackBoardType.Int,
-                value = DefaultGenerator.CreateDefaultValue(type),
-                SelectedType = (int)type
-                };
-        }
+        //BlackBoardGraphElement GetBlackBoardElement(BlackBoardType type)
+        //{
+        //    return new BlackBoardGraphElement() {
+        //        ValueName = DefaultGenerator.CreateDefaultName(type),
+        //        ValueType = BT.BlackBoardType.Int,
+        //        value = DefaultGenerator.CreateDefaultValue(type),
+        //        SelectedType = (int)type
+        //        };
+        //}
 
-        public bool AddVariable(string guid, int index)
-        {
-            BlackBoardType type = GetTypeFromIndex(index);
+        //public bool AddVariable(string guid, string index)
+        //{
+        //    //BlackBoardType type = GetTypeFromIndex(index);
 
-            return AddVariable(guid, type);
-        }
+        //    return AddVariable(guid, type);
+        //}
 
         // TODO remove this one
-        public BlackBoardType GetTypeFromName(string name)
-        {
-            if (!container.ContainsKey(name))
-            {
-                return BlackBoardType.Int;
-            }
+        //public BlackBoardType GetTypeFromName(string name)
+        //{
+        //    if (!container.ContainsKey(name))
+        //    {
+        //        return BlackBoardType.Int;
+        //    }
 
-            return container[name].ValueType;
-        }
+        //    return container[name].get;
+        //}
 
-        public BlackBoardType   GetTypeFromIndex(int index)
-        {
-            if (index > (int)Enum.GetValues(typeof(BlackBoardType)).Cast<BlackBoardType>().Max())
-            {
-                return Enum.GetValues(typeof(BlackBoardType)).Cast<BlackBoardType>().Max();
-            }
+        //public BlackBoardType   GetTypeFromIndex(int index)
+        //{
+        //    if (index > (int)Enum.GetValues(typeof(BlackBoardType)).Cast<BlackBoardType>().Max())
+        //    {
+        //        return Enum.GetValues(typeof(BlackBoardType)).Cast<BlackBoardType>().Max();
+        //    }
 
-            if (index == 0)
-            {
-                return BlackBoardType.Int;
-            }
+        //    if (index == 0)
+        //    {
+        //        return BlackBoardType.Int;
+        //    }
 
-            return (BT.BlackBoardType)index;
-        }
+        //    return (BT.BlackBoardType)index;
+        //}
 
-        public BlackBoardType GetTypeFromGUID(string guid)
+        public string GetTypeFromGUID(string guid)
         {
             if (!container.ContainsKey(guid))
             {
-                return BlackBoardType.Int;
+                return "int";
             }
 
-            return container[guid].ValueType;
+            return Variable.GetType(container[guid].GetValueType());
         }
 
         public string GetName(string guid)
@@ -177,7 +177,7 @@ namespace BT
                 return null;
             }
 
-            return container[guid].ValueName;
+            return container[guid].Name;
         }
     }
 }

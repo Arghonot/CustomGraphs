@@ -10,7 +10,7 @@ public class GraphRunner : MonoBehaviour
     /// Organized as follow : GUID - Value's datas
     /// </summary>
     // TODO directly referencing blackboardelement ? shall we use the BT namespace here directly ?
-    public Dictionary<string, BT.BlackboardElement> values = null;
+    public Dictionary<string, Variable> values = null;
 
     public void BuildValueDictionnary()
     {
@@ -26,12 +26,16 @@ public class GraphRunner : MonoBehaviour
         }
         else
         {
-            values = new Dictionary<string, BT.BlackboardElement>();
+            values = new Dictionary<string, Variable>();
         }
 
-        foreach (var item in graph.blackboard.container)
-        {
-            values.Add(item.Key, (BT.BlackboardElement)item.Value);
-        }
+        // TODO might be buggy
+        // Change this because it'll not work for multiple entities use
+        values = graph.blackboard.container;
+
+        //foreach (var item in graph.blackboard.container)
+        //{
+        //    values.Add(item.Key, (BT.BlackboardElement)item.Value);
+        //}
     }
 }

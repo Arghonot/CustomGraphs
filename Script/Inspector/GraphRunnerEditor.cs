@@ -60,36 +60,38 @@ public class GraphRunnerEditor : Editor
         }
     }
 
-    void DrawLine(BT.BlackboardElement elem)
+    void DrawLine(Variable elem)
     {
         GUILayout.BeginHorizontal("line");
 
-        EditorGUILayout.LabelField(elem.ValueName);
+        elem.DrawInspectorGUI();
 
-        switch (elem.ValueType)
-        {
-            case BT.BlackBoardType.Int:
-                Debug.Log((int)elem.value);
+        //EditorGUILayout.LabelField(elem.ValueName);
 
-                elem.value = EditorGUILayout.IntField((int)elem.value);
-                Debug.Log((int)elem.value);
+        //switch (elem.ValueType)
+        //{
+        //    case BT.BlackBoardType.Int:
+        //        Debug.Log((int)elem.value);
 
-                break;
-            case BT.BlackBoardType.Bool:
-                Debug.Log("Bool");
+        //        elem.value = EditorGUILayout.IntField((int)elem.value);
+        //        Debug.Log((int)elem.value);
 
-                elem.value = (object)EditorGUILayout.Toggle((bool)elem.value);
+        //        break;
+        //    case BT.BlackBoardType.Bool:
+        //        Debug.Log("Bool");
 
-                break;
-            case BT.BlackBoardType.String:
-                Debug.Log("String");
+        //        elem.value = (object)EditorGUILayout.Toggle((bool)elem.value);
 
-                elem.value = (object)EditorGUILayout.TextField((string)elem.value);
+        //        break;
+        //    case BT.BlackBoardType.String:
+        //        Debug.Log("String");
 
-                break;
-            default:
-                break;
-        }
+        //        elem.value = (object)EditorGUILayout.TextField((string)elem.value);
+
+        //        break;
+        //    default:
+        //        break;
+        //}
 
         GUILayout.EndHorizontal();
     }
