@@ -9,12 +9,8 @@ namespace BTEditor
     public class BlackBoardEditor : XNodeEditor.NodeEditor
     {
         int Selected = 0;
-        // TODO get this array from the DefaultGenerator so everything
-        // that needs to be changed is there 
         public string[] options = Variable.GetTypes();
         string UIDToDelete = string.Empty;
-
-        // = new string[] { "Int", "Bool", "String" };
 
         public override int GetWidth()
         {
@@ -69,12 +65,7 @@ namespace BTEditor
                 elem.Value.Name,
                 GUILayout.Width(blackboard.TextWidth));
 
-            // Display type and allow change
-            //elem.Value.SelectedType = EditorGUILayout.Popup(
-            //    elem.Value.SelectedType,
-            //    options,
-            //    GUILayout.Width(blackboard.TypeWidth));
-
+            // Display type
             EditorGUILayout.LabelField(
                 elem.Value.TypeName,
                 GUILayout.Width(blackboard.TypeWidth));

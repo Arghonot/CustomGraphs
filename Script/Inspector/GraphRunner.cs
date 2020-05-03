@@ -29,13 +29,7 @@ public class GraphRunner : MonoBehaviour
             values = new Dictionary<string, Variable>();
         }
 
-        // TODO might be buggy
-        // Change this because it'll not work for multiple entities use
+        // TODO Change this because it'll not work for multiple entities use
         values = graph.blackboard.container;
-
-        //foreach (var item in graph.blackboard.container)
-        //{
-        //    values.Add(item.Key, (BT.BlackboardElement)item.Value);
-        //}
     }
 }

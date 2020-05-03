@@ -66,33 +66,6 @@ public class GraphRunnerEditor : Editor
 
         elem.DrawInspectorGUI();
 
-        //EditorGUILayout.LabelField(elem.ValueName);
-
-        //switch (elem.ValueType)
-        //{
-        //    case BT.BlackBoardType.Int:
-        //        Debug.Log((int)elem.value);
-
-        //        elem.value = EditorGUILayout.IntField((int)elem.value);
-        //        Debug.Log((int)elem.value);
-
-        //        break;
-        //    case BT.BlackBoardType.Bool:
-        //        Debug.Log("Bool");
-
-        //        elem.value = (object)EditorGUILayout.Toggle((bool)elem.value);
-
-        //        break;
-        //    case BT.BlackBoardType.String:
-        //        Debug.Log("String");
-
-        //        elem.value = (object)EditorGUILayout.TextField((string)elem.value);
-
-        //        break;
-        //    default:
-        //        break;
-        //}
-
         GUILayout.EndHorizontal();
     }
 }

@@ -25,12 +25,7 @@ namespace BT
         // Also handle subgraph's subgraph -> call CompileAllBlackboard always
         Dictionary<string, Variable>   CompileAllBlackboard()
         {
-            //Dictionary<string, BlackboardElement> elems =
-            //    new Dictionary<string, BlackboardElement>();
-
             return blackboard.container;
-
-            //return elems;
         }
     }
 }
