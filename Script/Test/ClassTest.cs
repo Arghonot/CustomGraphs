@@ -112,6 +112,17 @@ public abstract partial class Variable
 
     #region Implemented
 
+    public static Variable CreateCopy(Variable original)
+    {
+        Variable copy = CreateType(original.TypeName);
+
+        copy.Name = original.Name;
+        copy.Value = original.Value;
+        copy.TypeName = original.TypeName;
+
+        return copy;
+    }
+
     /// <summary>
     /// Create an instance from a type's name.
     /// </summary>

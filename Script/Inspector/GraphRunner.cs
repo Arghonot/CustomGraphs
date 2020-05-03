@@ -14,6 +14,7 @@ public class GraphRunner : MonoBehaviour
 
     public void BuildValueDictionnary()
     {
+        print("BUILDING");
         // if un initialized we don't want to do anything
         if (graph.blackboard == null)
         {
@@ -29,7 +30,10 @@ public class GraphRunner : MonoBehaviour
             values = new Dictionary<string, Variable>();
         }
 
-        // TODO Change this because it'll not work for multiple entities use
-        values = graph.blackboard.container;
+        foreach (var item in graph.blackboard.container)
+        {
+            values.Add(item.Key, Variable.CreateCopy(item.Value));
+        }
+        //values = new Dictionary<string, Variable>(graph.blackboard.container);
     }
 }
