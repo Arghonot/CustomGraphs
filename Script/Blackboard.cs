@@ -5,7 +5,6 @@ using System;
 
 namespace BT
 {
-    [CreateNodeMenu("MYBT/Blackboard")]
     [NodeTint(6, 24, 56)]
     public class Blackboard : Node
     {
@@ -25,7 +24,6 @@ namespace BT
             container = new Dictionary<string, Variable>();
         }
 
-        // TODO make a string[] of the possible variables, so it's not recalculated every frames
         public string[] GetVariableNames()
         {
             return container.Select(x => x.Value.Name).ToArray();
@@ -68,7 +66,6 @@ namespace BT
             return container[guid].Name;
         }
 
-        // TODO use a premade array instead -> avoid recalculation every frames
         public string[] GetGUIDS()
         {
             int index = 0;
@@ -82,7 +79,6 @@ namespace BT
             return guids;
         }
 
-        // TODO ""
         public string[] GetVariableNames(string[] uids)
         {
             string[] names = new string[uids.Count()];
@@ -97,9 +93,6 @@ namespace BT
                 {
                     names[i] = "UNKNOWN";
                 }
-                //container.ContainsKey(uids[i]) ? 
-                //names[i] = container[uids[i]].Name : 
-                //names[i] = "UNKNOWN";
             }
 
             return names;
