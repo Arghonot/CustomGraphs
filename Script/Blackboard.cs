@@ -1,12 +1,12 @@
 ﻿using System.Linq;
 using System.Collections.Generic;
-using UnityEngine;
 using XNode;
 using System;
 
 namespace BT
 {
     [CreateNodeMenu("MYBT/Blackboard")]
+    [NodeTint(6, 24, 56)]
     public class Blackboard : Node
     {
         public int TextWidth = 130;

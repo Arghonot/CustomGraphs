@@ -1,7 +1,4 @@
-﻿using System.Linq;
-using System.Collections.Generic;
-using UnityEngine;
-using BT;
+﻿using BT;
 using UnityEditor;
 using XNodeEditor;
 
@@ -30,35 +27,6 @@ namespace BTEditor
 
         void DisplayPorts(BlackBoardVariable variable)
         {
-            //if (variable == null ||
-            //    variable.Name == null ||
-            //    variable.Name == string.Empty)
-            //{
-            //    return;
-            //}
-
-            //string[] excludes = { "m_Script", "graph", "position", "ports" };
-
-            //// Iterate through serialized properties and draw them like the Inspector (But with ports)
-            //SerializedProperty iterator = serializedObject.GetIterator();
-            //bool enterChildren = true;
-
-            //while (iterator.NextVisible(enterChildren))
-            //{
-            //    enterChildren = false;
-            //    if (excludes.Contains(iterator.name)) continue;
-
-            //    NodeEditorGUILayout.PropertyField(iterator, true);
-
-            //    Debug.Log(iterator.name);
-
-            //    // Only draw if it is an ouput
-            //    //if (iterator.name.Contains("value"))
-            //    //{
-            //    //    NodeEditorGUILayout.PropertyField(iterator, true);
-            //    //}
-            //}
-
             // Iterate through dynamic ports and draw them in the order in which they are serialized
             foreach (XNode.NodePort dynamicPort in target.DynamicPorts)
             {

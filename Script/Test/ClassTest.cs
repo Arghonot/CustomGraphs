@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using UnityEditor;
-using UnityEngine;
-using XNodeEditor;
 
 [BlackboardType("string")]
 public class Blackboard_String : Variable
