@@ -23,61 +23,67 @@ namespace BTEditor
 
             DisplayPorts(variable);
             DisplayNameSelection(variable);
+
+            serializedObject.ApplyModifiedProperties();
+
         }
 
         void DisplayPorts(BlackBoardVariable variable)
         {
-            if (variable == null ||
-                variable.Name == null ||
-                variable.Name == string.Empty)
+            //if (variable == null ||
+            //    variable.Name == null ||
+            //    variable.Name == string.Empty)
+            //{
+            //    return;
+            //}
+
+            //string[] excludes = { "m_Script", "graph", "position", "ports" };
+
+            //// Iterate through serialized properties and draw them like the Inspector (But with ports)
+            //SerializedProperty iterator = serializedObject.GetIterator();
+            //bool enterChildren = true;
+
+            //while (iterator.NextVisible(enterChildren))
+            //{
+            //    enterChildren = false;
+            //    if (excludes.Contains(iterator.name)) continue;
+
+            //    NodeEditorGUILayout.PropertyField(iterator, true);
+
+            //    Debug.Log(iterator.name);
+
+            //    // Only draw if it is an ouput
+            //    //if (iterator.name.Contains("value"))
+            //    //{
+            //    //    NodeEditorGUILayout.PropertyField(iterator, true);
+            //    //}
+            //}
+
+            // Iterate through dynamic ports and draw them in the order in which they are serialized
+            foreach (XNode.NodePort dynamicPort in target.DynamicPorts)
             {
-                return;
-            }
-
-            string[] excludes = { "m_Script", "graph", "position", "ports" };
-
-            // Iterate through serialized properties and draw them like the Inspector (But with ports)
-            SerializedProperty iterator = serializedObject.GetIterator();
-            bool enterChildren = true;
-
-            while (iterator.NextVisible(enterChildren))
-            {
-                enterChildren = false;
-                if (excludes.Contains(iterator.name)) continue;
-
-                // Only draw if it is an ouput
-                if (iterator.name.Contains("Output"))
-                {
-                    // with the type corresponding to the variable
-                    if (iterator.name.Contains(
-                        variable.Blackboard.GetTypeFromGUID(variable.uid)))
-                    {
-                        NodeEditorGUILayout.PropertyField(iterator, true);
-                    }
-                }
+                if (NodeEditorGUILayout.IsDynamicPortListPort(dynamicPort)) continue;
+                NodeEditorGUILayout.PortField(dynamicPort);
             }
         }
 
-        void DisplayNameSelection(BlackBoardVariable variable)
+        void DisplayNameSelection(BlackBoardVariable variablenode)
         {
-            string[] GUIDs = variable.GetGUIDs();
-            string[] names = variable.GetNames(GUIDs);
+            string[] GUIDs = variablenode.Blackboard.GetGUIDS();
+            string[] names = variablenode.Blackboard.GetVariableNames(GUIDs);
 
             int prevSelected = selected;
-            selected = EditorGUILayout.Popup(selected, variable.GetPossibleVariables());
+            selected = EditorGUILayout.Popup(selected, variablenode.GetPossibleVariables());
 
-            if (variable.GetPossibleVariables().Length > 0)
+            if (variablenode.GetPossibleVariables().Length > 0)
             {
                 if (prevSelected != selected)
                 {
-                    variable.Name = names[selected];//variable.GetPossibleVariables()[selected];
-                    variable.uid = GUIDs[selected];
+                    variablenode.SetVariable(names[selected], GUIDs[selected]);
                 }
-                else if (variable.Name == null)
+                else if (variablenode.Name == null)
                 {
-                    variable.Name = names[0];//variable.GetPossibleVariables()[selected];
-                    variable.uid = GUIDs[0];
-                    //variable.Name = variable.GetPossibleVariables()[0];
+                    variablenode.SetVariable(names[0], GUIDs[0]);
                 }
             }
         }

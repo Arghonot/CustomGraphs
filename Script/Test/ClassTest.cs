@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using UnityEditor;
 using UnityEngine;
+using XNodeEditor;
 
 [BlackboardType("string")]
 public class Blackboard_String : Variable
@@ -79,13 +80,11 @@ public class Blackboard_Int : Variable
         throw new NotImplementedException();
     }
 
-    // TODO is public necessary ?
     public override string GetDefaultName()
     {
         return "DefaultInt";
     }
 
-    // TODO is public necessary ?
     public override object GetDefaultValue()
     {
         return (object)0;
@@ -171,13 +170,10 @@ public abstract partial class Variable
 
     public static string[] GetTypes()
     {
-        //Debug.Log("1");
         List<string> types = new List<string>();
 
-        //Debug.Log("2");
         FindDerivedTypes(typeof(Variable)).ToList().ForEach(x =>
         {
-            //Debug.Log("3");
             if (x != typeof(Variable))
             {
                 types.Add(((BlackboardType)Attribute.GetCustomAttribute(
@@ -186,23 +182,7 @@ public abstract partial class Variable
             }
         });
 
-        //Debug.Log("4");
-
         return types.ToArray();
-
-        //var childtypes = FindDerivedTypes(typeof(Variable));
-        //List<string> types = new List<string>();
-
-        //foreach (var item in childtypes)
-        //{
-        //    BlackboardType bbtype = (BlackboardType)Attribute.GetCustomAttribute(
-        //        item,
-        //        typeof(BlackboardType));
-
-        //    types.Add(bbtype.TypeName);
-        //}
-
-        //return types.ToArray();
     }
 
     private static IEnumerable<Type> FindDerivedTypes(Type baseType)

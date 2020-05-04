@@ -8,59 +8,39 @@ namespace BT
     [CreateNodeMenu("MYBT/BlackboardVariable")]
     public class BlackBoardVariable : Node
     {
-        #region PORTS
-
-        [Output]
-        public int _int;
-        [Output]
-        public bool _bool;
-        [Output]
-        public string _string;
-
-        #endregion
-
         public string uid;
-        public string Name;
+        public string Name = string.Empty;
+        
 
         public Blackboard Blackboard;
 
         protected override void Init()
         {
             Blackboard = ((TestGraph)graph).blackboard;
+
+            //Outputs = new 
+        }
+
+        public void SetVariable(string newname, string newuid)
+        {
+            if (Name != string.Empty || Name != "")
+            {
+                RemoveDynamicPort(Name);
+            }
+
+            this.AddDynamicOutput(
+                Blackboard.GetVariableType(newuid),
+                ConnectionType.Multiple,
+                TypeConstraint.None,
+                newname);
+
+            uid = newuid;
+            Name = newname;
         }
 
         public string[] GetPossibleVariables()
         {
             return ((TestGraph)graph).blackboard.GetVariableNames();
-        }
-
-        // TODO premake this array instead
-        public string[] GetGUIDs()
-        {
-            if (Blackboard.container == null) // shouldn't happen right ?
-            {
-                return null;
-            }
-
-            return Blackboard.container.Select(x => x.Key).ToArray();
-        }
-
-        public string[] GetNames(string[] guids)
-        {
-            string[] names = new string[guids.Length];
-
-            if (guids == null ||
-                guids.Length == 0)
-            {
-                return new string[0];
-            }
-
-            for (int i = 0; i < guids.Length; i++)
-            {
-                names[i] = Blackboard.GetName(guids[i]);
-            }
-
-            return names;
         }
     }
 }

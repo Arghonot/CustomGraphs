@@ -20,11 +20,6 @@ namespace BT
         /// </summary>
         public Dictionary<string, Variable> container;
 
-        /// <summary>
-        /// GUID current name
-        /// </summary>
-        public Dictionary<string, string> ContainerNames;
-
         private void Awake()
         {
             container = new Dictionary<string, Variable>();
@@ -48,6 +43,11 @@ namespace BT
             return true;
         }
 
+        public Type GetVariableType(string guid)
+        {
+            return container[guid].GetValueType();
+        }
+
         public string GetTypeFromGUID(string guid)
         {
             if (!container.ContainsKey(guid))
@@ -66,6 +66,43 @@ namespace BT
             }
 
             return container[guid].Name;
+        }
+
+        // TODO use a premade array instead -> avoid recalculation every frames
+        public string[] GetGUIDS()
+        {
+            int index = 0;
+            string[] guids = new string[container.Count];
+
+            foreach (var item in container)
+            {
+                guids[index++] = item.Key;
+            }
+
+            return guids;
+        }
+
+        // TODO ""
+        public string[] GetVariableNames(string[] uids)
+        {
+            string[] names = new string[uids.Count()];
+
+            for (int i = 0; i < uids.Length; i++)
+            {
+                if (container.ContainsKey(uids[i]))
+                {
+                    names[i] = container[uids[i]].Name;
+                }
+                else
+                {
+                    names[i] = "UNKNOWN";
+                }
+                //container.ContainsKey(uids[i]) ? 
+                //names[i] = container[uids[i]].Name : 
+                //names[i] = "UNKNOWN";
+            }
+
+            return names;
         }
     }
 }
