@@ -10,13 +10,15 @@ namespace BT
     public class TestGraph : NodeGraph
     {
         public Blackboard blackboard;
+        string blackboardName = "Blacboard";
 
         private void Awake()
         {
-            Variable vari = new Blackboard_Int();
+            Debug.Log("TestGraph Awake");
 
             blackboard = AddNode<Blackboard>();
-            
+            blackboard.name = blackboardName;
+
             NodeEditorWindow.RepaintAll();
         }
 

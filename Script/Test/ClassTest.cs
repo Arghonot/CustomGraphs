@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using UnityEditor;
+using UnityEngine;
 
 [BlackboardType("string")]
 public class Blackboard_String : Variable
@@ -194,6 +195,16 @@ public abstract partial class Variable
         return GetType(this.GetType());
     }
 
+    public static explicit operator Variable(DumbVariable v)
+    {
+        Variable newvar = CreateType(v.TypeName);
+
+        newvar.Name = v.Name;
+        newvar.Value = v.Value;
+
+        return newvar;
+    }
+
     #endregion
 
     #region To be implemented
@@ -207,6 +218,21 @@ public abstract partial class Variable
 
     #endregion
 
+}
+
+[Serializable]
+public class DumbVariable
+{
+    [SerializeField] public string Name;
+    [SerializeField] public object Value;
+    [SerializeField] public string TypeName;
+
+    public DumbVariable(Variable source)
+    {
+        this.Name = source.Name;
+        this.Value = source.Value;
+        this.TypeName = source.TypeName;
+    }
 }
 
 [System.AttributeUsage(System.AttributeTargets.Class |

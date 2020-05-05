@@ -37,6 +37,7 @@ namespace BTEditor
 
         void DisplayNameSelection(BlackBoardVariable variablenode)
         {
+
             string[] GUIDs = variablenode.Blackboard.GetGUIDS();
             string[] names = variablenode.Blackboard.GetVariableNames(GUIDs);
 

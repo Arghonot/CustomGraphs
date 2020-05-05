@@ -19,12 +19,6 @@ namespace BTEditor
 
         public override void OnBodyGUI()
         {
-            if (target == null ||
-                ((BT.Blackboard)target).container == null)
-            {
-                return;
-            }
-
             BT.Blackboard blackboard = target as BT.Blackboard;
 
             AddVariable(blackboard);

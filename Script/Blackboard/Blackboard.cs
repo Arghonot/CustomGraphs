@@ -2,9 +2,40 @@
 using System.Collections.Generic;
 using XNode;
 using System;
+using UnityEngine;
 
 namespace BT
 {
+    [Serializable]
+    public class BlackBoardDictionnary : Dictionary<string, Variable>, ISerializationCallbackReceiver
+    {
+        [SerializeField] private List<string> keys = new List<string>();
+        [SerializeField] private List<DumbVariable> values = new List<DumbVariable>();
+
+        public void OnBeforeSerialize()
+        {
+            keys.Clear();
+            values.Clear();
+
+            foreach (KeyValuePair<string, Variable> pair in this)
+            {
+                keys.Add(pair.Key);
+                values.Add(new DumbVariable(pair.Value));
+            }
+        }
+
+        public void OnAfterDeserialize()
+        {
+            this.Clear();
+
+            if (keys.Count != values.Count)
+                throw new System.Exception("there are " + keys.Count + " keys and " + values.Count + " values after deserialization. Make sure that both key and value types are serializable.");
+
+            for (int i = 0; i < keys.Count; i++) 
+                this.Add(keys[i], Variable.CreateCopy((Variable)values[i]));
+        }
+    }
+
     [NodeTint(6, 24, 56)]
     public class Blackboard : Node
     {
@@ -17,11 +48,15 @@ namespace BT
         /// <summary>
         /// GUID - variables data
         /// </summary>
-        public Dictionary<string, Variable> container;
+        //public Dictionary<string, Variable> container;
+        public BlackBoardDictionnary container;
 
-        private void Awake()
+        /*protected override*/
+        void Awake()
         {
-            container = new Dictionary<string, Variable>();
+            Debug.Log("INIT blackboard");
+            //container = new Dictionary<string, Variable>();
+            container = new BlackBoardDictionnary();
         }
 
         public string[] GetVariableNames()
@@ -35,7 +70,7 @@ namespace BT
             {
                 return false;
             }
-
+            
             container.Add(guid, Variable.CreateType(type));
 
             return true;

@@ -26,7 +26,7 @@ namespace BT
             this.AddDynamicOutput(
                 Blackboard.GetVariableType(newuid),
                 ConnectionType.Multiple,
-                TypeConstraint.None,
+                TypeConstraint.Strict,
                 newname);
 
             uid = newuid;
