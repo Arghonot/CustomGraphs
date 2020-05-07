@@ -5,73 +5,102 @@ using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
-//[BlackboardType("string")]
-//public class Blackboard_String : Variable
-//{
-//    public override void DrawInspectorGUI()
-//    {
-//        EditorGUILayout.LabelField(Name);
-//        Value = (object)EditorGUILayout.TextField((string)Value);
-//    }
+[BlackboardType("string")]
+public class Blackboard_String : Variable
+{
+    public override void DrawInspectorGUI()
+    {
+        EditorGUILayout.LabelField(Name);
+        Value = (object)EditorGUILayout.TextField((string)Value);
+    }
 
-//    public override void DrawNodeGUI()
-//    {
-//        throw new NotImplementedException();
-//    }
+    public override void DrawNodeGUI()
+    {
+        throw new NotImplementedException();
+    }
 
-//    public override string GetDefaultName()
-//    {
-//        return "DefaultString";
-//    }
+    public override object FromString(string newvalue)
+    {
+        Value = (object)newvalue;
 
-//    public override object GetDefaultValue()
-//    {
-//        return (object)"DefaultStringValue";
-//    }
+        return Value;
+    }
 
-//    public override Type GetValueType()
-//    {
-//        return typeof(string);
-//    }
-//}
+    public override string GetDefaultName()
+    {
+        return "DefaultString";
+    }
 
-//[BlackboardType("bool")]
-//public class Blackboard_Bool : Variable
-//{
-//    public override void DrawInspectorGUI()
-//    {
-//        EditorGUILayout.LabelField(Name);
-//        Value = (object)EditorGUILayout.Toggle((bool)Value);
-//    }
+    public override object GetDefaultValue()
+    {
+        return (object)"DefaultStringValue";
+    }
 
-//    public override void DrawNodeGUI()
-//    {
-//        throw new NotImplementedException();
-//    }
+    public override Type GetValueType()
+    {
+        return typeof(string);
+    }
 
-//    public override string GetDefaultName()
-//    {
-//        return "DefaultBool";
-//    }
+    public override string ToString()
+    {
+        return (string)Value;
+    }
+}
 
-//    public override object GetDefaultValue()
-//    {
-//        return (object)false;
-//    }
+[BlackboardType("bool")]
+public class Blackboard_Bool : Variable
+{
+    public override void DrawInspectorGUI()
+    {
+        EditorGUILayout.LabelField(Name);
+        Value = (object)EditorGUILayout.Toggle((bool)Value);
+    }
 
-//    public override Type GetValueType()
-//    {
-//        return typeof(bool);
-//    }
-//}
+    public override void DrawNodeGUI()
+    {
+        throw new NotImplementedException();
+    }
+
+    public override object FromString(string newvalue)
+    {
+        if (newvalue == "True")
+        {
+            Value = (object)true;
+        }
+        else
+        {
+            Value = (object)false;
+        }
+
+        return Value;
+    }
+
+    public override string GetDefaultName()
+    {
+        return "DefaultBool";
+    }
+
+    public override object GetDefaultValue()
+    {
+        return (object)false;
+    }
+
+    public override Type GetValueType()
+    {
+        return typeof(bool);
+    }
+
+    public override string ToString()
+    {
+        return ((bool)Value).ToString();
+    }
+}
 
 [BlackboardType("int")]
 public class Blackboard_Int : Variable
 {
     public override void DrawInspectorGUI()
     {
-        Debug.Log("+--------------------------------+ DrawUI");
-
         EditorGUILayout.LabelField(Name);
 
         if (Value == null) return;
@@ -84,6 +113,17 @@ public class Blackboard_Int : Variable
     public override void DrawNodeGUI()
     {
         throw new NotImplementedException();
+    }
+
+    public override object FromString(string newvalue)
+    {
+        int testval = 0;
+        if (int.TryParse(newvalue, out testval))
+        {
+            Value = (object)testval;
+        }
+
+        return Value;
     }
 
     public override string GetDefaultName()
@@ -99,6 +139,11 @@ public class Blackboard_Int : Variable
     public override Type GetValueType() 
     {
         return typeof(int);
+    }
+
+    public override string ToString()
+    {
+        return ((int)Value).ToString();
     }
 }
 
@@ -206,12 +251,9 @@ public abstract partial class Variable
     {
         Variable newvar = CreateType(v.TypeName);
 
-        Debug.Log("explicit Variable " + (int)v.Value);
         newvar.Name = v.Name;
         newvar.Value = new object();
         newvar.Value = v.Value;
-
-        //Debug.Log("Value == null ?" + (v.Value == null));
 
         return newvar;
     }
@@ -224,6 +266,8 @@ public abstract partial class Variable
     public abstract void DrawNodeGUI();
 
     public abstract string GetDefaultName();
+    public new abstract string ToString();
+    public abstract object FromString(string newvalue);
     public abstract Type GetValueType();
     public abstract object GetDefaultValue(); // Necessary ?
 
@@ -235,20 +279,17 @@ public abstract partial class Variable
 public class DumbVariable
 {
     [SerializeField] public string Name;
-    [SerializeField] public object Value;
+    [SerializeField] public string Value;
     [SerializeField] public string TypeName;
 
     public DumbVariable()
     {
-        Value = new object();
     }
 
     public DumbVariable(Variable source)
     {
-        Debug.Log("DumbVariable " + (int)source.Value);
         this.Name = source.Name;
-        this.Value = new object();
-        this.Value = source.Value;
+        this.Value = source.ToString();
         this.TypeName = source.TypeName;
     }
 }

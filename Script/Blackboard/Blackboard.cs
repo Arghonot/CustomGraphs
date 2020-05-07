@@ -8,57 +8,44 @@ using UnityEngine;
 public class BlackBoardDictionnary : Dictionary<string, Variable>, ISerializationCallbackReceiver
 {
     [SerializeField] private List<string> keys = new List<string>();
-    [SerializeField] private List<int> values = new List<int>();
+    [SerializeField] private List<DumbVariable> values = new List<DumbVariable>();
 
     public void OnBeforeSerialize()
     {
         keys.Clear();
         values.Clear();
 
-        //Debug.Log(this.Count()); 
-        Debug.Log("OnBeforeSerialize");
-
         if (this.Count() == 0) return; 
 
         foreach (KeyValuePair<string, Variable> pair in this) 
         {
             keys.Add(pair.Key);
-            values.Add((int)pair.Value.Value); 
-
-            //values.Last().Name = pair.Value.Name;
-            //values.Last().TypeName = pair.Value.TypeName;
-            //values.Last().Value = pair.Value.Value;
+            values.Add(new DumbVariable()
+            {
+                Name = pair.Value.Name,
+                TypeName = pair.Value.TypeName,
+                Value = pair.Value.ToString()
+            });
         }
-    }
-
-    [UnityEditor.Callbacks.DidReloadScripts]
-    private static void OnScriptsReloaded()
-    {
-        Debug.Log("COMPILATIONNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"); 
-        // do something
     }
 
     public void OnAfterDeserialize()
     {
         this.Clear();
 
-        if (keys.Count() == 0) return;
-        Debug.Log("         OnAfterDeserialize");
+        if (keys.Count() == 0) return; 
 
         if (keys.Count != values.Count)
             throw new System.Exception("there are " + keys.Count + " keys and " + values.Count + " values after deserialization. Make sure that both key and value types are serializable.");
 
         for (int i = 0; i < keys.Count; i++)
         {
-            this.Add(keys[i], Variable.CreateType("int"));
+            Variable variable = Variable.CreateType(values[i].TypeName); 
 
-            this[keys[i]].Value = (object)values[i]; 
+            variable.FromString(values[i].Value);
+            variable.Name = values[i].Name;
 
-            //this[keys[i]].Value = values[i].Value;
-            //this[keys[i]].Name = values[i].Name;
-            //Debug.Log((int)values[i].Value);
-
-            //Debug.Log(values[i].Name + " became [" + values[i].Value + "]");
+            this.Add(keys[i], variable);
         }
     }
 }
