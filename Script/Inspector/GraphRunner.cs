@@ -8,7 +8,7 @@ public class GraphRunner : MonoBehaviour
     /// <summary>
     /// Organized as follow : GUID - Value's datas
     /// </summary>
-    public Dictionary<string, Variable> values = null;
+    public BlackBoardDictionnary values = null;
 
     public void BuildValueDictionnary()
     {
@@ -23,7 +23,7 @@ public class GraphRunner : MonoBehaviour
         }
         else
         {
-            values = new Dictionary<string, Variable>();
+            values = new BlackBoardDictionnary();
         }
 
         var original = graph.CompileAllBlackboard();

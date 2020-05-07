@@ -50,10 +50,10 @@ public class GraphRunnerEditor : Editor
 
     void DrawLine(Variable elem)
     {
-        GUILayout.BeginHorizontal("line");
+        //Debug.Log("Elem is null ?" + (elem == null) + " Value == null ?" + (elem.Value == null));
 
+        GUILayout.BeginHorizontal();
         elem.DrawInspectorGUI();
-
         GUILayout.EndHorizontal();
     }
 }

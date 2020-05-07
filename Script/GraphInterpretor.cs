@@ -16,22 +16,18 @@ public class GraphInterpretor : ScriptableObject
     /// <summary>
     /// Organized as follow : GUID - Value's datas
     /// </summary>
-    public Dictionary<string, Variable> values = null;
+    public BlackBoardDictionnary values = null;
 
     public void BuildValueDictionnary()
     {
-        if (graph.blackboard == null)
-        {
-            graph = null;
-            return;
-        }
+
         if (values != null)
         {
             values.Clear();
         }
         else
         {
-            values = new Dictionary<string, Variable>();
+            values = new BlackBoardDictionnary();
         }
 
         var original = graph.CompileAllBlackboard();

@@ -10,12 +10,10 @@ namespace BT
     public class TestGraph : NodeGraph
     {
         public Blackboard blackboard;
-        string blackboardName = "Blacboard";
+        string blackboardName = "Blackboard";
 
         private void Awake()
         {
-            Debug.Log("TestGraph Awake");
-
             blackboard = AddNode<Blackboard>();
             blackboard.name = blackboardName;
 
@@ -25,7 +23,9 @@ namespace BT
         public Dictionary<string, Variable>   CompileAllBlackboard()
         {
             Dictionary<string, Variable> CompiledDictionnary =
-                new Dictionary<string, Variable>(blackboard.container);
+                new Dictionary<string, Variable>();
+
+            MergeDictionnaries(CompiledDictionnary, blackboard.container);
 
             foreach (var node in nodes)
             {
@@ -33,20 +33,18 @@ namespace BT
                 {
                     if (((SubGraph)node).TargetGraph != null)
                     {
-                        HandleSubGraph(CompiledDictionnary, (SubGraph)node);
-                        Debug.Log("Double yeah");
+                        MergeDictionnaries(
+                            CompiledDictionnary,
+                            ((SubGraph)node).TargetGraph.CompileAllBlackboard());
                     }
-                    Debug.Log("yeah");
                 }
             }
 
             return CompiledDictionnary;
         }
 
-        void HandleSubGraph(Dictionary<string, Variable> compiled, SubGraph graph)
+        void MergeDictionnaries(Dictionary<string, Variable> compiled, Dictionary<string, Variable> subgraphDictionnary)
         {
-            var subgraphDictionnary = graph.TargetGraph.CompileAllBlackboard();
-
             foreach (var item in subgraphDictionnary)
             {
                 if (!compiled.ContainsKey(item.Key) && !ContainName(compiled, item.Value.Name))

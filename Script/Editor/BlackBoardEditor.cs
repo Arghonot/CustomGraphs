@@ -25,7 +25,7 @@ namespace BTEditor
 
             if (blackboard.container.Count > 0)
             {
-                GUILayout.Space(20);
+                GUILayout.Space(4);
             }
 
             DisplayAll(blackboard);

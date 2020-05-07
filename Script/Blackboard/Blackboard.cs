@@ -4,58 +4,80 @@ using XNode;
 using System;
 using UnityEngine;
 
-namespace BT
+[Serializable]
+public class BlackBoardDictionnary : Dictionary<string, Variable>, ISerializationCallbackReceiver
 {
-    [Serializable]
-    public class BlackBoardDictionnary : Dictionary<string, Variable>, ISerializationCallbackReceiver
+    [SerializeField] private List<string> keys = new List<string>();
+    [SerializeField] private List<int> values = new List<int>();
+
+    public void OnBeforeSerialize()
     {
-        [SerializeField] private List<string> keys = new List<string>();
-        [SerializeField] private List<DumbVariable> values = new List<DumbVariable>();
+        keys.Clear();
+        values.Clear();
 
-        public void OnBeforeSerialize()
+        //Debug.Log(this.Count()); 
+        Debug.Log("OnBeforeSerialize");
+
+        if (this.Count() == 0) return; 
+
+        foreach (KeyValuePair<string, Variable> pair in this) 
         {
-            keys.Clear();
-            values.Clear();
+            keys.Add(pair.Key);
+            values.Add((int)pair.Value.Value); 
 
-            foreach (KeyValuePair<string, Variable> pair in this)
-            {
-                keys.Add(pair.Key);
-                values.Add(new DumbVariable(pair.Value));
-            }
-        }
-
-        public void OnAfterDeserialize()
-        {
-            this.Clear();
-
-            if (keys.Count != values.Count)
-                throw new System.Exception("there are " + keys.Count + " keys and " + values.Count + " values after deserialization. Make sure that both key and value types are serializable.");
-
-            for (int i = 0; i < keys.Count; i++) 
-                this.Add(keys[i], Variable.CreateCopy((Variable)values[i]));
+            //values.Last().Name = pair.Value.Name;
+            //values.Last().TypeName = pair.Value.TypeName;
+            //values.Last().Value = pair.Value.Value;
         }
     }
 
+    [UnityEditor.Callbacks.DidReloadScripts]
+    private static void OnScriptsReloaded()
+    {
+        Debug.Log("COMPILATIONNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"); 
+        // do something
+    }
+
+    public void OnAfterDeserialize()
+    {
+        this.Clear();
+
+        if (keys.Count() == 0) return;
+        Debug.Log("         OnAfterDeserialize");
+
+        if (keys.Count != values.Count)
+            throw new System.Exception("there are " + keys.Count + " keys and " + values.Count + " values after deserialization. Make sure that both key and value types are serializable.");
+
+        for (int i = 0; i < keys.Count; i++)
+        {
+            this.Add(keys[i], Variable.CreateType("int"));
+
+            this[keys[i]].Value = (object)values[i]; 
+
+            //this[keys[i]].Value = values[i].Value;
+            //this[keys[i]].Name = values[i].Name;
+            //Debug.Log((int)values[i].Value);
+
+            //Debug.Log(values[i].Name + " became [" + values[i].Value + "]");
+        }
+    }
+}
+
+namespace BT
+{
     [NodeTint(6, 24, 56)]
     public class Blackboard : Node
     {
         public int TextWidth = 130;
-        public int TypeWidth = 100;
+        public int TypeWidth = 100; 
         public int MinusWidth = 20;
 
         public int width = 300;
 
-        /// <summary>
-        /// GUID - variables data
-        /// </summary>
-        //public Dictionary<string, Variable> container;
         public BlackBoardDictionnary container;
 
-        /*protected override*/
         void Awake()
         {
-            Debug.Log("INIT blackboard");
-            //container = new Dictionary<string, Variable>();
             container = new BlackBoardDictionnary();
         }
 

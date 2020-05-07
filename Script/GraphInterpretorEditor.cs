@@ -29,6 +29,7 @@ public class GraphInterpretorEditor : Editor
             runner.BuildValueDictionnary();
         }
 
+        runner.BuildValueDictionnary();
         DrawGraphBlackboard(runner);
 
         serializedObject.ApplyModifiedProperties();
@@ -49,7 +50,7 @@ public class GraphInterpretorEditor : Editor
 
     void DrawLine(Variable elem)
     {
-        GUILayout.BeginHorizontal("line");
+        GUILayout.BeginHorizontal();
         elem.DrawInspectorGUI();
         GUILayout.EndHorizontal();
     }

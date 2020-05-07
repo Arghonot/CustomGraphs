@@ -5,73 +5,80 @@ using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
-[BlackboardType("string")]
-public class Blackboard_String : Variable
-{
-    public override void DrawInspectorGUI()
-    {
-        EditorGUILayout.LabelField(Name);
-        Value = (object)EditorGUILayout.TextField((string)Value);
-    }
+//[BlackboardType("string")]
+//public class Blackboard_String : Variable
+//{
+//    public override void DrawInspectorGUI()
+//    {
+//        EditorGUILayout.LabelField(Name);
+//        Value = (object)EditorGUILayout.TextField((string)Value);
+//    }
 
-    public override void DrawNodeGUI()
-    {
-        throw new NotImplementedException();
-    }
+//    public override void DrawNodeGUI()
+//    {
+//        throw new NotImplementedException();
+//    }
 
-    public override string GetDefaultName()
-    {
-        return "DefaultString";
-    }
+//    public override string GetDefaultName()
+//    {
+//        return "DefaultString";
+//    }
 
-    public override object GetDefaultValue()
-    {
-        return (object)"DefaultStringValue";
-    }
+//    public override object GetDefaultValue()
+//    {
+//        return (object)"DefaultStringValue";
+//    }
 
-    public override Type GetValueType()
-    {
-        return typeof(string);
-    }
-}
+//    public override Type GetValueType()
+//    {
+//        return typeof(string);
+//    }
+//}
 
-[BlackboardType("bool")]
-public class Blackboard_Bool : Variable
-{
-    public override void DrawInspectorGUI()
-    {
-        EditorGUILayout.LabelField(Name);
-        Value = (object)EditorGUILayout.Toggle((bool)Value);
-    }
+//[BlackboardType("bool")]
+//public class Blackboard_Bool : Variable
+//{
+//    public override void DrawInspectorGUI()
+//    {
+//        EditorGUILayout.LabelField(Name);
+//        Value = (object)EditorGUILayout.Toggle((bool)Value);
+//    }
 
-    public override void DrawNodeGUI()
-    {
-        throw new NotImplementedException();
-    }
+//    public override void DrawNodeGUI()
+//    {
+//        throw new NotImplementedException();
+//    }
 
-    public override string GetDefaultName()
-    {
-        return "DefaultBool";
-    }
+//    public override string GetDefaultName()
+//    {
+//        return "DefaultBool";
+//    }
 
-    public override object GetDefaultValue()
-    {
-        return (object)false;
-    }
+//    public override object GetDefaultValue()
+//    {
+//        return (object)false;
+//    }
 
-    public override Type GetValueType()
-    {
-        return typeof(bool);
-    }
-}
+//    public override Type GetValueType()
+//    {
+//        return typeof(bool);
+//    }
+//}
 
 [BlackboardType("int")]
 public class Blackboard_Int : Variable
 {
     public override void DrawInspectorGUI()
     {
+        Debug.Log("+--------------------------------+ DrawUI");
+
         EditorGUILayout.LabelField(Name);
-        Value = (object)EditorGUILayout.IntField((int)Value);
+
+        if (Value == null) return;
+
+        Value = 
+            (object)EditorGUILayout.IntField(
+            (int)Value);
     }
 
     public override void DrawNodeGUI()
@@ -89,7 +96,7 @@ public class Blackboard_Int : Variable
         return (object)0;
     }
 
-    public override Type GetValueType()
+    public override Type GetValueType() 
     {
         return typeof(int);
     }
@@ -199,8 +206,12 @@ public abstract partial class Variable
     {
         Variable newvar = CreateType(v.TypeName);
 
+        Debug.Log("explicit Variable " + (int)v.Value);
         newvar.Name = v.Name;
+        newvar.Value = new object();
         newvar.Value = v.Value;
+
+        //Debug.Log("Value == null ?" + (v.Value == null));
 
         return newvar;
     }
@@ -227,17 +238,22 @@ public class DumbVariable
     [SerializeField] public object Value;
     [SerializeField] public string TypeName;
 
+    public DumbVariable()
+    {
+        Value = new object();
+    }
+
     public DumbVariable(Variable source)
     {
+        Debug.Log("DumbVariable " + (int)source.Value);
         this.Name = source.Name;
+        this.Value = new object();
         this.Value = source.Value;
         this.TypeName = source.TypeName;
     }
 }
 
-[System.AttributeUsage(System.AttributeTargets.Class |
-                       System.AttributeTargets.Struct)
-]
+[System.AttributeUsage(System.AttributeTargets.Class | System.AttributeTargets.Struct)]
 public class BlackboardType : System.Attribute
 {
     public string TypeName;
