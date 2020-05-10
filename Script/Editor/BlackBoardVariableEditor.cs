@@ -1,6 +1,5 @@
 ﻿using Graph;
 using UnityEditor;
-using UnityEngine;
 using XNodeEditor;
 
 namespace GraphEditor
@@ -50,11 +49,10 @@ namespace GraphEditor
                 {
                     variablenode.SetVariable(names[selected], GUIDs[selected]);
                 }
-                else if (variablenode.Name == null)
+                else if (variablenode.Name == string.Empty)
                 {
                     variablenode.SetVariable(names[0], GUIDs[0]);
                 }
-
             }
         }
     }

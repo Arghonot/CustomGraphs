@@ -1,5 +1,4 @@
-﻿using UnityEngine;
-using XNode;
+﻿using XNode;
 
 namespace Graph
 {
@@ -22,21 +21,13 @@ namespace Graph
             RemoveDynamicPort(Name);
             Name = string.Empty;
             uid = string.Empty;
-            Debug.Log("UpdatePorts");
         }
 
         public void SetVariable(string newname, string newuid)
         {
-            Debug.Log("[" + newname + "][" + newuid + "]");
-
             if (Name != string.Empty || Name != "")
             {
                 RemoveDynamicPort(Name);
-            }
-
-            if (newname == "" && newuid == "")
-            {
-                Debug.Log("yeyeyeyey");
             }
 
             this.AddDynamicOutput(
