@@ -12,12 +12,12 @@ namespace GraphEditor
         public override void OnBodyGUI()
         {
             Graph.SubGraph SubGraph = target as Graph.SubGraph;
-            Graph.TestGraph owngraph = (Graph.TestGraph)SubGraph.graph;
+            Graph.DefaultGraph owngraph = (Graph.DefaultGraph)SubGraph.graph;
 
-            SubGraph.TargetGraph = (Graph.TestGraph)EditorGUILayout.ObjectField(
+            SubGraph.TargetGraph = (Graph.DefaultGraph)EditorGUILayout.ObjectField(
                 "Sub graph ",
                 SubGraph.TargetGraph,
-                typeof(Graph.TestGraph),
+                typeof(Graph.DefaultGraph),
                 false);
 
             if (SubGraph.TargetGraph == owngraph)

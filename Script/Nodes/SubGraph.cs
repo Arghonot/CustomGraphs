@@ -8,6 +8,6 @@ namespace Graph
     [CreateNodeMenu("MYBT/SubGraph")]
     public class SubGraph : Node
     {
-        public TestGraph TargetGraph;
+        public DefaultGraph TargetGraph;
     }
 }

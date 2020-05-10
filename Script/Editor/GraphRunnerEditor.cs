@@ -36,7 +36,7 @@ namespace GraphEditor
         void    HandleNewGraph()
         {
             var TmpGraph = runner.graph;
-            TmpGraph = (Graph.TestGraph)EditorGUILayout.ObjectField(runner.graph, typeof(Graph.TestGraph), true);
+            TmpGraph = (Graph.DefaultGraph)EditorGUILayout.ObjectField(runner.graph, typeof(Graph.DefaultGraph), true);
 
             if (TmpGraph == null)
             {

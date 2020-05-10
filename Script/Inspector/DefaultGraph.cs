@@ -6,7 +6,7 @@ using XNodeEditor;
 namespace Graph
 {
     [CreateAssetMenu]
-    public class TestGraph : NodeGraph
+    public class DefaultGraph : NodeGraph
     {
         public Blackboard blackboard;
         public RootInt Root;

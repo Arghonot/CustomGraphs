@@ -45,7 +45,7 @@ namespace Graph
             }
 
             container.Remove(guid);
-            ((TestGraph)graph).OnDeleteVariable(guid);
+            ((DefaultGraph)graph).OnDeleteVariable(guid);
 
             return true;
         }

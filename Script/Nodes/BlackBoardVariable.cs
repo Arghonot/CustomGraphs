@@ -13,7 +13,7 @@ namespace Graph
 
         protected override void Init()
         {
-            Blackboard = ((TestGraph)graph).blackboard;
+            Blackboard = ((DefaultGraph)graph).blackboard;
         }
 
         public void UpdateNode()
@@ -42,14 +42,14 @@ namespace Graph
 
         public string[] GetPossibleVariables()
         {
-            return ((TestGraph)graph).blackboard.GetVariableNames();
+            return ((DefaultGraph)graph).blackboard.GetVariableNames();
         }
 
         public override object GetValue(NodePort port)
         {
-            if (((TestGraph)graph).gd.ContainsKey(Name))
+            if (((DefaultGraph)graph).gd.ContainsKey(Name))
             {
-                return ((TestGraph)graph).gd.Get(Name);
+                return ((DefaultGraph)graph).gd.Get(Name);
             }
 
             if (!Blackboard.container.ContainsKey(uid))

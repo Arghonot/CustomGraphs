@@ -14,7 +14,7 @@ namespace Graph
         /// <summary>
         /// 
         /// </summary>
-        public Graph.TestGraph graph;
+        public Graph.DefaultGraph graph;
 
         /// <summary>
         /// Organized as follow : GUID - Value's datas

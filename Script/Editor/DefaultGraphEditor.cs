@@ -7,8 +7,8 @@ using XNodeEditor;
 
 namespace GraphEditor
 {
-    [CustomNodeGraphEditor(typeof(Graph.TestGraph))]
-    public class TestGraphEditor : XNodeEditor.NodeGraphEditor
+    [CustomNodeGraphEditor(typeof(Graph.DefaultGraph))]
+    public class DefaultGraphEditor : XNodeEditor.NodeGraphEditor
     {
         List<Type> HiddenTypes = new List<Type>()
         {
@@ -18,7 +18,7 @@ namespace GraphEditor
 
         public override Texture2D GetGridTexture()
         {
-            NodeEditorWindow.current.titleContent = new GUIContent(((Graph.TestGraph)target).name);
+            NodeEditorWindow.current.titleContent = new GUIContent(((Graph.DefaultGraph)target).name);
 
             return base.GetGridTexture();
         }
@@ -35,7 +35,7 @@ namespace GraphEditor
 
         public override void RemoveNode(Node node)
         {
-            if (node != ((Graph.TestGraph)target).blackboard)
+            if (node != ((Graph.DefaultGraph)target).blackboard)
             {
                 base.RemoveNode(node);
             }

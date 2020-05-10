@@ -7,7 +7,7 @@ namespace Graph
     public class GraphRunner : MonoBehaviour
     {
         public ScriptableObject So;
-        public Graph.TestGraph graph;
+        public Graph.DefaultGraph graph;
 
         /// <summary>
         /// Organized as follow : GUID - Value's datas
