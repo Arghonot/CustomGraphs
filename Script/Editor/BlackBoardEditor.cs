@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-namespace BTEditor
+namespace GraphEditor
 {
-    [CustomNodeEditor(typeof(BT.Blackboard))]
+    [CustomNodeEditor(typeof(Graph.Blackboard))]
     public class BlackBoardEditor : XNodeEditor.NodeEditor
     {
         int Selected = 0;
@@ -14,12 +14,12 @@ namespace BTEditor
 
         public override int GetWidth()
         {
-            return ((BT.Blackboard)target).width;
+            return ((Graph.Blackboard)target).width;
         }
 
         public override void OnBodyGUI()
         {
-            BT.Blackboard blackboard = target as BT.Blackboard;
+            Graph.Blackboard blackboard = target as Graph.Blackboard;
 
             AddVariable(blackboard);
 
@@ -31,7 +31,7 @@ namespace BTEditor
             DisplayAll(blackboard);
         }
 
-        void DisplayAll(BT.Blackboard blackboard)
+        void DisplayAll(Graph.Blackboard blackboard)
         {
             if (blackboard.container == null ||
                 blackboard.container.Count == 0)
@@ -50,7 +50,7 @@ namespace BTEditor
             }
         }
 
-        void DisplayLine(BT.Blackboard blackboard, KeyValuePair<string, Variable> elem)
+        void DisplayLine(Graph.Blackboard blackboard, KeyValuePair<string, Variable> elem)
         {
             GUILayout.BeginHorizontal("box");
 
@@ -73,7 +73,7 @@ namespace BTEditor
             GUILayout.EndHorizontal();
         }
 
-        void AddVariable(BT.Blackboard blackboard)
+        void AddVariable(Graph.Blackboard blackboard)
         {
             GUILayout.BeginHorizontal();
 

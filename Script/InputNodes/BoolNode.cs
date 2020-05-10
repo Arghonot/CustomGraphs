@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using XNode;
 
-namespace BT
+namespace Graph
 {
     [CreateNodeMenu("MYBT/BoolNode")]
     public class BoolNode : Node

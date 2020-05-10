@@ -1,41 +1,28 @@
-﻿using System;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Graph
 {
-    public class GraphRunner : MonoBehaviour
+    /// <summary>
+    /// This class is interesting if you need to set variables for your 
+    /// graph instance and easily share it between scenes
+    /// </summary>
+    [CreateAssetMenu(fileName = "GraphDatas", menuName = "Graphs/GraphData", order = 1)]
+    public class GraphInterpretor : ScriptableObject
     {
-        public ScriptableObject So;
+        /// <summary>
+        /// 
+        /// </summary>
         public Graph.TestGraph graph;
 
         /// <summary>
         /// Organized as follow : GUID - Value's datas
         /// </summary>
-        [SerializeField]
         public BlackBoardDictionnary values = null;
-
-        public bool ContainsValue(string ValueName, Type valueType)
-        {
-            foreach (var item in values)
-            {
-                if (item.Value.Name == ValueName &&
-                    item.Value.GetValueType() == valueType)
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
 
         public void BuildValueDictionnary()
         {
-            if (graph.blackboard == null)
-            {
-                graph = null;
-                return;
-            }
             if (values != null)
             {
                 values.Clear();

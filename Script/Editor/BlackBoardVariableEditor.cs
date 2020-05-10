@@ -1,10 +1,10 @@
-﻿using BT;
+﻿using Graph;
 using UnityEditor;
 using XNodeEditor;
 
-namespace BTEditor
+namespace GraphEditor
 {
-    [CustomNodeEditor(typeof(BT.BlackBoardVariable))]
+    [CustomNodeEditor(typeof(Graph.BlackBoardVariable))]
     public class BlackBoardVariableEditor : XNodeEditor.NodeEditor
     {
         int selected = 0;

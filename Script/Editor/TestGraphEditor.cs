@@ -1,38 +1,50 @@
 ﻿using System;
+using System.Collections.Generic;
+//using System.ge
 using UnityEngine;
 using XNode;
 using XNodeEditor;
 
-[CustomNodeGraphEditor(typeof(BT.TestGraph))]
-public class TestGraphEditor : XNodeEditor.NodeGraphEditor
+namespace GraphEditor
 {
-    public override Texture2D GetGridTexture()
+    [CustomNodeGraphEditor(typeof(Graph.TestGraph))]
+    public class TestGraphEditor : XNodeEditor.NodeGraphEditor
     {
-        NodeEditorWindow.current.titleContent = new GUIContent(((BT.TestGraph)target).name);
-
-        return base.GetGridTexture();
-    }
-
-    public override string GetNodeMenuName(Type type)
-    {
-        if (type != typeof(BT.Blackboard))
+        List<Type> HiddenTypes = new List<Type>()
         {
-            return base.GetNodeMenuName(type);
+            typeof(Graph.Blackboard),
+            typeof(Graph.RootInt)
+        };
+
+        public override Texture2D GetGridTexture()
+        {
+            NodeEditorWindow.current.titleContent = new GUIContent(((Graph.TestGraph)target).name);
+
+            return base.GetGridTexture();
         }
 
-        else return null;
-    }
-
-    public override void RemoveNode(Node node)
-    {
-        if (node != ((BT.TestGraph)target).blackboard)
+        public override string GetNodeMenuName(Type type)
         {
-            base.RemoveNode(node);
-        }
-    }
+            if (!HiddenTypes.Contains(type) && !type.ToString().Contains("Root"))
+            {
+                Debug.Log(type.ToString());
+                return base.GetNodeMenuName(type);
+            }
 
-    public override void OnGUI()
-    {
-        NodeEditorWindow.current.Repaint();
+            else return null;
+        }
+
+        public override void RemoveNode(Node node)
+        {
+            if (node != ((Graph.TestGraph)target).blackboard)
+            {
+                base.RemoveNode(node);
+            }
+        }
+
+        public override void OnGUI()
+        {
+            NodeEditorWindow.current.Repaint();
+        }
     }
 }

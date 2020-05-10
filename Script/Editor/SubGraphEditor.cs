@@ -4,20 +4,20 @@ using UnityEditor;
 using UnityEngine;
 using static XNodeEditor.NodeEditor;
 
-namespace BTEditor
+namespace GraphEditor
 {
-    [CustomNodeEditor(typeof(BT.SubGraph))]
+    [CustomNodeEditor(typeof(Graph.SubGraph))]
     public class SubGraphEditor : XNodeEditor.NodeEditor
     {
         public override void OnBodyGUI()
         {
-            BT.SubGraph SubGraph = target as BT.SubGraph;
-            BT.TestGraph owngraph = (BT.TestGraph)SubGraph.graph;
+            Graph.SubGraph SubGraph = target as Graph.SubGraph;
+            Graph.TestGraph owngraph = (Graph.TestGraph)SubGraph.graph;
 
-            SubGraph.TargetGraph = (BT.TestGraph)EditorGUILayout.ObjectField(
+            SubGraph.TargetGraph = (Graph.TestGraph)EditorGUILayout.ObjectField(
                 "Sub graph ",
                 SubGraph.TargetGraph,
-                typeof(BT.TestGraph),
+                typeof(Graph.TestGraph),
                 false);
 
             if (SubGraph.TargetGraph == owngraph)

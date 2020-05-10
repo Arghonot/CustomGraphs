@@ -1,9 +1,9 @@
 ﻿using XNode;
 
-namespace BT
+namespace Graph
 {
     [CreateNodeMenu("MYBT/BlackboardVariable")]
-    [NodeTint(189, 17, 66)]
+    [NodeTint("#e63946")]
     public class BlackBoardVariable : Node
     {
         public string uid;
@@ -36,6 +36,16 @@ namespace BT
         public string[] GetPossibleVariables()
         {
             return ((TestGraph)graph).blackboard.GetVariableNames();
+        }
+
+        public override object GetValue(NodePort port)
+        {
+            if (((TestGraph)graph).gd.ContainsKey(Name))
+            {
+                return ((TestGraph)graph).gd.Get(Name);
+            }
+
+            return Blackboard.container[uid].GetDefaultValue();
         }
     }
 }

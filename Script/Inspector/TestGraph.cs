@@ -3,18 +3,22 @@ using UnityEngine;
 using XNode;
 using XNodeEditor;
 
-
-namespace BT
+namespace Graph
 {
     [CreateAssetMenu]
     public class TestGraph : NodeGraph
     {
         public Blackboard blackboard;
+        public RootInt Root;
+        public GenericDicionnary gd = new GenericDicionnary();
         string blackboardName = "Blackboard";
 
         private void Awake()
         {
             blackboard = AddNode<Blackboard>();
+            Root = AddNode<RootInt>();
+
+            Root.name = "Root";
             blackboard.name = blackboardName;
 
             NodeEditorWindow.RepaintAll();

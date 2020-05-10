@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using XNode;
 
-namespace BT
+namespace Graph
 {
     [CreateNodeMenu("MYBT/SubGraph")]
     public class SubGraph : Node

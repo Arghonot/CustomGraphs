@@ -1,16 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using XNode;
+using XNodeEditor;
 
-namespace BTEditor
+namespace Graph
 {
-    [CustomNodeEditor(typeof(BT.MyNode))]
-    public class MyNodeEditor : XNodeEditor.NodeEditor
+    [CustomNodeEditor(typeof(Graph.RootInt))]
+    public class RootIntEditor : XNodeEditor.NodeEditor
     {
-        public int selected = 0;
-        public string[] options = new string[] { "Cube", "Sphere", "Plane" };
-
         public override void OnHeaderGUI()
         {
             base.OnHeaderGUI();
@@ -19,7 +19,8 @@ namespace BTEditor
         public override void OnBodyGUI()
         {
             base.OnBodyGUI();
-            selected = EditorGUILayout.Popup(selected, options);
         }
     }
+
+    public class RootInt : Root<int> {    }
 }
