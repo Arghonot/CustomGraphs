@@ -46,7 +46,7 @@ namespace GraphEditor
 
             if (UIDToDelete != string.Empty)
             {
-                blackboard.container.Remove(UIDToDelete);
+                blackboard.RemoveVariable(UIDToDelete);
             }
         }
 

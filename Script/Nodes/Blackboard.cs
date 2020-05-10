@@ -37,6 +37,19 @@ namespace Graph
             return true;
         }
 
+        public bool RemoveVariable(string guid)
+        {
+            if (!container.ContainsKey(guid))
+            {
+                return false;
+            }
+
+            container.Remove(guid);
+            ((TestGraph)graph).OnDeleteVariable(guid);
+
+            return true;
+        }
+
         public Type GetVariableType(string guid)
         {
             return container[guid].GetValueType();

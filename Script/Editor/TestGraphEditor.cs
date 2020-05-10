@@ -27,7 +27,6 @@ namespace GraphEditor
         {
             if (!HiddenTypes.Contains(type) && !type.ToString().Contains("Root"))
             {
-                Debug.Log(type.ToString());
                 return base.GetNodeMenuName(type);
             }
 

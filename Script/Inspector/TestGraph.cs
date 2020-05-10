@@ -70,5 +70,21 @@ namespace Graph
 
             return false;
         }
+
+        public void OnDeleteVariable(string uid)
+        {
+            foreach (var node in nodes)
+            {
+                if (node.GetType() == typeof(BlackBoardVariable))
+                {
+                    BlackBoardVariable bbvar = node as BlackBoardVariable;
+
+                    if (bbvar.uid == uid)
+                    {
+                        bbvar.UpdateNode();
+                    }
+                }
+            }
+        }
     }
 }
