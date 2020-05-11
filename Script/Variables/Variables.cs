@@ -88,6 +88,25 @@ public class Blackboard_Float : Variable
     }
 }
 
+[BlackboardType("double")]
+public class Blackboard_Double : Variable
+{
+    public override string GetDefaultName()
+    {
+        return "Double";
+    }
+
+    public override object GetDefaultValue()
+    {
+        return (object)0d;
+    }
+
+    public override Type GetValueType()
+    {
+        return typeof(double);
+    }
+}
+
 [BlackboardType("long")]
 public class Long : Variable
 {

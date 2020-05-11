@@ -2,7 +2,7 @@
 
 namespace Graph
 {
-    [CreateNodeMenu("MYBT/BlackboardVariable")]
+    [CreateNodeMenu("Graph/BlackboardVariable")]
     [NodeTint("#e63946")]
     public class BlackBoardVariable : Node
     {

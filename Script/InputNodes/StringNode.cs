@@ -5,10 +5,18 @@ using XNode;
 
 namespace Graph
 {
-    [CreateNodeMenu("MYBT/StringNode")]
-    public class StringNode : Node
+    [CreateNodeMenu("Graph/StringNode")]
+    public class StringNode : Leaf
     {
-        [Input]
         public string value;
+
+        private void Awake()
+        {
+            AddDynamicOutput(
+                typeof(string),
+                ConnectionType.Multiple,
+                TypeConstraint.Strict,
+                "string");
+        }
     }
 }

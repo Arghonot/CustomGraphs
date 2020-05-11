@@ -5,10 +5,18 @@ using XNode;
 
 namespace Graph
 {
-    [CreateNodeMenu("MYBT/BoolNode")]
-    public class BoolNode : Node
+    [CreateNodeMenu("Graph/BoolNode")]
+    public class BoolNode : Leaf
     {
-        [Input]
         public bool value;
+
+        private void Awake()
+        {
+            AddDynamicOutput(
+                typeof(bool),
+                ConnectionType.Multiple,
+                TypeConstraint.Strict,
+                "bool");
+        }
     }
 }

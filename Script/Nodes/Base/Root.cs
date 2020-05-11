@@ -8,9 +8,9 @@ using static XNode.Node;
 namespace Graph
 {
     [NodeTint("#f1faee")]
-    public class Root<T> : Node
+    public class Root<T> : NodeBase
     {
-        [Input(ShowBackingValue.Never, ConnectionType.Multiple, TypeConstraint.Strict)]
+        [Input(ShowBackingValue.Never, ConnectionType.Override, TypeConstraint.Strict)]
         public T Input;
     }
 }

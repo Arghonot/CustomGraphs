@@ -5,9 +5,9 @@ using XNode;
 
 namespace Graph
 {
-    [CreateNodeMenu("Graph/SubGraph")]
-    public class SubGraph : Node
+    [NodeTint("#a8dadc")]
+    public class Branch : NodeBase
     {
-        public DefaultGraph TargetGraph;
+
     }
 }
