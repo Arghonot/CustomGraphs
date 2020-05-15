@@ -5,15 +5,15 @@ using System;
 
 namespace GraphEditor
 {
-    [CustomEditor(typeof(GraphRunner))]
+    [CustomEditor(typeof(GraphRunner<DefaultGraph>))]
     public class GraphRunnerEditor : Editor
     {
-        GraphRunner runner;
+        GraphRunner<DefaultGraph> runner;
 
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
-            runner = target as GraphRunner;
+            runner = target as GraphRunner<DefaultGraph>;
 
             if (target == null) return;
 
@@ -57,6 +57,8 @@ namespace GraphEditor
 
         void DrawValidityGraphSo()
         {
+            runner.isReady = true;
+
             foreach (var item in runner.values.Values)
             {
                 GUILayout.BeginHorizontal();
@@ -68,6 +70,7 @@ namespace GraphEditor
                 }
                 else
                 {
+                    runner.isReady = false;
                     EditorGUILayout.LabelField("    NOK");
                 }
 

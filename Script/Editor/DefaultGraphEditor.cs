@@ -16,6 +16,11 @@ namespace GraphEditor
             typeof(Graph.RootInt)
         };
 
+        public override void OnCreate()
+        {
+            base.OnCreate();
+        }
+
         public override Texture2D GetGridTexture()
         {
             NodeEditorWindow.current.titleContent = new GUIContent(((Graph.DefaultGraph)target).name);

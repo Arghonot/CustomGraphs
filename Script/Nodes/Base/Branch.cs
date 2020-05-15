@@ -1,11 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using XNode;
-
-namespace Graph
+﻿namespace Graph
 {
-    [NodeTint("#a8dadc")]
+    [NodeTint(ColorProfile.Branch)]
     public class Branch : NodeBase
     {
 

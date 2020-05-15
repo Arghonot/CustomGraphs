@@ -1,10 +1,12 @@
 ﻿using System.Linq;
 using XNode;
 using System;
+using UnityEngine;
 
 namespace Graph
 {
-    [NodeTint("#1d3557")]
+    [NodeTint(ColorProfile.Blackboard)]
+    [Serializable]
     public class Blackboard : Node
     {
         public int TextWidth = 130;
@@ -13,6 +15,7 @@ namespace Graph
 
         public int width = 300;
 
+        [SerializeField]
         public BlackBoardDictionnary container;
 
         void Awake()

@@ -164,6 +164,7 @@ public class Blackboard_Bool : Variable
     }
 }
 
+[Serializable]
 [BlackboardType("int")]
 public class Blackboard_Int : Variable
 {

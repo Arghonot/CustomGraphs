@@ -1,13 +1,16 @@
-﻿using XNode;
+﻿using UnityEngine;
+using XNode;
 
 namespace Graph
 {
+    [System.Serializable]
     [CreateNodeMenu("Graph/BlackboardVariable")]
-    [NodeTint("#e63946")]
+    [NodeTint(ColorProfile.other1)]
     public class BlackBoardVariable : Node
     {
-        public string uid;
-        public string Name = string.Empty;
+        [SerializeField] public string uid;
+        [SerializeField] public int VariableIndex;
+        [SerializeField] public string Name = string.Empty;
 
         public Blackboard Blackboard;
 
@@ -23,20 +26,21 @@ namespace Graph
             uid = string.Empty;
         }
 
-        public void SetVariable(string newname, string newuid)
+        public void SetVariable(string newname, string newuid, int newIndex)
         {
             if (Name != string.Empty || Name != "")
             {
-                RemoveDynamicPort(Name);
+                RemoveDynamicPort("");
             }
 
             this.AddDynamicOutput(
                 Blackboard.GetVariableType(newuid),
                 ConnectionType.Multiple,
                 TypeConstraint.Strict,
-                newname);
+                "");
 
             uid = newuid;
+            VariableIndex = newIndex;
             Name = newname;
         }
 
@@ -58,9 +62,6 @@ namespace Graph
             }
 
             return Blackboard.container[uid].GetDefaultValue();
-
-            //return null;
-
         }
     }
 }

@@ -4,10 +4,11 @@ using UnityEngine;
 
 namespace Graph
 {
-    public class GraphRunner : MonoBehaviour
+    public class GraphRunner<T> : MonoBehaviour where T: Graph.DefaultGraph
     {
         public ScriptableObject So;
-        public Graph.DefaultGraph graph;
+        public T graph;
+        public bool isReady;
 
         /// <summary>
         /// Organized as follow : GUID - Value's datas

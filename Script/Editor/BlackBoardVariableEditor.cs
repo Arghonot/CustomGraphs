@@ -1,5 +1,6 @@
 ﻿using Graph;
 using UnityEditor;
+using UnityEngine;
 using XNodeEditor;
 
 namespace GraphEditor
@@ -37,8 +38,15 @@ namespace GraphEditor
 
         void DisplayNameSelection(BlackBoardVariable variablenode)
         {
+            if (variablenode.Blackboard == null) return;
+
             string[] GUIDs = variablenode.Blackboard.GetGUIDS();
             string[] names = variablenode.Blackboard.GetVariableNames(GUIDs);
+
+            if (variablenode.VariableIndex < GUIDs.Length)
+            {
+                selected = variablenode.VariableIndex;
+            }
 
             int prevSelected = selected;
             selected = EditorGUILayout.Popup(selected, variablenode.GetPossibleVariables());
@@ -47,11 +55,11 @@ namespace GraphEditor
             {
                 if (prevSelected != selected)
                 {
-                    variablenode.SetVariable(names[selected], GUIDs[selected]);
+                    variablenode.SetVariable(names[selected], GUIDs[selected], selected);
                 }
                 else if (variablenode.Name == string.Empty)
                 {
-                    variablenode.SetVariable(names[0], GUIDs[0]);
+                    variablenode.SetVariable(names[0], GUIDs[0], 0);
                 }
             }
         }

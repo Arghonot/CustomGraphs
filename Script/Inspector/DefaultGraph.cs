@@ -9,20 +9,7 @@ namespace Graph
     public class DefaultGraph : NodeGraph
     {
         public Blackboard blackboard;
-        //public RootInt Root;
         public GenericDicionnary gd = new GenericDicionnary();
-        string blackboardName = "Blackboard";
-
-        public void Awake()
-        {
-            blackboard = AddNode<Blackboard>();
-            //Root = AddNode<RootInt>();
-
-            //Root.name = "Root";
-            blackboard.name = blackboardName;
-
-            NodeEditorWindow.RepaintAll();
-        }
 
         public Dictionary<string, Variable>   CompileAllBlackboard()
         {

@@ -5,7 +5,7 @@ using XNode;
 
 namespace Graph
 {
-    [NodeTint("#457b9d")]
+    [NodeTint(ColorProfile.Leaf)]
     public class Leaf : NodeBase
     {
 
