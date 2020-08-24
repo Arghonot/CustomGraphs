@@ -21,9 +21,9 @@ namespace Graph
     }
 
     [NodeTint(ColorProfile.Root)]
-    public class Root<T> : NodeBase
+    public class Root : NodeBase
     {
-        [Input(ShowBackingValue.Never, ConnectionType.Override, TypeConstraint.Strict)]
-        public T Input;
+        //[Input(ShowBackingValue.Never, ConnectionType.Override, TypeConstraint.Strict)]
+        //public T Input;
     }
 }

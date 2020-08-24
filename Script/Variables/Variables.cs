@@ -8,6 +8,20 @@ using UnityEngine;
 
 #region UNITY TYPES
 
+[BlackboardType("AnimationCurve")]
+public class Blackboard_AnimationCurve : Variable
+{
+    public override string GetDefaultName()
+    {
+        return "AnimationCurve";
+    }
+
+    public override Type GetValueType()
+    {
+        return typeof(AnimationCurve);
+    }
+}
+
 [BlackboardType("GameObject")]
 public class Blackboard_GameObject : Variable
 {

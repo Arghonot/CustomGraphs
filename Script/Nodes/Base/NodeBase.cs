@@ -8,7 +8,7 @@ namespace Graph
     public class NodeBase : XNode.Node
     {
         public override object GetValue(NodePort port)
-        {
+        {            
             return Run();
         }
 

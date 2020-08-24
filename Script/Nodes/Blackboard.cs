@@ -9,6 +9,7 @@ namespace Graph
     [Serializable]
     public class Blackboard : Node
     {
+        [SerializeField] public string welsh;
         public int TextWidth = 130;
         public int TypeWidth = 100; 
         public int MinusWidth = 20;
@@ -20,7 +21,11 @@ namespace Graph
 
         void Awake()
         {
-            container = new BlackBoardDictionnary();
+            //if (container == null)
+            //{
+            //    container = new BlackBoardDictionnary();
+            //}
+            //container = new BlackBoardDictionnary();
         }
 
         public string[] GetVariableNames()

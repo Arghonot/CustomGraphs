@@ -6,7 +6,7 @@ namespace Graph
     [System.Serializable]
     [CreateNodeMenu("Graph/BlackboardVariable")]
     [NodeTint(ColorProfile.other1)]
-    public class BlackBoardVariable : Node
+    public class BlackBoardVariable : NodeBase
     {
         [SerializeField] public string uid;
         [SerializeField] public int VariableIndex;
@@ -30,14 +30,14 @@ namespace Graph
         {
             if (Name != string.Empty || Name != "")
             {
-                RemoveDynamicPort("");
+                RemoveDynamicPort("Output");
             }
 
             this.AddDynamicOutput(
                 Blackboard.GetVariableType(newuid),
                 ConnectionType.Multiple,
                 TypeConstraint.Strict,
-                "");
+                "Output");
 
             uid = newuid;
             VariableIndex = newIndex;
@@ -49,19 +49,37 @@ namespace Graph
             return ((DefaultGraph)graph).blackboard.GetVariableNames();
         }
 
-        public override object GetValue(NodePort port)
+        public override object Run()
         {
+            // we try to get the key from the blackboard gd if any
             if (((DefaultGraph)graph).gd.ContainsKey(Name))
             {
                 return ((DefaultGraph)graph).gd.Get(Name);
             }
-
+            // or we return null if it isn't even in the blackboard
             if (!Blackboard.container.ContainsKey(uid))
             {
                 return null;
             }
-
+            // or we return the default value, might be null
             return Blackboard.container[uid].GetDefaultValue();
         }
+
+        //public override object GetValue(NodePort port)
+        //{
+        //    Debug.Log("BB VARIABLE");
+        //    // we try to get the key from the blackboard gd if any
+        //    if (((DefaultGraph)graph).gd.ContainsKey(Name))
+        //    {
+        //        return ((DefaultGraph)graph).gd.Get(Name);
+        //    }
+        //    // or we return null if it isn't even in the blackboard
+        //    if (!Blackboard.container.ContainsKey(uid))
+        //    {
+        //        return null;
+        //    }
+        //    // or we return the default value, might be null
+        //    return Blackboard.container[uid].GetDefaultValue();
+        //}
     }
 }

@@ -6,17 +6,8 @@ using XNode;
 namespace Graph
 {
     [CreateNodeMenu("Graph/BoolNode")]
-    public class BoolNode : Leaf
+    public class BoolNode : Leaf<bool>
     {
         public bool value;
-
-        private void Awake()
-        {
-            AddDynamicOutput(
-                typeof(bool),
-                ConnectionType.Multiple,
-                TypeConstraint.Strict,
-                "bool");
-        }
     }
 }

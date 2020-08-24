@@ -1,15 +1,15 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using XNode;
-using XNodeEditor;
 
 namespace Graph
 {
     [CreateAssetMenu]
     public class DefaultGraph : NodeGraph
     {
-        public Blackboard blackboard;
+        [SerializeField] public Blackboard blackboard;
         public GenericDicionnary gd = new GenericDicionnary();
+        public bool CanRun;
 
         public Dictionary<string, Variable>   CompileAllBlackboard()
         {

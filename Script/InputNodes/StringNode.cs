@@ -6,17 +6,8 @@ using XNode;
 namespace Graph
 {
     [CreateNodeMenu("Graph/StringNode")]
-    public class StringNode : Leaf
+    public class StringNode : Leaf<string>
     {
         public string value;
-
-        private void Awake()
-        {
-            AddDynamicOutput(
-                typeof(string),
-                ConnectionType.Multiple,
-                TypeConstraint.Strict,
-                "string");
-        }
     }
 }
