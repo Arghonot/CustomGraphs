@@ -4,7 +4,6 @@ using XNode;
 
 namespace Graph
 {
-    [CreateAssetMenu]
     public class DefaultGraph : NodeGraph
     {
         [SerializeField] public Blackboard blackboard;

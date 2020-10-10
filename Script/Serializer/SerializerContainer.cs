@@ -7,7 +7,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "test", menuName = "Test/ContainerTest", order = 1)]
 public class SerializerContainer : ScriptableObject
 {
-    public NoiseGraph.LibnoiseGraph graph;
+    //public NoiseGraph.LibnoiseGraph graph;
 
     //[DisplayScriptableObjectPropertiesAttribute]
     public Graph.SerializableBlackBoard sbb;
