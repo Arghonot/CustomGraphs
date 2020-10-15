@@ -11,13 +11,27 @@ namespace Graph
     [CustomNodeGraphEditor(typeof(IntGraph))]
     public class LibnoiseGraphEditor : XNodeEditor.NodeGraphEditor
     {
-        List<Type> HiddenTypes = new List<Type>()
+        //List<Type> HiddenTypes = new List<Type>()
+        //{
+        //    typeof(RootInt),
+        //    typeof(Graph.Leaf<int>),
+        //    typeof(Graph.Branch<int>),
+        //    typeof(Graph.Blackboard),
+        //    typeof(Graph.NodeBase)
+        //};
+
+        // TODO might go back to a list<type>, let's see if we break the perfs
+        List<string> HiddenTypes = new List<string>()
         {
-            typeof(RootInt),
-            typeof(Graph.Leaf<int>),
-            typeof(Graph.Branch<int>),
-            typeof(Graph.Blackboard),
-            typeof(Graph.NodeBase)
+            "Graph.RootInt",
+            "Leaf<int>",
+            "Branch<int>",
+            "Graph.Blackboard",
+            "Graph.NodeBase",
+            "Graph.Branch`1[T]",
+            "Graph.Leaf`1[T]",
+            "Graph.Root",
+            "BT.AILeaf"
         };
 
         public override void RemoveNode(Node node)
@@ -39,7 +53,7 @@ namespace Graph
 
         public override string GetNodeMenuName(Type type)
         {
-            if (!HiddenTypes.Contains(type) && !type.ToString().Contains("Root"))
+            if (!HiddenTypes.Contains(type.ToString()))
             {
                 return base.GetNodeMenuName(type);
             }

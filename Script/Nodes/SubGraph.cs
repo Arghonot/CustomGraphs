@@ -3,11 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using XNode;
 
-namespace Graph
+namespace BT.StandardLeaves
 {
-    [CreateNodeMenu("Graph/SubGraph")]
-    public class SubGraph : Node
+    public class SubGraph : AILeaf
     {
-        public DefaultGraph TargetGraph;
+        public Graph.IntGraph TargetGraph;
+
+        public override object Run()
+        {
+            TargetGraph.gd = Gd;
+            return TargetGraph.Root.Run();//GetValue( Root.Ports.First());
+        }
     }
 }

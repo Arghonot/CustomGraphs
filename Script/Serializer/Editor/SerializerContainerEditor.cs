@@ -7,16 +7,16 @@ using UnityEngine;
 public class SerializerContainerEditor : Editor
 {
     // TODO use for real later on
-    //public override void OnInspectorGUI()
-    //{
-    //    var oldgraph = ((SerializerContainer)target).graph;
+    public override void OnInspectorGUI()
+    {
+        var oldgraph = ((SerializerContainer)target).graph;
 
-    //    base.OnInspectorGUI();
+        base.OnInspectorGUI();
 
-    //    if (oldgraph != ((SerializerContainer)target).graph)
-    //    {
-    //        ((SerializerContainer)target).sbb.InitializeContent(
-    //            ((SerializerContainer)target).graph);
-    //    }
-    //}
+        if (oldgraph != ((SerializerContainer)target).graph)
+        {
+            ((SerializerContainer)target).sbb.InitializeContent(
+                ((SerializerContainer)target).graph);
+        }
+    }
 }

@@ -8,7 +8,22 @@ namespace Graph
     {
         public T Get<T>(string name)
         {
+            if (!Contains(name))
+            {
+                Debug.LogError("THE KEY [" + name + "] DOES NOT EXISTS.");
+            }
+
             return (T)this[name];
+        }
+
+        public object TryGet(string name)
+        {
+            if (!Contains(name))
+            {
+                return null;
+            }
+
+            return this[name];
         }
 
         public object Get(string name)
@@ -26,6 +41,11 @@ namespace Graph
             this.Add(name, (object)value);
 
             return true;
+        }
+
+        public bool Contains(string key)
+        {
+            return ContainsKey(key);
         }
     }
 }

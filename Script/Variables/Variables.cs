@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.AI;
 
 
 #region UNITY TYPES
@@ -19,6 +20,20 @@ public class Blackboard_AnimationCurve : Variable
     public override Type GetValueType()
     {
         return typeof(AnimationCurve);
+    }
+}
+
+[BlackboardType("NavMeshAgent")]
+public class Blackboard_NavMeshAgent : Variable
+{
+    public override string GetDefaultName()
+    {
+        return "NavMeshAgent";
+    }
+
+    public override Type GetValueType()
+    {
+        return typeof(NavMeshAgent);
     }
 }
 
