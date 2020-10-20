@@ -2,17 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 using XNode;
+using Graph;
 
-namespace BT.StandardLeaves
+namespace Graph
 {
-    public class SubGraph : AILeaf
+    public class SubGraph : Leaf<int>
     {
         public Graph.IntGraph TargetGraph;
 
         public override object Run()
         {
-            TargetGraph.gd = Gd;
-            return TargetGraph.Root.Run();//GetValue( Root.Ports.First());
+            TargetGraph.gd = ((DefaultGraph)graph).gd;
+            return TargetGraph.Root.Run();
         }
     }
 }
