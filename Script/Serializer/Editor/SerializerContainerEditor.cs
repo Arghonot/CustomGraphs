@@ -13,8 +13,10 @@ public class SerializerContainerEditor : Editor
 
         base.OnInspectorGUI();
 
-        if (oldgraph != ((SerializerContainer)target).graph)
+        if (((SerializerContainer)target).graph != null &&
+            oldgraph != ((SerializerContainer)target).graph)
         {
+            Debug.Log("DIFF");
             ((SerializerContainer)target).sbb.InitializeContent(
                 ((SerializerContainer)target).graph);
         }

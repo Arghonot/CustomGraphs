@@ -5,7 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "test", menuName = "Test/ContainerTest", order = 1)]
 public class SerializerContainer : ScriptableObject
 {
-    public IntGraph graph;
+    public DefaultGraph graph;
 
     //[DisplayScriptableObjectPropertiesAttribute]
     public Graph.SerializableBlackBoard sbb;

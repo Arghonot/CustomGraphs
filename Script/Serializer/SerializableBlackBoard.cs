@@ -43,7 +43,9 @@ namespace Graph
 
             foreach (var item in compiledBlackBoard)
             {
-                switch (item.Value.Name)
+                Debug.Log(item.Value.Name);
+
+                switch (item.Value.TypeName)
                 {
                     case "double":
                         DoublesContainer.Add(new DoubleVariable()
