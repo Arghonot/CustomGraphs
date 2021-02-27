@@ -3,22 +3,22 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(SerializerContainer))]
+[CustomEditor(typeof(TextureGenerator))]
 public class SerializerContainerEditor : Editor
 {
     // TODO use for real later on
     public override void OnInspectorGUI()
     {
-        var oldgraph = ((SerializerContainer)target).graph;
+        var oldgraph = ((TextureGenerator)target).graph;
 
         base.OnInspectorGUI();
 
-        if (((SerializerContainer)target).graph != null &&
-            oldgraph != ((SerializerContainer)target).graph)
+        if (((TextureGenerator)target).graph != null &&
+            oldgraph != ((TextureGenerator)target).graph)
         {
             Debug.Log("DIFF");
-            ((SerializerContainer)target).sbb.InitializeContent(
-                ((SerializerContainer)target).graph);
+            ((TextureGenerator)target).sbb.InitializeContent(
+                ((TextureGenerator)target).graph);
         }
     }
 }

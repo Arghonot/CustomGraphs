@@ -5,7 +5,6 @@ using UnityEngine;
 
 namespace Graph
 {
-    [CreateAssetMenu]
     public class IntGraph : DefaultGraph
     {
         public RootInt Root;
