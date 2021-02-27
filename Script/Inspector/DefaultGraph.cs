@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using XNode;
 
@@ -10,6 +11,18 @@ namespace Graph
         public GenericDicionnary gd = new GenericDicionnary();
         public bool CanRun;
 
+        public Root root;
+
+        public object Run(GenericDicionnary newgd = null)
+        {
+            if (newgd != null)
+            {
+                this.gd = newgd;
+            }
+
+            return root.GetValue(root.Ports.First());
+        }
+
         public Dictionary<string, Variable>   CompileAllBlackboard()
         {
             Dictionary<string, Variable> CompiledDictionnary =
@@ -19,13 +32,13 @@ namespace Graph
 
             foreach (var node in nodes)
             {
-                if (node.GetType() == typeof(SubGraph))
+                if (node.GetType().IsAssignableFrom(typeof(SubGraphNode)))
                 {
-                    if (((SubGraph)node).TargetGraph != null)
+                    if (((SubGraphNode)node).SubGraph != null)
                     {
                         MergeDictionnaries(
                             CompiledDictionnary,
-                            ((SubGraph)node).TargetGraph.CompileAllBlackboard());
+                            ((SubGraphNode)node).SubGraph.CompileAllBlackboard());
                     }
                 }
             }
