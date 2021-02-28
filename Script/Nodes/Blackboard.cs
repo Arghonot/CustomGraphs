@@ -19,15 +19,6 @@ namespace Graph
         [SerializeField]
         public BlackBoardDictionnary container;
 
-        void Awake()
-        {
-            //if (container == null)
-            //{
-            //    container = new BlackBoardDictionnary();
-            //}
-            //container = new BlackBoardDictionnary();
-        }
-
         public string[] GetVariableNames()
         {
             return container.Select(x => x.Value.Name).ToArray();

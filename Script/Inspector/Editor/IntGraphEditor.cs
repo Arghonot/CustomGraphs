@@ -23,15 +23,12 @@ namespace Graph
         // TODO might go back to a list<type>, let's see if we break the perfs
         List<string> HiddenTypes = new List<string>()
         {
-            "Graph.RootInt",
+            "Graph",
             "Leaf<int>",
             "Branch<int>",
             "Graph.Blackboard",
             "Graph.NodeBase",
-            "Graph.Branch`1[T]",
-            "Graph.Leaf`1[T]",
-            "Graph.Root",
-            "BT.AILeaf"
+            "Graph.Root"
         };
 
         public override void RemoveNode(Node node)
@@ -53,12 +50,15 @@ namespace Graph
 
         public override string GetNodeMenuName(Type type)
         {
-            if (!HiddenTypes.Contains(type.ToString()))
+            Debug.Log("GetNodeMenuName " + type.ToString());
+
+            if (!HiddenTypes.Contains(type.ToString()) &&
+                !type.ToString().Contains("[T]"))
             {
                 return base.GetNodeMenuName(type);
             }
 
-            else return null;
+            return string.Empty;
         }
 
         public override void OnCreate()

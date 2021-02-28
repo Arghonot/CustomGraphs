@@ -5,7 +5,7 @@ using XNode;
 
 namespace Graph
 {
-    [CreateNodeMenu("Graph/BoolNode")]
+    [CreateNodeMenu("Graph/Constants/BoolNode")]
     public class BoolNode : Leaf<bool>
     {
         public bool value;

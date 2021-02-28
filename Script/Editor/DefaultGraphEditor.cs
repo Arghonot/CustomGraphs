@@ -13,7 +13,8 @@ namespace GraphEditor
         List<Type> HiddenTypes = new List<Type>()
         {
             typeof(Graph.Blackboard),
-            typeof(Graph.RootInt)
+            typeof(Graph.RootInt),
+            typeof(Graph.Single)
         };
 
         public override void OnCreate()
@@ -30,12 +31,16 @@ namespace GraphEditor
 
         public override string GetNodeMenuName(Type type)
         {
-            if (!HiddenTypes.Contains(type) && !type.ToString().Contains("Root"))
+            if (!HiddenTypes.Contains(type) &&
+                !type.ToString().Contains("Root") &&
+                !type.ToString().Contains("Leaf"))
             {
                 return base.GetNodeMenuName(type);
             }
-
-            else return null;
+            else
+            {
+                return null;
+            }
         }
 
         public override void RemoveNode(Node node)

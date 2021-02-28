@@ -5,7 +5,7 @@ using XNode;
 
 namespace Graph
 {
-    [CreateNodeMenu("Graph/RandomInt")]
+    [CreateNodeMenu("Graph/Math/RandomInt")]
     public class RandomInt : Leaf<int>
     {
         [Input(ShowBackingValue.Always, ConnectionType.Override, TypeConstraint.Strict)]

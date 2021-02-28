@@ -5,7 +5,7 @@ using XNode;
 
 namespace Graph
 {
-    [CreateNodeMenu("Graph/IntInputNode")]
+    [CreateNodeMenu("Graph/Constants/IntInputNode")]
     public class IntNode : Leaf<int>
     {
         public int value;

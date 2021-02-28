@@ -6,6 +6,7 @@ using XNode;
 namespace Graph
 {
     [NodeTint(ColorProfile.Leaf)]
+    [HideInInspector]
     public class Leaf<T> : NodeBase
     {
         public void Awake()

@@ -6,9 +6,9 @@ namespace Graph
 {
     // TODO create a node without input or output
     [CreateNodeMenu("Graph/Misc/Comment")]
-    public class CommentNode : Leaf<string>
+    public class CommentNode : Single
     {
-        [Input(ShowBackingValue.Always, ConnectionType.Override, TypeConstraint.Strict)]
+        [TextArea]
         public string Comment;
     }
 }

@@ -5,7 +5,7 @@ using XNode;
 
 namespace Graph
 {
-    [CreateNodeMenu("Graph/StringNode")]
+    [CreateNodeMenu("Graph/Constants/StringNode")]
     public class StringNode : Leaf<string>
     {
         public string value;
