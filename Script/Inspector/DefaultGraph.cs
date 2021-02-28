@@ -23,6 +23,11 @@ namespace Graph
             return root.GetValue(root.Ports.First());
         }
 
+        public void UpdateDictionnary(Dictionary<string, Variable> newDictionnary)
+        {
+            MergeDictionnaries(blackboard.container, newDictionnary);
+        }
+
         public Dictionary<string, Variable>   CompileAllBlackboard()
         {
             Dictionary<string, Variable> CompiledDictionnary =
@@ -32,7 +37,7 @@ namespace Graph
 
             foreach (var node in nodes)
             {
-                if (node.GetType().IsAssignableFrom(typeof(SubGraphNode)))
+                if (node.GetType().IsSubclassOf(typeof(SubGraphNode)))
                 {
                     if (((SubGraphNode)node).SubGraph != null)
                     {
@@ -46,6 +51,8 @@ namespace Graph
             return CompiledDictionnary;
         }
 
+        // for performance reason you don't want this graph's dictionnary to directly add the new values
+        // because if you have 10 graph nested in each other you will end up checking the same values over and over.
         void MergeDictionnaries(Dictionary<string, Variable> compiled, Dictionary<string, Variable> subgraphDictionnary)
         {
             foreach (var item in subgraphDictionnary)

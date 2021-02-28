@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using XNode;
-using Graph;
+﻿using System;
 
 namespace Graph
 {
@@ -12,17 +8,7 @@ namespace Graph
 
         public override object Run()
         {
-            Debug.Log("DefaultGraph");
-
-            return null;
-            //TargetGraph.gd = ((DefaultGraph)graph).gd;
-
-            //if (TargetGraph == null)
-            //{
-            //    return new Object();
-            //}
-
-            //return GetInputValue<DefaultGraph>("TargetGraph", this.TargetGraph);
+            throw new NotImplementedException();
         }
     }
 }

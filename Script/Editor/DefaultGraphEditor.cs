@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-//using System.ge
 using UnityEngine;
 using XNode;
 using XNodeEditor;

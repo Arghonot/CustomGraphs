@@ -9,7 +9,6 @@ namespace Graph
     [Serializable]
     public class Blackboard : Node
     {
-        [SerializeField] public string welsh;
         public int TextWidth = 130;
         public int TypeWidth = 100; 
         public int MinusWidth = 20;

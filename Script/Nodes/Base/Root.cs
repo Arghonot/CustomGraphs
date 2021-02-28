@@ -1,11 +1,4 @@
-﻿
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using XNode;
-using static XNode.Node;
-
-namespace Graph
+﻿namespace Graph
 {
     public static class ColorProfile
     {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 using UnityEditor;
 
 namespace GraphEditor
@@ -29,6 +30,28 @@ namespace GraphEditor
             }
 
             DisplayAll(blackboard);
+
+
+            // -- load system
+            LoadSubgraphBlackboard();
+        }
+
+        private void LoadSubgraphBlackboard()
+        {
+            Graph.Blackboard blackboard = target as Graph.Blackboard;
+
+            // TODO handle a recursivity problem if a subgraph contain itself as a subgraph
+            // TODO add a boolean on graph add node instead of a linq request
+            if (blackboard.graph.nodes.Where(x => x.GetType().IsSubclassOf(typeof(Graph.SubGraphNode))).Count() != 0)
+            {
+                GUILayout.Space(10);
+
+                if (GUILayout.Button("load subgraphs blackboard"))
+                {
+                    ((Graph.DefaultGraph)blackboard.graph).UpdateDictionnary(
+                        ((Graph.DefaultGraph)blackboard.graph).CompileAllBlackboard());
+                }
+            }
         }
 
         void DisplayAll(Graph.Blackboard blackboard)
