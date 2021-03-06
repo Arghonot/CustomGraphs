@@ -23,7 +23,7 @@ namespace Graph
     [Serializable]
     // Basically do the bridge between Graph edition - Data edition in scene and
     // Scene runtime
-    public class SerializableBlackBoard /*: ScriptableObject*/
+    public class SerializableBlackBoard
     {
         // TODO Yeah terrible way of doing this, need some further
         // investigations on how to change it.
