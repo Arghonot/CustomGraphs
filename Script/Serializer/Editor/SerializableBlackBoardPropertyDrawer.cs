@@ -106,18 +106,11 @@ namespace Graph
             //Don't make child fields be indented
             var indent = EditorGUI.indentLevel;
             EditorGUI.indentLevel = 0;
-
-            //var NameRect = new Rect(
-            //    position.x,
-            //    position.y + VariableRect.YSpacing,
-            //    VariableRect.Width,
-            //    position.height + VariableRect.Height);
             position.height = fieldHeight;
 
             SerializedProperty iterator = property.Copy();
 
             float posx = position.x;
-            var container = new PropertyField();
 
             while (iterator.Next(true))
             {

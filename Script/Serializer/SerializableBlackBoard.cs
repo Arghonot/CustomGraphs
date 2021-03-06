@@ -21,6 +21,12 @@ namespace Graph
     public class TransformVariable : VariableStorage<Transform> { }
 
     [Serializable]
+    public class CurveVariable : VariableStorage<AnimationCurve> { }
+
+    [Serializable]
+    public class QualityModeVariable : VariableStorage<LibNoise.QualityMode> { }
+
+    [Serializable]
     // Basically do the bridge between Graph edition - Data edition in scene and
     // Scene runtime
     public class SerializableBlackBoard
@@ -31,6 +37,8 @@ namespace Graph
         public IntVariable[] Ints;
         public StringVariable[] Strings;
         public TransformVariable[] Transforms;
+        public CurveVariable[] AnimationCurves;
+        public QualityModeVariable[] QualityModes;
 
         public void InitializeContent(DefaultGraph graph)
         {
@@ -39,11 +47,11 @@ namespace Graph
             var DoublesContainer = new List<DoubleVariable>();
             var IntsContainer = new List<IntVariable>();
             var StringContainer = new List<StringVariable>();
-            var TransformContainer = new List<TransformVariable>();
+            var QualityModeContainer = new List<QualityModeVariable>();
 
             foreach (var item in compiledBlackBoard)
             {
-                Debug.Log(item.Value.Name);
+                Debug.Log(item.Value.Name + " " + item.Value.TypeName);
 
                 switch (item.Value.TypeName)
                 {
@@ -65,8 +73,8 @@ namespace Graph
                             Name = item.Value.Name
                         });
                         break;
-                    case "Transform":
-                        TransformContainer.Add(new TransformVariable()
+                    case "QualityMode":
+                        QualityModeContainer.Add(new QualityModeVariable()
                         {
                             Name = item.Value.Name
                         });
@@ -80,6 +88,7 @@ namespace Graph
             Strings = StringContainer.ToArray();
             Doubles = DoublesContainer.ToArray();
             Ints = IntsContainer.ToArray();
+            QualityModes = QualityModeContainer.ToArray();
         }
 
         //public void HandleVariable(
