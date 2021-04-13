@@ -5,25 +5,86 @@ using UnityEngine;
 
 namespace Graph
 {
-    public class VariableStorage<T>
+    [System.AttributeUsage(System.AttributeTargets.Class | System.AttributeTargets.Struct)]
+    public class StorableType : System.Attribute
     {
+        public Type ReferenceType;
+
+        public StorableType(Type reftype)
+        {
+            ReferenceType = reftype;
+        }
+    }
+
+    public class VariableStorageRoot
+    {
+        public string GUID;
         public string Name;
+        public object copyValue;
+
+        public VariableStorageRoot()
+        {
+            GUID = Guid.NewGuid().ToString();
+        }
+    }
+
+    public class VariableStorage<T> : VariableStorageRoot
+    {
         public T Value;
+
+        public void StoreValue()
+        {
+            Value = (T)copyValue;
+        }
+
+        public VariableStorage<T> SetAsCopy(VariableStorage<T> original)
+        {
+            this.Name = original.Name;
+            this.Value = (T)(original.Value);
+
+            return this;
+        }
+
+        //public override object Clone()
+        //{
+        //    var item = (VariableStorage<T>)MemberwiseClone();
+
+        //    item.Name = this.Name;
+        //    item.GUID = Guid.NewGuid().ToString();
+        //    item.Value = this.Value;
+
+        //    return item;
+        //}
+
+
+
+        //public VariableStorage(VariableStorage<T> original)
+        //{
+        //    Debug.Log("Copy constructor");
+        //    this.Name = original.Name;
+        //    this.Value = original.Value;
+        //}
     }
 
     [Serializable]
+    [StorableType(typeof(string))]
     public class StringVariable : VariableStorage<string> { }
     [Serializable]
+    [StorableType(typeof(double))]
     public class DoubleVariable : VariableStorage<double> { }
     [Serializable]
+    [StorableType(typeof(int))]
     public class IntVariable : VariableStorage<int> { }
     [Serializable]
+    [StorableType(typeof(Transform))]
     public class TransformVariable : VariableStorage<Transform> { }
 
     [Serializable]
+    [StorableType(typeof(AnimationCurve))]
     public class CurveVariable : VariableStorage<AnimationCurve> { }
 
     [Serializable]
+    [StorableType(typeof(LibNoise.QualityMode))]
     public class QualityModeVariable : VariableStorage<LibNoise.QualityMode> { }
 
     [Serializable]
