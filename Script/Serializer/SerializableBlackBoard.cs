@@ -20,7 +20,6 @@ namespace Graph
     {
         public string GUID;
         public string Name;
-        public object copyValue;
 
         public VariableStorageRoot()
         {
@@ -32,17 +31,32 @@ namespace Graph
     {
         public T Value;
 
-        public void StoreValue()
-        {
-            Value = (T)copyValue;
-        }
-
         public VariableStorage<T> SetAsCopy(VariableStorage<T> original)
         {
             this.Name = original.Name;
             this.Value = (T)(original.Value);
 
             return this;
+        }
+
+        public object GetValue()
+        {
+            return Value;
+        }
+
+        public void Set(T newValue)
+        {
+            Value = newValue;
+        }
+
+        public void ToString()
+        {
+            Debug.Log(string.Join("\n- ", new string[]
+            {
+                GUID,
+                Name,
+                Value.ToString()
+            }));
         }
 
         //public override object Clone()
