@@ -5,6 +5,131 @@ using System.Reflection;
 using UnityEngine;
 using UnityEngine.AI;
 
+namespace Graph
+{
+    [System.AttributeUsage(System.AttributeTargets.Class | System.AttributeTargets.Struct)]
+    public class StorableType : System.Attribute
+    {
+        public Type ReferenceType;
+
+        public StorableType(Type reftype)
+        {
+            ReferenceType = reftype;
+        }
+    }
+
+    public class VariableStorageRoot
+    {
+        public string GUID;
+        public string Name;
+
+        public VariableStorageRoot()
+        {
+            GUID = Guid.NewGuid().ToString();
+        }
+    }
+
+    public class VariableStorage<T> : VariableStorageRoot
+    {
+        public T Value;
+
+        public VariableStorage<T> SetAsCopy(VariableStorage<T> original)
+        {
+            this.Name = original.Name;
+            this.Value = (T)(original.Value);
+
+            return this;
+        }
+
+        public object GetValue()
+        {
+            return Value;
+        }
+
+        public void Set(T newValue)
+        {
+            Value = newValue;
+        }
+
+        public void ToString()
+        {
+            Debug.Log(string.Join(" ", new string[]
+            {
+                GUID,
+                Name,
+                Value.ToString()
+            }));
+        }
+
+        //public override object Clone()
+        //{
+        //    var item = (VariableStorage<T>)MemberwiseClone();
+
+        //    item.Name = this.Name;
+        //    item.GUID = Guid.NewGuid().ToString();
+        //    item.Value = this.Value;
+
+        //    return item;
+        //}
+
+
+
+        //public VariableStorage(VariableStorage<T> original)
+        //{
+        //    Debug.Log("Copy constructor");
+        //    this.Name = original.Name;
+        //    this.Value = original.Value;
+        //}
+    }
+
+    #region C# types
+
+    [Serializable]
+    [StorableType(typeof(float))]
+    public class floatVariable : VariableStorage<float> { }
+    [Serializable]
+    [StorableType(typeof(long))]
+    public class LongVariable : VariableStorage<long> { }
+    [Serializable]
+    [StorableType(typeof(bool))]
+    public class BoolVariable : VariableStorage<bool> { }
+    [Serializable]
+    [StorableType(typeof(string))]
+    public class StringVariable : VariableStorage<string> { }
+    [Serializable]
+    [StorableType(typeof(double))]
+    public class DoubleVariable : VariableStorage<double> { }
+    [Serializable]
+    [StorableType(typeof(int))]
+    public class IntVariable : VariableStorage<int> { }
+
+    #endregion
+
+    #region Unity types
+
+    [Serializable]
+    [StorableType(typeof(AnimationCurve))]
+    public class AnimationCurveVariable : VariableStorage<AnimationCurve> { }
+    [Serializable]
+    [StorableType(typeof(NavMeshAgent))]
+    public class NavMeshAgentVariable : VariableStorage<NavMeshAgent> { }
+    [Serializable]
+    [StorableType(typeof(GameObject))]
+    public class GameObjectVariable : VariableStorage<GameObject> { }
+    [Serializable]
+    [StorableType(typeof(Vector3))]
+    public class Vector3Variable : VariableStorage<Vector3> { }
+    [Serializable]
+    [StorableType(typeof(Quaternion))]
+    public class QuaternionVariable : VariableStorage<Quaternion> { }
+    [Serializable]
+    [StorableType(typeof(Transform))]
+    public class TransformVariable : VariableStorage<Transform> { }
+
+    #endregion
+
+}
+
 
 #region UNITY TYPES
 
