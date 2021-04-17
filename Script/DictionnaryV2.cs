@@ -84,7 +84,7 @@ public class DictionnaryV2 : MonoBehaviour
     [ContextMenu("Test contain string")]
     public void TestContainString()
     {
-        Debug.Log("TestContainString->" + storage.ContainsValue(GUIDToGet));
+        Debug.Log("TestContainString->" + storage.ContainsGuid(GUIDToGet));
     }
 
     [ContextMenu("Test get container type")]

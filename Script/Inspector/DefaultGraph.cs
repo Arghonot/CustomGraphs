@@ -8,32 +8,31 @@ namespace Graph
     public class DefaultGraph : NodeGraph
     {
         [SerializeField] public Blackboard blackboard;
-        public GenericDicionnary gd = new GenericDicionnary();
+        public GraphVariableStorage storage = new GraphVariableStorage();
         public bool CanRun;
 
         public Root root;
 
-        public object Run(GenericDicionnary newgd = null)
+        public object Run(GraphVariableStorage newstorage = null)
         {
-            if (newgd != null)
+            if (newstorage != null)
             {
-                this.gd = newgd;
+                this.storage = newstorage;
             }
 
             return root.GetValue(root.Ports.First());
         }
 
-        public void UpdateDictionnary(Dictionary<string, Variable> newDictionnary)
+        public void UpdateDictionnary(GraphVariableStorage newstorage)
         {
-            MergeDictionnaries(blackboard.container, newDictionnary);
+            MergeDictionnaries(blackboard.storage, newstorage);
         }
 
-        public Dictionary<string, Variable>   CompileAllBlackboard()
+        public GraphVariableStorage   CompileAllBlackboard()
         {
-            Dictionary<string, Variable> CompiledDictionnary =
-                new Dictionary<string, Variable>();
+            GraphVariableStorage CompiledDictionnary = new GraphVariableStorage();
 
-            MergeDictionnaries(CompiledDictionnary, blackboard.container);
+            MergeDictionnaries(CompiledDictionnary, blackboard.storage);
 
             foreach (var node in nodes)
             {
@@ -53,29 +52,31 @@ namespace Graph
 
         // for performance reason you don't want this graph's dictionnary to directly add the new values
         // because if you have 10 graph nested in each other you will end up checking the same values over and over.
-        void MergeDictionnaries(Dictionary<string, Variable> compiled, Dictionary<string, Variable> subgraphDictionnary)
+        void MergeDictionnaries(GraphVariableStorage compiled, GraphVariableStorage subgraphDictionnary)
         {
-            foreach (var item in subgraphDictionnary)
-            {
-                if (!compiled.ContainsKey(item.Key) && !ContainName(compiled, item.Value.Name))
-                {
-                    compiled.Add(item.Key, item.Value);
-                }
-            }
+            compiled.Merge(subgraphDictionnary);
+
+            //foreach (var item in subgraphDictionnary)
+            //{
+            //    if (!compiled.ContainsKey(item.Key) && !ContainName(compiled, item.Value.Name))
+            //    {
+            //        compiled.Add(item.Key, item.Value);
+            //    }
+            //}
         }
 
-        bool ContainName(Dictionary<string, Variable> dic, string name)
-        {
-            foreach (var item in dic)
-            {
-                if (item.Value.Name == name)
-                {
-                    return true;
-                }
-            }
+        //bool ContainName(GraphVariableStorage dic, string name)
+        //{
+        //    foreach (var item in dic)
+        //    {
+        //        if (item.Value.Name == name)
+        //        {
+        //            return true;
+        //        }
+        //    }
 
-            return false;
-        }
+        //    return false;
+        //}
 
         public void OnDeleteVariable(string uid)
         {

@@ -10,7 +10,8 @@ namespace GraphEditor
     public class BlackBoardEditor : XNodeEditor.NodeEditor
     {
         int Selected = 0;
-        public string[] options = Variable.GetTypes();
+        public string[] options = Graph.GraphVariableStorage.GetPossibleTypesName();
+        public Type[] optionsType = Graph.GraphVariableStorage.getPossibleTypes();
         string UIDToDelete = string.Empty;
 
         public override int GetWidth()
@@ -24,7 +25,7 @@ namespace GraphEditor
 
             AddVariable(blackboard);
 
-            if (blackboard.container.Count > 0)
+            if (blackboard.storage.Count() > 0)
             {
                 GUILayout.Space(4);
             }
@@ -57,41 +58,44 @@ namespace GraphEditor
 
         void DisplayAll(Graph.Blackboard blackboard)
         {
-            if (blackboard.container == null ||
-                blackboard.container.Count == 0)
+            if (blackboard.storage == null ||
+                blackboard.storage.Count() == 0)
             {
                 return;
             }
 
-            foreach (var item in blackboard.container)
+            string[] Guids = blackboard.storage.getAllGuids();
+
+
+            for (int i = 0; i < Guids.Length; i++)
             {
-                DisplayLine(blackboard, item);
+                DisplayLine(blackboard, blackboard.storage.GetContainerInstance(Guids[i]));
             }
 
             if (UIDToDelete != string.Empty)
             {
-                blackboard.RemoveVariable(UIDToDelete);
+                blackboard.storage.Remove(UIDToDelete);
             }
         }
 
-        void DisplayLine(Graph.Blackboard blackboard, KeyValuePair<string, Variable> elem)
+        void DisplayLine(Graph.Blackboard blackboard, Graph.VariableStorageRoot elem)
         {
             GUILayout.BeginHorizontal("box");
 
             // Display name and allow change
-            elem.Value.Name = EditorGUILayout.TextField(
-                elem.Value.Name,
+            elem.Name = EditorGUILayout.TextField(
+                elem.Name,
                 GUILayout.Width(blackboard.TextWidth));
 
             // Display type
             EditorGUILayout.LabelField(
-                elem.Value.TypeName,
+                blackboard.storage.GetStoredType(elem.GUID).Name,
                 GUILayout.Width(blackboard.TypeWidth));
 
             // Allow variable removal
             if (GUILayout.Button("-", GUILayout.Width(blackboard.MinusWidth)))
             {
-                UIDToDelete = elem.Key;
+                UIDToDelete = elem.GUID;
             }
 
             GUILayout.EndHorizontal();
@@ -105,10 +109,7 @@ namespace GraphEditor
 
             if (GUILayout.Button("Add"))
             {
-                var guid =
-                    Guid.NewGuid().ToString();
-                
-                blackboard.AddVariable(guid, options[Selected]);
+                blackboard.storage.Add(optionsType[Selected]);
             }
 
             GUILayout.EndHorizontal();

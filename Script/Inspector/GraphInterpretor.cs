@@ -17,25 +17,20 @@ namespace Graph
         /// <summary>
         /// Organized as follow : GUID - Value's datas
         /// </summary>
-        public BlackBoardDictionnary values = null;
+        public GraphVariableStorage storage = new GraphVariableStorage();
 
         public void BuildValueDictionnary()
         {
-            if (values != null)
+            if (storage != null)
             {
-                values.Clear();
+                storage.Flush();
             }
             else
             {
-                values = new BlackBoardDictionnary();
+                storage = new GraphVariableStorage();
             }
 
-            var original = graph.CompileAllBlackboard();
-
-            foreach (var item in original)
-            {
-                values.Add(item.Key, Variable.CreateCopy(item.Value));
-            }
+            storage.Merge(graph.CompileAllBlackboard());
         }
     }
 }

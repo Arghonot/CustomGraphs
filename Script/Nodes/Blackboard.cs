@@ -10,99 +10,84 @@ namespace Graph
     public class Blackboard : Node
     {
         public int TextWidth = 130;
-        public int TypeWidth = 100; 
+        public int TypeWidth = 100;
         public int MinusWidth = 20;
 
         public int width = 300;
 
         [SerializeField]
-        public BlackBoardDictionnary container;
+        public GraphVariableStorage storage;
 
         public string[] GetVariableNames()
         {
-            return container.Select(x => x.Value.Name).ToArray();
+            return storage.GetAllNames();
         }
 
-        public bool AddVariable(string guid, string type)
-        {
-            if (container.ContainsKey(name))
-            {
-                return false;
-            }
+        //public bool AddVariable(string guid, string type)
+        //{
+        //    if (storage.ContainName(name))
+        //    {
+        //        return false;
+        //    }
             
-            container.Add(guid, Variable.CreateType(type));
+        //    storage.Add(guid, Variable.CreateType(type));
 
-            return true;
-        }
+        //    return true;
+        //}
 
-        public bool RemoveVariable(string guid)
-        {
-            if (!container.ContainsKey(guid))
-            {
-                return false;
-            }
+        //public bool RemoveVariable(string guid)
+        //{
+        //    if (!storage.ContainsKey(guid))
+        //    {
+        //        return false;
+        //    }
 
-            container.Remove(guid);
-            ((DefaultGraph)graph).OnDeleteVariable(guid);
+        //    storage.Remove(guid);
+        //    ((DefaultGraph)graph).OnDeleteVariable(guid);
 
-            return true;
-        }
+        //    return true;
+        //}
+
+        //public Type GetVariableType(string guid)
+        //{
+        //    return storage[guid].GetValueType();
+        //}
+
+        //public string GetTypeFromGUID(string guid)
+        //{
+        //    if (!storage.ContainsKey(guid))
+        //    {
+        //        return "int";
+        //    }
+
+        //    return Variable.GetType(storage[guid].GetValueType());
+        //}
+
+        //public string GetName(string guid)
+        //{
+        //    if (!storage.ContainsKey(guid))
+        //    {
+        //        return null;
+        //    }
+
+        //    return storage[guid].Name;
+        //}
 
         public Type GetVariableType(string guid)
         {
-            return container[guid].GetValueType();
+            return storage.GetStoredType(guid);
         }
 
-        public string GetTypeFromGUID(string guid)
-        {
-            if (!container.ContainsKey(guid))
-            {
-                return "int";
-            }
-
-            return Variable.GetType(container[guid].GetValueType());
-        }
-
-        public string GetName(string guid)
-        {
-            if (!container.ContainsKey(guid))
-            {
-                return null;
-            }
-
-            return container[guid].Name;
-        }
-
+        // TODO decide if storage should be exposed
         public string[] GetGUIDS()
         {
-            int index = 0;
-            string[] guids = new string[container.Count];
-
-            foreach (var item in container)
-            {
-                guids[index++] = item.Key;
-            }
-
-            return guids;
+            return storage.getAllGuids();
         }
 
-        public string[] GetVariableNames(string[] uids)
+        // TODO decide if storage should be exposed
+        public string[] GetVariableNames(string[] guids)
         {
-            string[] names = new string[uids.Count()];
-
-            for (int i = 0; i < uids.Length; i++)
-            {
-                if (container.ContainsKey(uids[i]))
-                {
-                    names[i] = container[uids[i]].Name;
-                }
-                else
-                {
-                    names[i] = "UNKNOWN";
-                }
-            }
-
-            return names;
+            return storage.GetNames(guids);
         }
     }
 }

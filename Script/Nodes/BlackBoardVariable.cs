@@ -10,6 +10,8 @@ namespace Graph
         [SerializeField] public string uid;
         [SerializeField] public int VariableIndex;
         [SerializeField] public string Name = string.Empty;
+        //private string Guid;
+
 
         public Blackboard Blackboard;
 
@@ -51,17 +53,17 @@ namespace Graph
         public override object Run()
         {
             // we try to get the key from the blackboard gd if any
-            if (((DefaultGraph)graph).gd.ContainsKey(Name))
+            if (((DefaultGraph)graph).storage.ContainsGuid(uid))
             {
-                return ((DefaultGraph)graph).gd.Get(Name);
+                return ((DefaultGraph)graph).storage.Get(uid);
             }
             // or we return null if it isn't even in the blackboard
-            if (!Blackboard.container.ContainsKey(uid))
+            if (!Blackboard.storage.ContainsGuid(uid))
             {
                 return null;
             }
             // or we return the default value, might be null
-            return Blackboard.container[uid].GetDefaultValue();
+            return Blackboard.storage.Get(uid);
         }
 
         //public override object GetValue(NodePort port)

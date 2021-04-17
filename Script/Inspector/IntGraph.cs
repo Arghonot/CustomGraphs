@@ -6,11 +6,11 @@ namespace Graph
     {
         public RootInt Root;
 
-        public int Run(GenericDicionnary newgd = null)
+        public int Run(GraphVariableStorage newStorage = null)
         {
-            if (newgd != null)
+            if (newStorage != null)
             {
-                this.gd = newgd;
+                this.storage = newStorage;
             }
 
             return (int)Root.GetValue(Root.Ports.First());

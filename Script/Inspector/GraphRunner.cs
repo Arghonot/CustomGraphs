@@ -10,25 +10,8 @@ namespace Graph
         public T graph;
         public bool isReady;
 
-        /// <summary>
-        /// Organized as follow : GUID - Value's datas
-        /// </summary>
         [SerializeField]
-        public BlackBoardDictionnary values = null;
-
-        public bool ContainsValue(string ValueName, Type valueType)
-        {
-            foreach (var item in values)
-            {
-                if (item.Value.Name == ValueName &&
-                    item.Value.GetValueType() == valueType)
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
+        public GraphVariableStorage storage = null;
 
         public void BuildValueDictionnary()
         {
@@ -37,21 +20,16 @@ namespace Graph
                 graph = null;
                 return;
             }
-            if (values != null)
+            if (storage != null)
             {
-                values.Clear();
+                storage.Flush();
             }
             else
             {
-                values = new BlackBoardDictionnary();
+                storage = new GraphVariableStorage();
             }
 
-            var original = graph.CompileAllBlackboard();
-
-            foreach (var item in original)
-            {
-                values.Add(item.Key, Variable.CreateCopy(item.Value));
-            }
+            storage.Merge(graph.CompileAllBlackboard());
         }
     }
 }

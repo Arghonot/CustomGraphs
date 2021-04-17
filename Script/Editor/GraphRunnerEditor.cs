@@ -27,10 +27,10 @@ namespace GraphEditor
         {
             runner.So = (ScriptableObject)EditorGUILayout.ObjectField(runner.So, typeof(ScriptableObject), true);
 
-            if (runner.So != null && runner.graph != null)
-            {
-                DrawValidity();
-            }
+            //if (runner.So != null && runner.graph != null)
+            //{
+            //    DrawValidity();
+            //}
         }
 
         void    HandleNewGraph()
@@ -50,74 +50,47 @@ namespace GraphEditor
             runner.BuildValueDictionnary();
         }
 
-        void DrawValidity()
-        {
-            DrawValidityGraphSo();
-        }
+        //void DrawValidity()
+        //{
+        //    DrawValidityGraphSo();
+        //}
 
-        void DrawValidityGraphSo()
-        {
-            runner.isReady = true;
+        //void DrawValidityGraphSo()
+        //{
+        //    runner.isReady = true;
 
-            foreach (var item in runner.values.Values)
-            {
-                GUILayout.BeginHorizontal();
-                EditorGUILayout.LabelField(item.Name);
+        //    foreach (var item in runner.storage.Values)
+        //    {
+        //        GUILayout.BeginHorizontal();
+        //        EditorGUILayout.LabelField(item.Name);
 
-                if (DoesSoContainsValue(item.Name, item.GetValueType()))
-                {
-                    EditorGUILayout.LabelField("    OK");
-                }
-                else
-                {
-                    runner.isReady = false;
-                    EditorGUILayout.LabelField("    NOK");
-                }
+        //        if (DoesSoContainsValue(item.Name, item.GetValueType()))
+        //        {
+        //            EditorGUILayout.LabelField("    OK");
+        //        }
+        //        else
+        //        {
+        //            runner.isReady = false;
+        //            EditorGUILayout.LabelField("    NOK");
+        //        }
 
-                GUILayout.EndHorizontal();
-            }
-        }
+        //        GUILayout.EndHorizontal();
+        //    }
+        //}
 
-        bool DoesSoContainsValue(string name, Type valueType)
-        {
-            var properties = runner.So.GetType().GetProperties();
+        //bool DoesSoContainsValue(string name, Type valueType)
+        //{
+        //    var properties = runner.So.GetType().GetProperties();
 
-            foreach (var property in runner.So.GetType().GetFields())
-            {
-                if (property.Name == name && property.FieldType == valueType)
-                {
-                    return true;
-                }
-            }
+        //    foreach (var property in runner.So.GetType().GetFields())
+        //    {
+        //        if (property.Name == name && property.FieldType == valueType)
+        //        {
+        //            return true;
+        //        }
+        //    }
 
-            return false;
-        }
-
-        /// <summary>
-        /// Display for each variable in the So if it is being used in the Graph.
-        /// </summary>
-        /// <param name="runner"></param>
-        void DrawValiditySoGraph()
-        {
-            var properties = runner.So.GetType().GetProperties();
-
-            foreach (var property in runner.So.GetType().GetFields())
-            {
-                GUILayout.BeginHorizontal();
-
-                EditorGUILayout.LabelField(property.Name);
-
-                if (runner.ContainsValue(property.Name, property.FieldType))
-                {
-                    EditorGUILayout.LabelField("    OK");
-                }
-                else
-                {
-                    EditorGUILayout.LabelField("    NOK");
-                }
-
-                GUILayout.EndHorizontal();
-            }
-        }
+        //    return false;
+        //}
     }
 }

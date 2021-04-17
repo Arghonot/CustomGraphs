@@ -13,6 +13,22 @@ namespace Graph
     {
         protected Dictionary<string, string> GuidToNames;
         protected Dictionary<string, Type> GuidToType;
+        public Dictionary<string, string> PublicGUIDsToNames
+        {
+            get
+            {
+                return GuidToNames;
+            }
+        }
+        public Dictionary<string, Type> PublicGUIDsToType
+        {
+            get
+            {
+                return GuidToType;
+            }
+        }
+
+
         // to be implemented
         protected Dictionary<KeyValuePair<string, Type>, string> NameTypeToGuid;
 
@@ -102,6 +118,79 @@ namespace Graph
         [SerializeField] public List<Vector3Variable> Vector3s;
         [SerializeField] public List<QuaternionVariable> Quaternions;
 
+        public GraphVariableStorage()
+        {
+
+        }
+
+        public string[] getAllGuids()
+        {
+            return GuidToNames.Select(x => x.Key).ToArray();
+        }
+
+        public static Type[] getPossibleTypes()
+        {
+            List<Type> possibleTypes = new List<Type>();
+            var vals = Assembly.GetAssembly(typeof(VariableStorageRoot)).
+                GetTypes().
+                Where(t => typeof(VariableStorageRoot).
+                IsAssignableFrom(t)).
+                ToList();
+
+            vals.ForEach(x =>
+            {
+                if (x != typeof(VariableStorageRoot) && x != typeof(VariableStorage<>))
+                {
+                    possibleTypes.Add(((StorableType)Attribute.GetCustomAttribute(x, typeof(StorableType))).ReferenceType);
+                }
+            });
+
+            return possibleTypes.ToArray();
+        }
+
+        public static string[] GetPossibleTypesName()
+        {
+            List<string> PossibleTypeNames = new List<string>();
+            var vals = Assembly.GetAssembly(typeof(VariableStorageRoot)).
+                GetTypes().
+                Where(t => typeof(VariableStorageRoot).
+                IsAssignableFrom(t)).
+                ToList();
+
+            vals.ForEach(x =>
+            {
+                if (x != typeof(VariableStorageRoot) && x != typeof(VariableStorage<>))
+                {
+                    PossibleTypeNames.Add(((StorableType)Attribute.GetCustomAttribute(x, typeof(StorableType))).ReferenceType.Name);
+                }
+            });
+
+            return PossibleTypeNames.ToArray();
+        }
+
+        public String[] GetAllNames()
+        {
+            return GuidToNames.Select(x => x.Value).ToArray();
+        }
+
+        public string[] GetNames(string[] guids)
+        {
+            return GuidToNames.Where(x => guids.Contains(x.Key)).Select(x => x.Value).ToArray();
+        }
+
+        public int Count()
+        {
+            return GuidToNames.Count();
+        }
+
+        public object Get(string Guid)
+        {
+            object container = GetContainerInstance(Guid);
+            MethodInfo GetValueMethod = container.GetType().GetMethod("GetValue");
+
+            return GetValueMethod.Invoke(container, new object[] { });
+        }
+
         public T GetVariableStorage<T>(string Guid) where T : VariableStorageRoot
         {
             VariableStorageRoot value = GetContainerInstance(Guid);
@@ -152,13 +241,23 @@ namespace Graph
             }
         }
 
-        // to be implemented
-        public void Compile(GraphVariableStorage storageToCompile)
+        public void Merge(GraphVariableStorage storageToCompile)
         {
-            throw new NotImplementedException();
+            foreach (var item in storageToCompile.PublicGUIDsToType)
+            {
+                if (!ContainsGuid(item.Key))
+                {
+                    CreateCopy(storageToCompile.GetContainerInstance(item.Key));
+                }
+            }
         }
 
-        public bool ContainsValue(string guid)
+        public bool ContainName(string name)
+        {
+            return GuidToNames.ContainsValue(name);
+        }
+
+        public bool ContainsGuid(string guid)
         {
             return GuidToNames.ContainsKey(guid);
         }
@@ -321,7 +420,7 @@ namespace Graph
                 First();
         }
 
-        private VariableStorageRoot GetContainerInstance(string guid)
+        public VariableStorageRoot GetContainerInstance(string guid)
         {
             IList container = GetListOfContainer(GuidToType[guid]);
 
