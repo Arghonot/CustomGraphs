@@ -86,10 +86,21 @@ namespace Graph
     [Serializable]
     public partial class GraphVariableStorage : GraphVariableStorageHelper
     {
-        [SerializeField] public List<StringVariable> Strings;
+        // C# types
+        [SerializeField] public List<floatVariable> Floats;
+        [SerializeField] public List<LongVariable> Longs;
+        [SerializeField] public List<BoolVariable> Bools;
+        [SerializeField] public List<IntVariable> Ints;
         [SerializeField] public List<DoubleVariable> Doubles;
-        [SerializeField] public List<CurveVariable> AnimationCurves;
+        [SerializeField] public List<StringVariable> Strings;
+
+        // Unity types
+        [SerializeField] public List<AnimationCurveVariable> AnimationCurves;
         [SerializeField] public List<TransformVariable> Transforms;
+        [SerializeField] public List<NavMeshAgentVariable> NavmeshAgents;
+        [SerializeField] public List<GameObjectVariable> GameOjbects;
+        [SerializeField] public List<Vector3Variable> Vector3s;
+        [SerializeField] public List<QuaternionVariable> Quaternions;
 
         public T GetVariableStorage<T>(string Guid) where T : VariableStorageRoot
         {
@@ -323,11 +334,6 @@ namespace Graph
             }
 
             return null;
-        }
-
-        private string GetFirstGUIDByName(string name)
-        {
-
         }
 
         #region DEBUG

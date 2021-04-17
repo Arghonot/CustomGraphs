@@ -130,7 +130,6 @@ namespace Graph
 
 }
 
-
 #region UNITY TYPES
 
 [BlackboardType("AnimationCurve")]
@@ -331,7 +330,7 @@ public class Blackboard_Int : Variable
         return (object)0;
     }
 
-    public override Type GetValueType() 
+    public override Type GetValueType()
     {
         return typeof(int);
     }
@@ -439,7 +438,7 @@ public class Variable
     #endregion
 
     #region To be implemented
-    public virtual void DrawNodeGUI(){    }
+    public virtual void DrawNodeGUI() { }
 
     public virtual string GetDefaultName() { return "Variable"; }
     public virtual Type GetValueType() { return typeof(Variable); }
