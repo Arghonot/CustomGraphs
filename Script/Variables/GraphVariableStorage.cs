@@ -120,7 +120,58 @@ namespace Graph
 
         public GraphVariableStorage()
         {
+            Floats = new List<floatVariable>();
+            Longs = new List<LongVariable>();
+            Bools = new List<BoolVariable>();
+            Ints = new List<IntVariable>();
+            Doubles = new List<DoubleVariable>();
+            Strings = new List<StringVariable>();
 
+            AnimationCurves = new List<AnimationCurveVariable>();
+            Transforms = new List<TransformVariable>();
+            NavmeshAgents = new List<NavMeshAgentVariable>();
+            GameOjbects = new List<GameObjectVariable>();
+            Vector3s = new List<Vector3Variable>();
+            Quaternions = new List<QuaternionVariable>();
+
+            //var containersTypes =
+            //    this.GetType().
+            //    GetFields().
+            //    Select(x => x.FieldType).ToList();
+
+            //Debug.Log("containers : " + containersInstance.Count());
+            //Debug.Log("types : " + containersTypes.Count());
+
+            ////foreach (var item in containersTypes)
+            ////{
+            ////    Debug.Log(item);
+            ////}
+
+            //for (int i = 0; i < containersInstance.Count(); i++)
+            //{
+            //    containersInstance[i] = Activator.CreateInstance(containersTypes[i]);
+            //}
+
+            //Debug.Log("+-------------+");
+
+            //foreach (var item in containersInstance)
+            //{
+            //    Debug.Log(item.GetType());
+
+            //}
+
+            //Debug.Log("+-------------+");
+
+            //foreach (var item in containersTypes)
+            //{
+            //    Debug.Log(item.Name);
+            //    var containerInstance = containersInstance.Where(x => x.GetType() == item).First();
+            //    containerInstance = Activator.CreateInstance(item);
+            //    Debug.Log("creating a container of type " +
+            //        containersInstance.Where(x => x.GetType() == item).First().GetType().Name +
+            //        " for item of type " +
+            //        containerInstance.GetType());
+            //}
         }
 
         public string[] getAllGuids()
@@ -171,6 +222,11 @@ namespace Graph
         public String[] GetAllNames()
         {
             return GuidToNames.Select(x => x.Value).ToArray();
+        }
+
+        public void UpdateName(string guid, string name)
+        {
+            GuidToNames[guid] = name;
         }
 
         public string[] GetNames(string[] guids)
@@ -224,6 +280,7 @@ namespace Graph
 
         public void SetName(string Guid, string newName)
         {
+            UpdateName(Guid, newName);
             GetContainerInstance(Guid).Name = newName;
         }
 

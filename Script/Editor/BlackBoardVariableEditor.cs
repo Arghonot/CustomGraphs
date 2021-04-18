@@ -1,5 +1,6 @@
 ﻿using Graph;
 using UnityEditor;
+using UnityEngine;
 using XNodeEditor;
 
 namespace GraphEditor
@@ -40,7 +41,7 @@ namespace GraphEditor
             if (variablenode.Blackboard == null) return;
 
             string[] GUIDs = variablenode.Blackboard.GetGUIDS();
-            string[] names = variablenode.Blackboard.GetVariableNames(GUIDs);
+            string[] names = variablenode.Blackboard.GetAllNames();
 
             if (variablenode.VariableIndex < GUIDs.Length)
             {

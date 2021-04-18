@@ -23,6 +23,11 @@ namespace Graph
             return storage.GetAllNames();
         }
 
+        public void InitializeBlackboard()
+        {
+            storage = ((DefaultGraph)graph).storage;
+        }
+
         //public bool AddVariable(string guid, string type)
         //{
         //    if (storage.ContainName(name))
@@ -82,6 +87,11 @@ namespace Graph
         public string[] GetGUIDS()
         {
             return storage.getAllGuids();
+        }
+
+        public string[] GetAllNames()
+        {
+            return storage.GetAllNames();
         }
 
         // TODO decide if storage should be exposed

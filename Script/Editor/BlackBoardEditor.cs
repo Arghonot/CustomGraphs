@@ -86,6 +86,7 @@ namespace GraphEditor
             elem.Name = EditorGUILayout.TextField(
                 elem.Name,
                 GUILayout.Width(blackboard.TextWidth));
+            blackboard.storage.UpdateName(elem.GUID, elem.Name);
 
             // Display type
             EditorGUILayout.LabelField(
