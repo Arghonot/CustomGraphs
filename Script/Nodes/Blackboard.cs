@@ -25,6 +25,7 @@ namespace Graph
 
         public void InitializeBlackboard()
         {
+            Debug.Log("InitializeBlackboard");
             storage = ((DefaultGraph)graph).storage;
         }
 

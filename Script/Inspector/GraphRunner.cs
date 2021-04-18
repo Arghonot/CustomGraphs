@@ -11,7 +11,7 @@ namespace Graph
         public bool isReady;
 
         [SerializeField]
-        public GraphVariableStorage storage = null;
+        public GraphVariableStorage storage = new GraphVariableStorage();
 
         public void BuildValueDictionnary()
         {

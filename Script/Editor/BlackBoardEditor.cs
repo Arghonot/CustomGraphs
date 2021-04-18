@@ -66,7 +66,6 @@ namespace GraphEditor
 
             string[] Guids = blackboard.storage.getAllGuids();
 
-
             for (int i = 0; i < Guids.Length; i++)
             {
                 DisplayLine(blackboard, blackboard.storage.GetContainerInstance(Guids[i]));

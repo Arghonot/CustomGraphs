@@ -103,36 +103,88 @@ namespace Graph
     public partial class GraphVariableStorage : GraphVariableStorageHelper
     {
         // C# types
-        [SerializeField] public List<floatVariable> Floats;
-        [SerializeField] public List<LongVariable> Longs;
-        [SerializeField] public List<BoolVariable> Bools;
-        [SerializeField] public List<IntVariable> Ints;
-        [SerializeField] public List<DoubleVariable> Doubles;
-        [SerializeField] public List<StringVariable> Strings;
+        [SerializeField] public List<floatVariable> Floats = new List<floatVariable>();
+        [SerializeField] public List<LongVariable> Longs = new List<LongVariable>();
+        [SerializeField] public List<BoolVariable> Bools = new List<BoolVariable>();
+        [SerializeField] public List<IntVariable> Ints = new List<IntVariable>();
+        [SerializeField] public List<DoubleVariable> Doubles = new List<DoubleVariable>();
+        [SerializeField] public List<StringVariable> Strings = new List<StringVariable>();
 
         // Unity types
-        [SerializeField] public List<AnimationCurveVariable> AnimationCurves;
-        [SerializeField] public List<TransformVariable> Transforms;
-        [SerializeField] public List<NavMeshAgentVariable> NavmeshAgents;
-        [SerializeField] public List<GameObjectVariable> GameOjbects;
-        [SerializeField] public List<Vector3Variable> Vector3s;
-        [SerializeField] public List<QuaternionVariable> Quaternions;
+        [SerializeField] public List<AnimationCurveVariable> AnimationCurves = new List<AnimationCurveVariable>();
+        [SerializeField] public List<TransformVariable> Transforms = new List<TransformVariable>();
+        [SerializeField] public List<NavMeshAgentVariable> NavmeshAgents = new List<NavMeshAgentVariable>();
+        [SerializeField] public List<GameObjectVariable> GameOjbects = new List<GameObjectVariable>();
+        [SerializeField] public List<Vector3Variable> Vector3s = new List<Vector3Variable>();
+        [SerializeField] public List<QuaternionVariable> Quaternions = new List<QuaternionVariable>();
+
+        object CreateGenericListInstance(Type t)
+        {
+            //Debug.Log(t.Length);
+
+            //for (int i = 0; i < t.Length; i++)
+            //{
+            //    Debug.Log(t[i]);
+            //}
+
+            //return null;
+
+            var listType = typeof(List<>);
+            var constructedListType = listType.MakeGenericType(t);
+
+            Debug.Log("t->" + t);
+            Debug.Log("constructedListType->" + constructedListType);
+
+            return Activator.CreateInstance(constructedListType);
+        }
 
         public GraphVariableStorage()
         {
-            Floats = new List<floatVariable>();
-            Longs = new List<LongVariable>();
-            Bools = new List<BoolVariable>();
-            Ints = new List<IntVariable>();
-            Doubles = new List<DoubleVariable>();
-            Strings = new List<StringVariable>();
+            //var containersTypes =
+            //    this.GetType().
+            //    GetFields().
+            //    Select(x => x.FieldType).ToList();
+            //var correspondingArrayRow =
+            //    this.GetType().
+            //    GetFields().
+            //    Select(x => x.GetValue(this)).ToList();
 
-            AnimationCurves = new List<AnimationCurveVariable>();
-            Transforms = new List<TransformVariable>();
-            NavmeshAgents = new List<NavMeshAgentVariable>();
-            GameOjbects = new List<GameObjectVariable>();
-            Vector3s = new List<Vector3Variable>();
-            Quaternions = new List<QuaternionVariable>();
+            //Debug.Log(containersTypes.Count);
+            //Debug.Log(correspondingArrayRow.Count);
+
+            //for (int i = 0; i < containersTypes.Count; i++)
+            //{
+            //    Debug.Log("containersTypes->" + containersTypes[i]);
+            //    correspondingArrayRow[i] = CreateGenericListInstance(containersTypes[i].GetGenericArguments()[0]);
+            //}
+
+            //foreach (var item in containersTypes)
+            //{
+            //    Debug.Log(item);
+            //}
+            //foreach (var item in correspondingArrayRow)
+            //{
+            //    Debug.Log(item.GetType());
+            //}
+            //Debug.Log("+--------------------------+");
+
+            // -------------------------------------------------------
+
+            //Floats = new List<floatVariable>();
+            //Longs = new List<LongVariable>();
+            //Bools = new List<BoolVariable>();
+            //Ints = new List<IntVariable>();
+            //Doubles = new List<DoubleVariable>();
+            //Strings = new List<StringVariable>();
+
+            //AnimationCurves = new List<AnimationCurveVariable>();
+            //Transforms = new List<TransformVariable>();
+            //NavmeshAgents = new List<NavMeshAgentVariable>();
+            //GameOjbects = new List<GameObjectVariable>();
+            //Vector3s = new List<Vector3Variable>();
+            //Quaternions = new List<QuaternionVariable>();
+
+            // --------------------------------------------------------
 
             //var containersTypes =
             //    this.GetType().
@@ -176,6 +228,8 @@ namespace Graph
 
         public string[] getAllGuids()
         {
+            Debug.Log("getAllGuids Names" + GuidToNames.Count);
+            Debug.Log("getAllGuids Types " + GuidToType.Count);
             return GuidToNames.Select(x => x.Key).ToArray();
         }
 
@@ -217,6 +271,11 @@ namespace Graph
             });
 
             return PossibleTypeNames.ToArray();
+        }
+
+        public string GetName(string guid)
+        {
+            return GuidToNames[guid];
         }
 
         public String[] GetAllNames()
@@ -288,6 +347,9 @@ namespace Graph
         {
             IList container = GetListOfContainer(GetContainerType(Guid));
 
+            Debug.Log("[BEFORE] Removing " + Guid + " contains " + GuidToNames.Count + " objects");
+
+
             foreach (var item in container)
             {
                 if (((VariableStorageRoot)item).GUID == Guid)
@@ -296,6 +358,10 @@ namespace Graph
                     break;
                 }
             }
+
+            GuidToNames.Remove(Guid);
+            GuidToType.Remove(Guid);
+            Debug.Log("[AFTER] Removing an item contains " + GuidToNames.Count + " objects");
         }
 
         public void Merge(GraphVariableStorage storageToCompile)
@@ -305,6 +371,8 @@ namespace Graph
                 if (!ContainsGuid(item.Key))
                 {
                     CreateCopy(storageToCompile.GetContainerInstance(item.Key));
+                    GuidToType.Add(item.Key, item.Value);
+                    GuidToNames.Add(item.Key, storageToCompile.GetName(item.Key));
                 }
             }
         }
