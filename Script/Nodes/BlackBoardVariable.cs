@@ -7,11 +7,9 @@ namespace Graph
     [NodeTint(ColorProfile.other1)]
     public class BlackBoardVariable : NodeBase
     {
-        [SerializeField] public string uid;
+        [SerializeField] public string guid;
         [SerializeField] public int VariableIndex;
         [SerializeField] public string Name = string.Empty;
-        //private string Guid;
-
 
         public Blackboard Blackboard;
 
@@ -24,7 +22,7 @@ namespace Graph
         {
             RemoveDynamicPort(Name);
             Name = string.Empty;
-            uid = string.Empty;
+            guid = string.Empty;
         }
 
         public void SetVariable(string newname, string newuid, int newIndex)
@@ -40,7 +38,7 @@ namespace Graph
                 TypeConstraint.Strict,
                 "Output");
 
-            uid = newuid;
+            guid = newuid;
             VariableIndex = newIndex;
             Name = newname;
         }
@@ -53,17 +51,17 @@ namespace Graph
         public override object Run()
         {
             // we try to get the key from the blackboard gd if any
-            if (((DefaultGraph)graph).storage.ContainsGuid(uid))
+            if (((DefaultGraph)graph).storage.ContainsGuid(guid))
             {
-                return ((DefaultGraph)graph).storage.Get(uid);
+                return ((DefaultGraph)graph).storage.Get(guid);
             }
             // or we return null if it isn't even in the blackboard
-            if (!Blackboard.storage.ContainsGuid(uid))
+            if (!Blackboard.storage.ContainsGuid(guid))
             {
                 return null;
             }
             // or we return the default value, might be null
-            return Blackboard.storage.Get(uid);
+            return Blackboard.storage.Get(guid);
         }
 
         //public override object GetValue(NodePort port)

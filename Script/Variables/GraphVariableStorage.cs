@@ -388,6 +388,21 @@ namespace Graph
             GuidToType.Add(newval.GUID, newval.GetType());
         }
 
+        public VariableStorageRoot GetContainerInstance(string guid)
+        {
+            IList container = GetListOfContainer(GuidToType[guid]);
+
+            foreach (var row in container)
+            {
+                if (((VariableStorageRoot)row).GUID == guid)
+                {
+                    return (VariableStorageRoot)row;
+                }
+            }
+
+            return null;
+        }
+
         private IEnumerable<IList> GetAllListOfContainers()
         {
             return
@@ -427,21 +442,6 @@ namespace Graph
                 Select(x => x.GetValue(this)).
                 Where(x => x.ToString().Contains(containerType[0].ToString())).
                 First();
-        }
-
-        public VariableStorageRoot GetContainerInstance(string guid)
-        {
-            IList container = GetListOfContainer(GuidToType[guid]);
-
-            foreach (var row in container)
-            {
-                if (((VariableStorageRoot)row).GUID == guid)
-                {
-                    return (VariableStorageRoot)row;
-                }
-            }
-
-            return null;
         }
 
         #region DEBUG

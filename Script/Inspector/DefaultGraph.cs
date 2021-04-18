@@ -86,7 +86,7 @@ namespace Graph
                 {
                     BlackBoardVariable bbvar = node as BlackBoardVariable;
 
-                    if (bbvar.uid == uid)
+                    if (bbvar.guid == uid)
                     {
                         bbvar.UpdateNode();
                     }
