@@ -118,118 +118,8 @@ namespace Graph
         [SerializeField] public List<Vector3Variable> Vector3s = new List<Vector3Variable>();
         [SerializeField] public List<QuaternionVariable> Quaternions = new List<QuaternionVariable>();
 
-        object CreateGenericListInstance(Type t)
-        {
-            //Debug.Log(t.Length);
-
-            //for (int i = 0; i < t.Length; i++)
-            //{
-            //    Debug.Log(t[i]);
-            //}
-
-            //return null;
-
-            var listType = typeof(List<>);
-            var constructedListType = listType.MakeGenericType(t);
-
-            Debug.Log("t->" + t);
-            Debug.Log("constructedListType->" + constructedListType);
-
-            return Activator.CreateInstance(constructedListType);
-        }
-
-        public GraphVariableStorage()
-        {
-            //var containersTypes =
-            //    this.GetType().
-            //    GetFields().
-            //    Select(x => x.FieldType).ToList();
-            //var correspondingArrayRow =
-            //    this.GetType().
-            //    GetFields().
-            //    Select(x => x.GetValue(this)).ToList();
-
-            //Debug.Log(containersTypes.Count);
-            //Debug.Log(correspondingArrayRow.Count);
-
-            //for (int i = 0; i < containersTypes.Count; i++)
-            //{
-            //    Debug.Log("containersTypes->" + containersTypes[i]);
-            //    correspondingArrayRow[i] = CreateGenericListInstance(containersTypes[i].GetGenericArguments()[0]);
-            //}
-
-            //foreach (var item in containersTypes)
-            //{
-            //    Debug.Log(item);
-            //}
-            //foreach (var item in correspondingArrayRow)
-            //{
-            //    Debug.Log(item.GetType());
-            //}
-            //Debug.Log("+--------------------------+");
-
-            // -------------------------------------------------------
-
-            //Floats = new List<floatVariable>();
-            //Longs = new List<LongVariable>();
-            //Bools = new List<BoolVariable>();
-            //Ints = new List<IntVariable>();
-            //Doubles = new List<DoubleVariable>();
-            //Strings = new List<StringVariable>();
-
-            //AnimationCurves = new List<AnimationCurveVariable>();
-            //Transforms = new List<TransformVariable>();
-            //NavmeshAgents = new List<NavMeshAgentVariable>();
-            //GameOjbects = new List<GameObjectVariable>();
-            //Vector3s = new List<Vector3Variable>();
-            //Quaternions = new List<QuaternionVariable>();
-
-            // --------------------------------------------------------
-
-            //var containersTypes =
-            //    this.GetType().
-            //    GetFields().
-            //    Select(x => x.FieldType).ToList();
-
-            //Debug.Log("containers : " + containersInstance.Count());
-            //Debug.Log("types : " + containersTypes.Count());
-
-            ////foreach (var item in containersTypes)
-            ////{
-            ////    Debug.Log(item);
-            ////}
-
-            //for (int i = 0; i < containersInstance.Count(); i++)
-            //{
-            //    containersInstance[i] = Activator.CreateInstance(containersTypes[i]);
-            //}
-
-            //Debug.Log("+-------------+");
-
-            //foreach (var item in containersInstance)
-            //{
-            //    Debug.Log(item.GetType());
-
-            //}
-
-            //Debug.Log("+-------------+");
-
-            //foreach (var item in containersTypes)
-            //{
-            //    Debug.Log(item.Name);
-            //    var containerInstance = containersInstance.Where(x => x.GetType() == item).First();
-            //    containerInstance = Activator.CreateInstance(item);
-            //    Debug.Log("creating a container of type " +
-            //        containersInstance.Where(x => x.GetType() == item).First().GetType().Name +
-            //        " for item of type " +
-            //        containerInstance.GetType());
-            //}
-        }
-
         public string[] getAllGuids()
         {
-            Debug.Log("getAllGuids Names" + GuidToNames.Count);
-            Debug.Log("getAllGuids Types " + GuidToType.Count);
             return GuidToNames.Select(x => x.Key).ToArray();
         }
 
@@ -347,9 +237,6 @@ namespace Graph
         {
             IList container = GetListOfContainer(GetContainerType(Guid));
 
-            Debug.Log("[BEFORE] Removing " + Guid + " contains " + GuidToNames.Count + " objects");
-
-
             foreach (var item in container)
             {
                 if (((VariableStorageRoot)item).GUID == Guid)
@@ -361,7 +248,6 @@ namespace Graph
 
             GuidToNames.Remove(Guid);
             GuidToType.Remove(Guid);
-            Debug.Log("[AFTER] Removing an item contains " + GuidToNames.Count + " objects");
         }
 
         public void Merge(GraphVariableStorage storageToCompile)
@@ -388,14 +274,12 @@ namespace Graph
         }
 
         // return the Variable storage type
-        // to be tested
         public Type GetContainerType(string guid)
         {
             return ((object)GetContainerInstance(guid)).GetType();
         }
 
         // Get the type of the variable stored
-        // to be tested
         public Type GetStoredType(string guid)
         {
             VariableStorageRoot container = GetContainerInstance(guid);

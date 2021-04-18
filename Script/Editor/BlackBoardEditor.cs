@@ -74,6 +74,7 @@ namespace GraphEditor
             if (UIDToDelete != string.Empty)
             {
                 blackboard.storage.Remove(UIDToDelete);
+                UIDToDelete = string.Empty;
             }
         }
 
