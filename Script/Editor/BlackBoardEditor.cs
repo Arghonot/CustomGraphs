@@ -32,7 +32,6 @@ namespace GraphEditor
 
             DisplayAll(blackboard);
 
-
             // -- load system
             LoadSubgraphBlackboard();
         }
@@ -83,10 +82,10 @@ namespace GraphEditor
             GUILayout.BeginHorizontal("box");
 
             // Display name and allow change
-            elem.Name = EditorGUILayout.TextField(
+            string newName = EditorGUILayout.TextField(
                 elem.Name,
                 GUILayout.Width(blackboard.TextWidth));
-            blackboard.storage.UpdateName(elem.GUID, elem.Name);
+            blackboard.storage.SetName(elem.GUID, newName);
 
             // Display type
             EditorGUILayout.LabelField(

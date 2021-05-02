@@ -100,5 +100,10 @@ namespace Graph
         {
             return storage.GetNames(guids);
         }
+
+        public void PrintStorageGUID(GraphVariableStorage otherstorage)
+        {
+            storage.CompareDictionnaries(otherstorage);
+        }
     }
 }

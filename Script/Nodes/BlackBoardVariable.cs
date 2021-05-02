@@ -38,6 +38,7 @@ namespace Graph
                 TypeConstraint.Strict,
                 "Output");
 
+
             guid = newuid;
             VariableIndex = newIndex;
             Name = newname;
@@ -50,18 +51,20 @@ namespace Graph
 
         public override object Run()
         {
-            // we try to get the key from the blackboard gd if any
-            if (((DefaultGraph)graph).storage.ContainsGuid(guid))
-            {
-                return ((DefaultGraph)graph).storage.Get(guid);
-            }
-            // or we return null if it isn't even in the blackboard
-            if (!Blackboard.storage.ContainsGuid(guid))
-            {
-                return null;
-            }
-            // or we return the default value, might be null
-            return Blackboard.storage.Get(guid);
+            return ((DefaultGraph)graph).storage.Get(guid);
+
+            //// we try to get the key from the blackboard gd if any
+            //if (((DefaultGraph)graph).storage.ContainsGuid(guid))
+            //{
+            //    return ((DefaultGraph)graph).storage.Get(guid);
+            //}
+            //// or we return null if it isn't even in the blackboard
+            //if (!Blackboard.storage.ContainsGuid(guid))
+            //{
+            //    return null;
+            //}
+            //// or we return the default value, might be null
+            //return Blackboard.storage.Get(guid);
         }
 
         //public override object GetValue(NodePort port)
