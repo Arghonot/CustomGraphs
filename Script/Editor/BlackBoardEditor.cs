@@ -43,14 +43,16 @@ namespace GraphEditor
             // TODO How to handle a variable being renamed ? it will keep the same GUID so it will never 
             // TODO handle a recursivity problem if a subgraph contain itself as a subgraph
             // TODO add a boolean on graph add node instead of a linq request
-            if (blackboard.graph.nodes.Where(x => x.GetType().IsSubclassOf(typeof(Graph.SubGraphNode))).Count() != 0)
+            if (blackboard.graph.nodes.Where(x => x.GetType().IsSubclassOf(typeof(Graph.SubGraphMaster))).Count() != 0)
             {
                 GUILayout.Space(10);
 
                 if (GUILayout.Button("load subgraphs blackboard"))
                 {
-                    ((Graph.DefaultGraph)blackboard.graph).UpdateDictionnary(
-                        ((Graph.DefaultGraph)blackboard.graph).CompileAllBlackboard());
+                    ((Graph.DefaultGraph)blackboard.graph).EncapsulateSubGraphDictionaries();
+
+                    //((Graph.DefaultGraph)blackboard.graph).UpdateDictionnary(
+                    //    ((Graph.DefaultGraph)blackboard.graph).CompileAllBlackboard());
                 }
             }
         }
@@ -89,7 +91,7 @@ namespace GraphEditor
 
             // Display type
             EditorGUILayout.LabelField(
-                blackboard.storage.GetStoredType(elem.GUID).Name,
+                blackboard.storage.GetContainedType(elem.GUID).Name,
                 GUILayout.Width(blackboard.TypeWidth));
 
             // Allow variable removal

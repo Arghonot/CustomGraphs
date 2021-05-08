@@ -2,9 +2,25 @@
 
 namespace Graph
 {
-    public class SubGraphNode : NodeBase
+    public class SubGraphMaster : NodeBase
     {
         public DefaultGraph SubGraph;
+    }
+
+    public class SubGraphNode<T> : SubGraphMaster
+    {
+
+        public void Awake()
+        {
+            if (GetOutputPort("Output") == null)
+            {
+                AddDynamicOutput(
+                    typeof(T),
+                    ConnectionType.Multiple,
+                    TypeConstraint.None,
+                    "Output");
+            }
+        }
 
         public override object Run()
         {

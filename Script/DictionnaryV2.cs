@@ -96,7 +96,7 @@ public class DictionnaryV2 : MonoBehaviour
     [ContextMenu("Test get stored type")]
     public void TestGetStoredType()
     {
-        Debug.Log("GetStoredType->" + storage.GetStoredType(GUIDToGet));
+        Debug.Log("GetStoredType->" + storage.GetContainedType(GUIDToGet));
     }
 
 

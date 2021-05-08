@@ -7,7 +7,7 @@ namespace Graph
     [NodeTint(ColorProfile.other1)]
     public class BlackBoardVariable : NodeBase
     {
-        [SerializeField] public string guid;
+        [SerializeField] public string guid = string.Empty;
         [SerializeField] public int VariableIndex;
         [SerializeField] public string Name = string.Empty;
 
@@ -38,10 +38,23 @@ namespace Graph
                 TypeConstraint.Strict,
                 "Output");
 
+            UpdateGUID(newuid);
 
-            guid = newuid;
             VariableIndex = newIndex;
             Name = newname;
+        }
+
+        private void UpdateGUID(string to)
+        {
+            Debug.Log("UpdateGUID");
+            // if already had a GUID stored
+            if (guid != string.Empty && guid != "")
+            {
+                Blackboard.storage.GetContainerInstance(guid).OnUpdateGUID -= UpdateGUID;
+            }
+
+            Blackboard.storage.GetContainerInstance(to).OnUpdateGUID += UpdateGUID;
+            guid = to;
         }
 
         public string[] GetPossibleVariables()
@@ -51,37 +64,10 @@ namespace Graph
 
         public override object Run()
         {
+            Debug.Log("Name : " + Name);
+            //return ((DefaultGraph)graph).storage.Get(((DefaultGraph)graph).storage.GetGUIDFromNameAndType(Name, typeof(Graph.DoubleVariable)));
+
             return ((DefaultGraph)graph).storage.Get(guid);
-
-            //// we try to get the key from the blackboard gd if any
-            //if (((DefaultGraph)graph).storage.ContainsGuid(guid))
-            //{
-            //    return ((DefaultGraph)graph).storage.Get(guid);
-            //}
-            //// or we return null if it isn't even in the blackboard
-            //if (!Blackboard.storage.ContainsGuid(guid))
-            //{
-            //    return null;
-            //}
-            //// or we return the default value, might be null
-            //return Blackboard.storage.Get(guid);
         }
-
-        //public override object GetValue(NodePort port)
-        //{
-        //    Debug.Log("BB VARIABLE");
-        //    // we try to get the key from the blackboard gd if any
-        //    if (((DefaultGraph)graph).gd.ContainsKey(Name))
-        //    {
-        //        return ((DefaultGraph)graph).gd.Get(Name);
-        //    }
-        //    // or we return null if it isn't even in the blackboard
-        //    if (!Blackboard.container.ContainsKey(uid))
-        //    {
-        //        return null;
-        //    }
-        //    // or we return the default value, might be null
-        //    return Blackboard.container[uid].GetDefaultValue();
-        //}
     }
 }

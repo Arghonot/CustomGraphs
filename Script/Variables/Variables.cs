@@ -23,6 +23,15 @@ namespace Graph
         public string GUID;
         public string Name;
 
+        public Action<string> OnUpdateGUID;
+
+        public void setGuid(string to)
+        {
+            OnUpdateGUID?.Invoke(to);
+
+            GUID = to;
+        }
+
         public VariableStorageRoot()
         {
             GUID = Guid.NewGuid().ToString();

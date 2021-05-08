@@ -23,30 +23,53 @@ namespace Graph
             return root.GetValue(root.Ports.First());
         }
 
+        public void EncapsulateSubGraphDictionaries()
+        {
+            GraphVariableStorage CompiledDictionnary = new GraphVariableStorage();
+
+            EncapsulateSubGraphDictionaries(CompiledDictionnary);
+        }
+
+        public void EncapsulateSubGraphDictionaries(GraphVariableStorage CompiledDictionnary)
+        {
+            foreach (var node in nodes)
+            {
+                if (node.GetType().IsSubclassOf(typeof(SubGraphMaster)))
+                {
+                    ((SubGraphMaster)node).SubGraph.EncapsulateSubGraphDictionaries(CompiledDictionnary);
+                }
+            }
+
+            CompiledDictionnary.Merge(storage);
+            storage = CompiledDictionnary;
+            blackboard.storage = storage;
+        }
+
         public void UpdateDictionnary(GraphVariableStorage newstorage)
         {
             MergeDictionnaries(blackboard.storage, newstorage);
+            Debug.Log("UpdateDictionnary " + storage.PublicGUIDsToNames.Count);
+            blackboard.storage = storage;
         }
 
         public GraphVariableStorage   CompileAllBlackboard()
         {
             GraphVariableStorage CompiledDictionnary = new GraphVariableStorage();
 
-            MergeDictionnaries(CompiledDictionnary, blackboard.storage);
-
             foreach (var node in nodes)
             {
-                if (node.GetType().IsSubclassOf(typeof(SubGraphNode)))
+                if (node.GetType().IsSubclassOf(typeof(SubGraphMaster)))
                 {
-                    if (((SubGraphNode)node).SubGraph != null)
+                    if (((SubGraphMaster)node).SubGraph != null)
                     {
                         MergeDictionnaries(
                             CompiledDictionnary,
-                            ((SubGraphNode)node).SubGraph.CompileAllBlackboard());
+                            ((SubGraphMaster)node).SubGraph.CompileAllBlackboard());
                     }
                 }
             }
 
+            MergeDictionnaries(CompiledDictionnary, blackboard.storage);
             return CompiledDictionnary;
         }
 

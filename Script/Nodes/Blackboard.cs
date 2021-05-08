@@ -81,7 +81,7 @@ namespace Graph
 
         public Type GetVariableType(string guid)
         {
-            return storage.GetStoredType(guid);
+            return storage.GetContainedType(guid);
         }
 
         // TODO decide if storage should be exposed

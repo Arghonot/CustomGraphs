@@ -39,7 +39,7 @@ namespace GraphEditor
         void DisplayNameSelection(BlackBoardVariable variablenode)
         {
             if (variablenode.Blackboard == null) return;
-
+            // TODO really bad use a list from graphVariableStorage instead
             string[] GUIDs = variablenode.Blackboard.GetGUIDS();
             string[] names = variablenode.Blackboard.GetAllNames();
 
@@ -48,20 +48,24 @@ namespace GraphEditor
                 selected = variablenode.VariableIndex;
             }
 
-            int prevSelected = selected;
-            selected = EditorGUILayout.Popup(selected, variablenode.GetPossibleVariables());
-
-            if (variablenode.GetPossibleVariables().Length > 0)
+            if (names.Length > 0)
             {
-                if (prevSelected != selected)
+                selected = EditorGUILayout.Popup(selected, variablenode.GetPossibleVariables());
+
+                if (selected != variablenode.VariableIndex)
                 {
-                    variablenode.SetVariable(names[selected], GUIDs[selected], selected);
-                }
-                else if (variablenode.Name == string.Empty)
-                {
-                    variablenode.SetVariable(names[0], GUIDs[0], 0);
+                    variablenode.SetVariable(
+                        variablenode.Blackboard.storage.GetName(GUIDs[selected]),
+                        GUIDs[selected],
+                        selected);
                 }
             }
+            else
+            {
+                EditorGUILayout.LabelField("Use the blackboard first.");
+            }
+
+
         }
     }
 }
