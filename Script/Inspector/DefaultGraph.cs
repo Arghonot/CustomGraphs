@@ -43,6 +43,30 @@ namespace Graph
             CompiledDictionnary.Merge(storage);
             storage = CompiledDictionnary;
             blackboard.storage = storage;
+            UpdateGraphBlackBoardVariables();
+        }
+
+        private void UpdateGraphBlackBoardVariables()
+        {
+            foreach (Node variable in nodes)
+            {
+                if (variable.GetType() == typeof(BlackBoardVariable))
+                {
+                    // If we just changed this guid
+                    if (!storage.ContainsGuid(((BlackBoardVariable)variable).guid))
+                    {
+                        string newGUID = storage.GetGUIDFromNameAndType(
+                            ((BlackBoardVariable)variable).Name,
+                            ((BlackBoardVariable)variable).VariableType);
+                        Debug.Log("<color=green> GUID for " + ((BlackBoardVariable)variable).Name + " wasn't found, updating it from [" + ((BlackBoardVariable)variable).guid + "] to [" + newGUID + "]</color>");
+                        ((BlackBoardVariable)variable).guid = newGUID;
+                    }
+                    else
+                    {
+                        Debug.Log("<color=green> GUID for " + ((BlackBoardVariable)variable).Name + " already Contained.</color>");
+                    }
+                }
+            }
         }
 
         public void UpdateDictionnary(GraphVariableStorage newstorage)

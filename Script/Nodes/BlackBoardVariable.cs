@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Graph
 {
@@ -7,9 +8,10 @@ namespace Graph
     [NodeTint(ColorProfile.other1)]
     public class BlackBoardVariable : NodeBase
     {
-        [SerializeField] public string guid = string.Empty;
         [SerializeField] public int VariableIndex;
+        [SerializeField] public string guid = string.Empty;
         [SerializeField] public string Name = string.Empty;
+        [SerializeField] public Type VariableType = null;
 
         public Blackboard Blackboard;
 
@@ -42,6 +44,7 @@ namespace Graph
 
             VariableIndex = newIndex;
             Name = newname;
+            VariableType = Blackboard.GetVariableType(newuid);
         }
 
         private void UpdateGUID(string to)
@@ -64,9 +67,6 @@ namespace Graph
 
         public override object Run()
         {
-            Debug.Log("Name : " + Name);
-            //return ((DefaultGraph)graph).storage.Get(((DefaultGraph)graph).storage.GetGUIDFromNameAndType(Name, typeof(Graph.DoubleVariable)));
-
             return ((DefaultGraph)graph).storage.Get(guid);
         }
     }

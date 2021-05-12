@@ -366,7 +366,7 @@ namespace Graph
             }
 
             GuidToNames.Add(variableContainerAsGenericType.GUID, variableContainerAsGenericType.Name);
-            GuidToType.Add(variableContainerAsGenericType.GUID, variableContainerAsGenericType.GetType());
+            GuidToType.Add(variableContainerAsGenericType.GUID, GetVariableTypeInContainer(variableContainerAsGenericType));
             GuidToValue.Add(variableContainerAsGenericType.GUID, GetValue<object>(variableContainerAsGenericType.GUID));
 
             return variableContainerAsGenericType.GUID;
@@ -413,7 +413,7 @@ namespace Graph
             }
 
             GuidToNames.Add(newval.GUID, newval.Name);
-            GuidToType.Add(newval.GUID, newval.GetType());
+            GuidToType.Add(newval.GUID, GetVariableTypeInContainer(newval));
             GuidToValue.Add(newval.GUID, GetValue<object>(newval.GUID));
 
             return newval.GUID;
@@ -465,7 +465,16 @@ namespace Graph
 
         public VariableStorageRoot GetContainerInstance(string guid)
         {
-            IList container = GetListOfContainer(GuidToType[guid]);
+            // we get the list containing this instance
+            Type TypeOfVariable = GetContainerContaningType(GuidToType[guid]);
+
+            // couldn't find an appropriate type for this guid
+            if (TypeOfVariable == typeof(VariableStorageRoot))
+            {
+                return null;
+            }
+
+            IList container = GetListOfContainer(TypeOfVariable);
 
             foreach (var row in container)
             {
@@ -475,10 +484,35 @@ namespace Graph
                 }
             }
 
-            Debug.Log("GetContainerInstance == null");
-
             return null;
         }
+
+        private Type GetContainerContaningType(Type type)
+        {
+            IEnumerable<IList> containers = GetAllListOfContainers();
+
+            foreach (var item in containers)
+            {
+                // we might have debug variables that are not variable storage
+                if (item != null)
+                {
+                    var storedType = item.GetType().GetGenericArguments().Single();
+
+                    if (GetAttributeFromContainerType(storedType) == type)
+                    {
+                        return storedType;
+                    }
+                }
+            }
+
+            return typeof(VariableStorageRoot);
+        }
+
+        private Type GetAttributeFromContainerType(Type containerType)
+        {
+            return ((StorableType)Attribute.GetCustomAttribute(containerType, typeof(StorableType))).ReferenceType;
+        }
+
 
         private IEnumerable<IList> GetAllListOfContainers()
         {
@@ -531,6 +565,12 @@ namespace Graph
         public Type GetContainedType(string guid)
         {
             VariableStorageRoot container = GetContainerInstance(guid);
+
+            return GetVariableTypeInContainer(container);
+        }
+
+        private Type GetVariableTypeInContainer(VariableStorageRoot container)
+        {
             StorableType containerMetadata = (StorableType)Attribute.GetCustomAttribute(container.GetType(), typeof(StorableType));
 
             return containerMetadata.ReferenceType;
