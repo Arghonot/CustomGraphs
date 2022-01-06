@@ -1,8 +1,7 @@
 ﻿namespace Graph
 {
     [CreateNodeMenu("Graph/Constants/BoolNode")]
-    public class BoolNode : Leaf<bool>
+    public class BoolNode : ConstantNode<bool>
     {
-        public bool value;
     }
 }
