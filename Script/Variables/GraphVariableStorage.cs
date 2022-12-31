@@ -2,7 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using UnityEngine;
 
 namespace Graph
@@ -28,7 +30,6 @@ namespace Graph
                 return GuidToType;
             }
         }
-
 
         // to be implemented
         protected Dictionary<KeyValuePair<string, Type>, string> NameTypeToGuid;
@@ -129,7 +130,6 @@ namespace Graph
         [SerializeField] public List<QuaternionVariable> Quaternions = new List<QuaternionVariable>();
 
         #region Inner storage management
-
 
         public GraphVariableStorage()
         {
@@ -372,6 +372,18 @@ namespace Graph
             return variableContainerAsGenericType.GUID;
         }
 
+        public string Add<T>(VariableStorage<T> newVal)
+        {
+            FindCorrespondingList(typeof(T)).Add(newVal);
+
+            GuidToNames.Add(newVal.GUID, newVal.Name);
+            GuidToType.Add(newVal.GUID, GetVariableTypeInContainer(newVal));
+            GuidToValue.Add(newVal.GUID, GetValue<object>(newVal.GUID));
+
+            return newVal.GUID;
+        }
+
+
         public string Add(Type typeToAdd, string Name = "", string guid = "")
         {
             List<Type> types = new List<Type>();
@@ -384,6 +396,7 @@ namespace Graph
 
             vals.ForEach(x =>
             {
+                // TODO add a break if adding to types
                 if (x != typeof(VariableStorageRoot) && x != typeof(VariableStorage<>))
                 {
                     if (((StorableType)Attribute.GetCustomAttribute(
@@ -407,6 +420,7 @@ namespace Graph
             VariableStorageRoot newval = (VariableStorageRoot)newvalue;
             newval.Name = Name;
 
+            // TODO shouldn't it be == instead of !=
             if (guid != "")
             {
                 newval.GUID = guid;
@@ -416,7 +430,40 @@ namespace Graph
             GuidToType.Add(newval.GUID, GetVariableTypeInContainer(newval));
             GuidToValue.Add(newval.GUID, GetValue<object>(newval.GUID));
 
+            Debug.Log("Added " + Name + " to " + toto.GetType());
+
             return newval.GUID;
+        }
+
+        private IList FindCorrespondingList(Type type)
+        {
+            List<Type> types = new List<Type>();
+
+            var vals = Assembly.GetAssembly(typeof(VariableStorageRoot)).
+                GetTypes().
+                Where(t => typeof(VariableStorageRoot).
+                IsAssignableFrom(t)).
+                ToList();
+
+            vals.ForEach(x =>
+            {
+                if (x != typeof(VariableStorageRoot) && x != typeof(VariableStorage<>))
+                {
+                    if (((StorableType)Attribute.GetCustomAttribute(
+                        x,
+                        typeof(StorableType))).ReferenceType == type)
+                    {
+                        types.Add(x);
+                    }
+                }
+            });
+
+            return
+                (IList)this.GetType().
+                GetFields().
+                Select(x => x.GetValue(this)).
+                Where(x => x.ToString().Contains(types[0].ToString())).
+                First();
         }
 
         #endregion
@@ -708,6 +755,46 @@ namespace Graph
             foreach (var item in GuidToNames)
             {
                 Debug.Log("[" + item.Key + "] [" + item.Value + "] [" + GuidToType[item.Key] + "]");
+            }
+        }
+
+        public void DebugDictionnaryInDepth()
+        {
+            DebugList(typeof(float));
+            DebugList(typeof(int));
+        }
+
+        public void DebugList(Type type)
+        {
+            var vals = FindCorrespondingList(type);
+
+            Debug.Log(vals);
+            Debug.Log(vals.Count);
+
+            foreach (var item in vals)
+            {
+                ((VariableStorageRoot)item).ToString();
+            }
+        }
+
+        public GraphVariableStorage CreateDeepCopy()
+        {
+            GraphVariableStorage newStorage = new GraphVariableStorage();
+
+            AddRow<int>(newStorage, typeof(int));
+
+            return newStorage;
+        }
+
+        private void AddRow<T>(GraphVariableStorage newStorage, Type type)
+        {
+            var vals = FindCorrespondingList(type);
+            VariableStorage<T> tmp;
+
+            foreach (var item in vals)
+            {
+                tmp = (VariableStorage<T>)((VariableStorage<T>)item).Clone();
+                newStorage.Add(tmp);
             }
         }
 

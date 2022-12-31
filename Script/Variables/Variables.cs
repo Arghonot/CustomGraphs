@@ -4,6 +4,9 @@ using System.Linq;
 using System.Reflection;
 using UnityEngine;
 using UnityEngine.AI;
+using static UnityEngine.Rendering.DebugUI;
+using static UnityEngine.UI.Image;
+using Type = System.Type;
 
 namespace Graph
 {
@@ -36,9 +39,18 @@ namespace Graph
         {
             GUID = Guid.NewGuid().ToString();
         }
+
+        public virtual void ToString()
+        {
+            Debug.Log(string.Join(" ", new string[]
+            {
+                GUID,
+                Name
+            }));
+        }
     }
 
-    public class VariableStorage<T> : VariableStorageRoot
+    public class VariableStorage<T> : VariableStorageRoot, ICloneable
     {
         public T Value;
 
@@ -60,7 +72,7 @@ namespace Graph
             Value = newValue;
         }
 
-        public void ToString()
+        public override void ToString()
         {
             Debug.Log(string.Join(" ", new string[]
             {
@@ -68,6 +80,17 @@ namespace Graph
                 Name,
                 Value.ToString()
             }));
+        }
+
+        public object Clone()
+        {
+            VariableStorage<T> newVariable = (VariableStorage<T>)Activator.CreateInstance(this.GetType());
+
+            newVariable.Name = Name;
+            newVariable.GUID = GUID;
+            newVariable.Value = Value;
+
+            return newVariable;
         }
 
         //public override object Clone()
