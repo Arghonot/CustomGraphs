@@ -21,7 +21,7 @@ namespace Graph
         }
     }
 
-    public class VariableStorageRoot
+    public class VariableStorageRoot : ICloneable
     {
         public string GUID;
         public string Name;
@@ -48,9 +48,14 @@ namespace Graph
                 Name
             }));
         }
+
+        public virtual object Clone()
+        {
+            throw new NotImplementedException();
+        }
     }
 
-    public class VariableStorage<T> : VariableStorageRoot, ICloneable
+    public class VariableStorage<T> : VariableStorageRoot
     {
         public T Value;
 
@@ -82,9 +87,10 @@ namespace Graph
             }));
         }
 
-        public object Clone()
+        public override object Clone()
         {
             VariableStorage<T> newVariable = (VariableStorage<T>)Activator.CreateInstance(this.GetType());
+            Debug.Log("Cloning T " + GUID + " " + Name);
 
             newVariable.Name = Name;
             newVariable.GUID = GUID;

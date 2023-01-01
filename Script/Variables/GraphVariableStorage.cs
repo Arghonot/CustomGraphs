@@ -6,6 +6,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace Graph
 {
@@ -372,10 +373,11 @@ namespace Graph
             return variableContainerAsGenericType.GUID;
         }
 
-        public string Add<T>(VariableStorage<T> newVal)
+        public string Add(VariableStorageRoot newVal, Type type)
         {
-            FindCorrespondingList(typeof(T)).Add(newVal);
+            var vals = FindCorrespondingList(type);
 
+            vals.Add(newVal);
             GuidToNames.Add(newVal.GUID, newVal.Name);
             GuidToType.Add(newVal.GUID, GetVariableTypeInContainer(newVal));
             GuidToValue.Add(newVal.GUID, GetValue<object>(newVal.GUID));
@@ -686,6 +688,30 @@ namespace Graph
 
         #endregion
 
+        private List<Type> GetStorableTypes()
+        {
+            List<Type> types = new List<Type>();
+
+            var vals = Assembly.GetAssembly(typeof(VariableStorageRoot)).
+                GetTypes().
+                Where(t => typeof(VariableStorageRoot).
+                IsAssignableFrom(t)).
+                ToList();
+
+
+            vals.ForEach(x =>
+            {
+                if (x != typeof(VariableStorageRoot) && x != typeof(VariableStorage<>))
+                {
+                    types.Add(((StorableType)Attribute.GetCustomAttribute(
+                        x,
+                        typeof(StorableType))).ReferenceType);
+                }
+            });
+
+            return types;
+        }
+
         #region DEBUG
 
         public void CompareDictionnaries(GraphVariableStorage otherStorage)
@@ -779,9 +805,13 @@ namespace Graph
 
         public GraphVariableStorage CreateDeepCopy()
         {
+            List<Type> types = GetStorableTypes();
             GraphVariableStorage newStorage = new GraphVariableStorage();
-
-            AddRow<int>(newStorage, typeof(int));
+            // will HAVE to iterate through all storages
+            foreach (var item in types)
+            {
+                AddRow<object>(newStorage, item);
+            }
 
             return newStorage;
         }
@@ -789,12 +819,12 @@ namespace Graph
         private void AddRow<T>(GraphVariableStorage newStorage, Type type)
         {
             var vals = FindCorrespondingList(type);
-            VariableStorage<T> tmp;
+            VariableStorageRoot tmp;
 
             foreach (var item in vals)
             {
-                tmp = (VariableStorage<T>)((VariableStorage<T>)item).Clone();
-                newStorage.Add(tmp);
+                tmp = (VariableStorageRoot)((VariableStorageRoot)item).Clone();
+                newStorage.Add(tmp, type);
             }
         }
 
