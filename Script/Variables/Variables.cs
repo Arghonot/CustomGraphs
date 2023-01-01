@@ -53,6 +53,10 @@ namespace Graph
         {
             throw new NotImplementedException();
         }
+        public virtual object GetValue()
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public class VariableStorage<T> : VariableStorageRoot
@@ -67,7 +71,7 @@ namespace Graph
             return this;
         }
 
-        public object GetValue()
+        public override object GetValue()
         {
             return Value;
         }
