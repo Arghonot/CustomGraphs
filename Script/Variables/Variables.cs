@@ -42,20 +42,26 @@ namespace Graph
             GUID = Guid.NewGuid().ToString();
         }
 
-        public virtual void ToString()
+        public virtual string ToString()
         {
-            Debug.Log(string.Join(" ", new string[]
+            return string.Join(" ", new string[]
             {
                 GUID,
                 Name
-            }));
+            });
         }
 
         public virtual object Clone()
         {
             throw new NotImplementedException();
         }
+
         public virtual object GetValue()
+        {
+            throw new NotImplementedException();
+        }
+
+        public virtual void SetValue(object newValue)
         {
             throw new NotImplementedException();
         }
@@ -79,19 +85,24 @@ namespace Graph
             return Value;
         }
 
+        public override void SetValue(object newValue)
+        {
+            Value = (T)newValue;
+        }
+
         public void Set(T newValue)
         {
             Value = newValue;
         }
 
-        public override void ToString()
+        public override string ToString()
         {
-            Debug.Log(string.Join(" ", new string[]
+            return string.Join(" ", new string[]
             {
                 GUID,
                 Name,
                 Value.ToString()
-            }));
+            });
         }
 
         public override object Clone()

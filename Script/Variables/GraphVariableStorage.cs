@@ -304,7 +304,7 @@ namespace Graph
             vals.Add(newVal);
             GuidToNames.Add(newVal.GUID, newVal.Name);
             GuidToType.Add(newVal.GUID, GetVariableTypeInContainer(newVal));
-            GuidToValue.Add(newVal.GUID, GetValue<object>(newVal.GUID));
+            GuidToValue.Add(newVal.GUID, newVal.GetValue());
 
             return newVal.GUID;
         }
@@ -312,24 +312,23 @@ namespace Graph
         public string Add(Type typeToAdd, string Name = "", string guid = "")
         {
             List<Type> types = new List<Type>();
+            IList listContainingType = ListPerRealType[typeToAdd];
+            VariableStorageRoot newVariableStorage = (VariableStorageRoot)Activator.CreateInstance(StorageTypesPerRealType[typeToAdd]);
 
-            IList toto = ListPerRealType[typeToAdd];
-            object newvalue = Activator.CreateInstance(StorageTypesPerRealType[typeToAdd]);
-            toto.Add(newvalue);
-            VariableStorageRoot newval = (VariableStorageRoot)newvalue;
-            newval.Name = Name;
+            listContainingType.Add(newVariableStorage);
+            newVariableStorage.Name = Name;
 
             if (guid != "")
             {
-                newval.GUID = guid;
+                newVariableStorage.GUID = guid;
             }
 
-            GuidToStorage.Add(newval.GUID, newval);
-            GuidToNames.Add(newval.GUID, newval.Name);
-            GuidToType.Add(newval.GUID, GetVariableTypeInContainer(newval));
-            GuidToValue.Add(newval.GUID, GetValue<object>(newval.GUID));
+            GuidToStorage.Add(newVariableStorage.GUID, newVariableStorage);
+            GuidToNames.Add(newVariableStorage.GUID, newVariableStorage.Name);
+            GuidToType.Add(newVariableStorage.GUID, GetVariableTypeInContainer(newVariableStorage));
+            GuidToValue.Add(newVariableStorage.GUID, GetValue<object>(newVariableStorage.GUID));
 
-            return newval.GUID;
+            return newVariableStorage.GUID;
         }
 
         private IList FindCorrespondingList(Type type)
@@ -345,6 +344,7 @@ namespace Graph
                     return (IList)ilist.GetValue(this);
                 }
             }
+
             return null;
         }
 
@@ -497,98 +497,6 @@ namespace Graph
             return containerMetadata.ReferenceType;
         }
 
-        public void StressTestContainer(int Amount)
-        {
-            System.Diagnostics.Stopwatch watch = new System.Diagnostics.Stopwatch();
-            StringBuilder builder = new StringBuilder();
-            List<Type> vals = new List<Type>();
-            List<Type> types = new List<Type>();
-            Add(typeof(int), "");
-            watch.Start();
-
-            for (int i = 0; i < Amount; i++)
-            {
-                GetVariableTypeInContainer(Ints[0]);
-            }
-            builder.Append("\nFind container " + watch.ElapsedMilliseconds);
-
-            for (int i = 0; i < Amount; i++)
-            {
-                vals = Assembly.GetAssembly(typeof(VariableStorageRoot)).
-                GetTypes().
-                Where(t => typeof(VariableStorageRoot).
-                IsAssignableFrom(t)).
-                ToList();
-            }
-            builder.Append("\nGet assembly " + watch.ElapsedMilliseconds);
-            for (int i = 0; i < Amount; i++)
-            {
-
-                vals.ForEach(x =>
-                {
-                    // TODO add a break if adding to types
-                    if (x != typeof(VariableStorageRoot) && x != typeof(VariableStorage<>))
-                    {
-                        if (((StorableType)Attribute.GetCustomAttribute(
-                            x,
-                            typeof(StorableType))).ReferenceType == typeof(int))
-                        {
-                            types.Add(x);
-                        }
-                    }
-                });
-            }
-            builder.Append("\nFind types" + watch.ElapsedMilliseconds);
-            IList toto = null;
-            for (int i = 0; i < Amount; i++)
-            {
-                toto = (IList)this.GetType().
-                GetFields().
-                Select(x => x.GetValue(this)).
-                Where(x => x.ToString().Contains(types[0].ToString())).
-                First();
-            }
-            builder.Append("\nFindLists" + watch.ElapsedMilliseconds);
-            object newvalue = null;
-
-            for (int i = 0; i < Amount; i++)
-            {
-                newvalue = Activator.CreateInstance(types[0]);
-                toto.Add(newvalue);
-            }
-            builder.Append("\nCreate variable instance " + watch.ElapsedMilliseconds);
-
-            for (int i = 0; i < Amount; i++)
-            {
-                var guid = Guid.NewGuid().ToString();
-                ((VariableStorageRoot)newvalue).GUID = guid;
-                GuidToNames.Add(((VariableStorageRoot)newvalue).GUID, "");
-                GuidToType.Add(((VariableStorageRoot)newvalue).GUID, GetVariableTypeInContainer((VariableStorageRoot)newvalue));
-                GuidToValue.Add(((VariableStorageRoot)newvalue).GUID, GetValue<object>(((VariableStorageRoot)newvalue).GUID));
-            }
-            builder.Append("\nStore metadatas " + watch.ElapsedMilliseconds);
-            var prevValue = 0l;
-            for (int i = 0; i < Amount; i++)
-            {
-                GetValue<object>(((VariableStorageRoot)newvalue).GUID);
-            }
-            builder.Append("\nCall to getValue " + (watch.ElapsedMilliseconds));
-
-            prevValue = 0l;
-            for (int i = 0; i < Amount; i++)
-            {
-                var guid = Guid.NewGuid().ToString();
-            }
-            builder.Append("\nGenerating GUIDs " + (watch.ElapsedMilliseconds));
-            var id = ((VariableStorageRoot)newvalue).GUID;
-            for (int i = 0; i < Amount; i++)
-            {
-                GetContainerInstance(id);
-            }
-            builder.Append("\nGenerating GUIDs " + (watch.ElapsedMilliseconds));
-            UnityEngine.Debug.Log(builder.ToString());
-        }
-
         private void FillSelfStorageMetadatas()
         {
             var types = FindAllStorableRealTypes();
@@ -634,7 +542,6 @@ namespace Graph
             vals = FindAllStorageTypes();
             vals.ForEach(x =>
             {
-                // TODO add a break if adding to types
                 if (x != typeof(VariableStorageRoot) && x != typeof(VariableStorage<>))
                 {
                     types.Add(GetAttributeFromContainerType(x));
@@ -680,13 +587,7 @@ namespace Graph
 
         public void SetValue(string Guid, object value)
         {
-            object container = GetContainerInstance(Guid);
-            MethodInfo AddMethod = container.GetType().GetMethod("Set");
-
-            AddMethod.Invoke(container, new object[]
-            {
-            value
-            });
+            GetContainerInstance(Guid).SetValue(value);
         }
 
         #endregion
@@ -705,29 +606,29 @@ namespace Graph
 
         #endregion
 
-        private List<Type> GetStorableTypes()
-        {
-            List<Type> types = new List<Type>();
+        //private List<Type> GetStorableTypes()
+        //{
+        //    List<Type> types = new List<Type>();
 
-            var vals = Assembly.GetAssembly(typeof(VariableStorageRoot)).
-                GetTypes().
-                Where(t => typeof(VariableStorageRoot).
-                IsAssignableFrom(t)).
-                ToList();
+        //    var vals = Assembly.GetAssembly(typeof(VariableStorageRoot)).
+        //        GetTypes().
+        //        Where(t => typeof(VariableStorageRoot).
+        //        IsAssignableFrom(t)).
+        //        ToList();
 
 
-            vals.ForEach(x =>
-            {
-                if (x != typeof(VariableStorageRoot) && x != typeof(VariableStorage<>))
-                {
-                    types.Add(((StorableType)Attribute.GetCustomAttribute(
-                        x,
-                        typeof(StorableType))).ReferenceType);
-                }
-            });
+        //    vals.ForEach(x =>
+        //    {
+        //        if (x != typeof(VariableStorageRoot) && x != typeof(VariableStorage<>))
+        //        {
+        //            types.Add(((StorableType)Attribute.GetCustomAttribute(
+        //                x,
+        //                typeof(StorableType))).ReferenceType);
+        //        }
+        //    });
 
-            return types;
-        }
+        //    return types;
+        //}
 
         #region DEBUG
 
@@ -823,23 +724,22 @@ namespace Graph
 
         public GraphVariableStorage CreateDeepCopy()
         {
-            List<Type> types = GetStorableTypes();
             GraphVariableStorage newStorage = new GraphVariableStorage();
-            // will HAVE to iterate through all storages
-            foreach (var item in types)
+
+            foreach (var pair in ListPerRealType)
             {
-                AddRow<object>(newStorage, item);
+                AddRow(newStorage, pair.Key, pair.Value);
             }
 
             return newStorage;
         }
 
-        private void AddRow<T>(GraphVariableStorage newStorage, Type type)
+        private void AddRow(GraphVariableStorage newStorage, Type type, IList list)
         {
-            var vals = FindCorrespondingList(type);
+            //var vals = FindCorrespondingList(type);
             VariableStorageRoot tmp;
 
-            foreach (var item in vals)
+            foreach (var item in list)
             {
                 tmp = (VariableStorageRoot)((VariableStorageRoot)item).Clone();
                 newStorage.Add(tmp, type);
