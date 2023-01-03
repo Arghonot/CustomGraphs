@@ -30,10 +30,18 @@ namespace GraphEditor
                 GUILayout.Space(4);
             }
 
+            DebugGraph(blackboard);
             DisplayAll(blackboard);
-
             // -- load system
             LoadSubgraphBlackboard();
+        }
+
+        private void DebugGraph(Graph.Blackboard blackboard)
+        {
+            if (GUILayout.Button("debug blackboard"))
+            {
+                blackboard.storage.DebugDictionnaries();
+            }
         }
 
         private void LoadSubgraphBlackboard()

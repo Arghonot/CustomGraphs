@@ -15,10 +15,8 @@ using static UnityEditor.Progress;
 namespace Graph
 {
     // TODO make the load subgraph work
-    public class GraphVariableStorageHelper : ISerializationCallbackReceiver
+    public class GraphVariableStorageHelper
     {
-        public string GUID = Guid.NewGuid().ToString();
-
         [HideInInspector] protected Action OnFinishedSerializationProcess;
         [HideInInspector] public Dictionary<string, string> GuidToNames;
         [HideInInspector] public Dictionary<string, Type> GuidToType;
@@ -43,13 +41,13 @@ namespace Graph
         // to be implemented
         protected Dictionary<KeyValuePair<string, Type>, string> NameTypeToGuid;
 
-        [SerializeField] private string[] guids;
-        [SerializeField] private string[] names;
-        [SerializeField] private Type[] types;
+        [SerializeField] protected string[] guids;
+        [SerializeField] protected string[] names;
+        [SerializeField] protected Type[] types;
         // This is basically a backup in case a compilation occured since the last serialization
         // pass, if so 'types' will always be null, so we can still recover it's value by storing its 
         // stored type's name and execute a less performance effective alogrythm to find the type.
-        [SerializeField] private string[] typeString;
+        [SerializeField] protected string[] typeString;
 
         public GraphVariableStorageHelper()
         {
@@ -58,124 +56,6 @@ namespace Graph
             GuidToStorage = new Dictionary<string, VariableStorageRoot>();
         }
 
-        protected int val = -1;
-
-        // we save the GUIDs as a fast way to restore the object.
-        // later we just have to retrieve the object instance from the list and add its
-        // GUID in the dictionnary.
-        public void OnBeforeSerialize()
-        {
-            int i = 0;
-
-            if (GuidToNames == null || GuidToType == null)
-            {
-                GuidToNames = new Dictionary<string, string>();
-                GuidToType = new Dictionary<string, Type>();
-            }
-
-            guids = new string[GuidToNames.Count()];
-            names = new string[GuidToNames.Count()];
-            types = new Type[GuidToNames.Count()];
-            typeString = new string[GuidToNames.Count()];
-
-            foreach (var item in GuidToNames)
-            {
-                guids[i] = item.Key;
-                names[i] = item.Value;
-                types[i] = GuidToType[item.Key];
-                typeString[i] = types[i].AssemblyQualifiedName;
-                i++;
-            }
-        }
-
-        public void OnAfterDeserialize()
-        {
-            GuidToNames.Clear();
-            GuidToType.Clear();
-            GuidToValue.Clear();
-
-            if (types == null)
-            {
-                SetTypes();
-            }
-
-            for (int i = 0; i < guids.Length; i++)
-            {
-                GuidToNames.Add(guids[i], names[i]);
-                GuidToType.Add(guids[i], types[i]);
-            }
-
-            OnFinishedSerializationProcess?.Invoke();
-        }
-
-        public virtual string Add(Type type, string name, object value, string GUID)
-        {
-            return GUID;
-        }
-
-        //public void OnBeforeSerialize()
-        //{
-        //    int i = 0;
-
-        //    if (GuidToNames == null || GuidToType == null)
-        //    {
-        //        GuidToNames = new Dictionary<string, string>();
-        //        GuidToType = new Dictionary<string, Type>();
-        //        GuidToValue = new Dictionary<string, object>();
-        //        GuidToStorage = new Dictionary<string, VariableStorageRoot>();
-        //    }
-
-        //    guids = new string[GuidToNames.Count()];
-        //    names = new string[GuidToNames.Count()];
-        //    types = new Type[GuidToNames.Count()];
-        //    typeString = new string[GuidToNames.Count()];
-        //    containers = new object[GuidToNames.Count()];
-
-
-        //    Debug.Log("||||||||||||||||||||||||||||");
-
-        //    Debug.Log(GuidToNames.Count());
-        //    Debug.Log(GuidToStorage.Count());
-        //    Debug.Log(GuidToType.Count());
-        //    Debug.Log(GuidToValue.Count());
-        //    foreach (var item in GuidToNames)
-        //    {
-        //        Debug.Log("saving " + item.Value);
-        //        guids[i] = item.Key;
-        //        names[i] = item.Value;
-        //        types[i] = GuidToType[item.Key];
-        //        typeString[i] = types[i].AssemblyQualifiedName;
-        //        containers[i] = GuidToStorage[item.Key];
-        //        i++;
-        //    }
-        //}
-
-        //public void OnAfterDeserialize()
-        //{
-        //    GuidToNames.Clear();
-        //    GuidToType.Clear();
-        //    GuidToValue.Clear();
-        //    GuidToStorage.Clear();
-
-        //    if (types == null)
-        //    {
-        //        SetTypes();
-        //    }
-        //    Debug.Log("XXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-
-        //    Debug.Log(GuidToNames.Count());
-        //    Debug.Log(GuidToStorage.Count());
-        //    Debug.Log(GuidToType.Count());
-        //    Debug.Log(GuidToValue.Count());
-        //    for (int i = 0; i < guids.Length; i++)
-        //    {
-        //        GuidToNames.Add(guids[i], names[i]);
-        //        GuidToType.Add(guids[i], types[i]);
-        //        GuidToStorage.Add(guids[i], (VariableStorageRoot)containers[i]);
-        //    }
-
-        //    OnFinishedSerializationProcess?.Invoke();
-        //}
 
         private void SetTypes()
         {
@@ -193,9 +73,10 @@ namespace Graph
     // TODO do a system of event for variable modification so we don't get their value every frames
     // TODO Should all the set and get handled directly by this class or the class that contains this class ?
     [Serializable]
-    public partial class GraphVariableStorage : GraphVariableStorageHelper
+    public partial class GraphVariableStorage : GraphVariableStorageHelper, ISerializationCallbackReceiver
     {
-         
+        public string GUID = Guid.NewGuid().ToString();
+
         // C# types
         [SerializeField] public List<floatVariable> Floats = new List<floatVariable>();
         [SerializeField] public List<LongVariable> Longs = new List<LongVariable>();
@@ -216,13 +97,12 @@ namespace Graph
 
         public GraphVariableStorage()
         {
+            ReinitObjectDictionnary();
             OnFinishedSerializationProcess += ReinitObjectDictionnary;
-            //ReinitObjectDictionnary();
 
             GuidToValue = new Dictionary<string, object>();
 
             FillSelfStorageMetadatas();
-            //Debug.Log("creaztibng new instance.");
         }
 
         ~GraphVariableStorage()
@@ -230,24 +110,68 @@ namespace Graph
             OnFinishedSerializationProcess -= ReinitObjectDictionnary;
         }
 
+
+        // we save the GUIDs as a fast way to restore the object.
+        // later we just have to retrieve the object instance from the list and add its
+        // GUID in the dictionnary.
+        public void OnBeforeSerialize()
+        {
+        }
+
+        public void OnAfterDeserialize()
+        {
+            GuidToNames.Clear();
+            GuidToType.Clear();
+            GuidToValue.Clear();
+            GuidToStorage.Clear();
+
+            ReinitObjectDictionnary();
+
+            //if (types == null)
+            //{
+            //    SetTypes();
+            //}
+
+            //for (int i = 0; i < guids.Length; i++)
+            //{
+            //    GuidToNames.Add(guids[i], names[i]);
+            //    GuidToType.Add(guids[i], types[i]);
+            //}
+
+            //OnFinishedSerializationProcess?.Invoke();
+        }
+
         [ContextMenu("ReinitObjectDictionnary")]
         private void ReinitObjectDictionnary()
         {
             GuidToValue = new Dictionary<string, object>();
+            GuidToStorage = new Dictionary<string, VariableStorageRoot>();
             FillSelfStorageMetadatas();
 
-            foreach (var item in GuidToNames)
+            foreach (var list in ListPerRealType)
             {
-                Debug.Log(GuidToType.ContainsKey(item.Key));
-                if (!GuidToStorage.ContainsKey(item.Key))
+                foreach (var item in list.Value)
                 {
-                    GuidToStorage.Add(item.Key, getContainerFromListFromID(item.Key));
-                }
-                if (!GuidToValue.ContainsKey(item.Key))
-                {
-                    GuidToValue.Add(item.Key, GetValue<object>(item.Key));
+                    GuidToStorage.Add(((VariableStorageRoot)item).GUID, (VariableStorageRoot)item);
+                    GuidToNames.Add(((VariableStorageRoot)item).GUID, ((VariableStorageRoot)item).Name);
+                    GuidToType.Add(((VariableStorageRoot)item).GUID, GetVariableTypeInContainer((VariableStorageRoot)item));
+                    GuidToValue.Add(((VariableStorageRoot)item).GUID, ((VariableStorageRoot)item).GetValue());
                 }
             }
+
+            //foreach (var item in GuidToNames)
+            //{
+            //    if (!GuidToStorage.ContainsKey(item.Key))
+            //    {
+            //        GuidToStorage.Add(item.Key, getContainerFromListFromID(item.Key));
+            //    }
+            //    if (!GuidToValue.ContainsKey(item.Key))
+            //    {
+            //        GuidToValue.Add(item.Key, GetValue<object>(item.Key));
+            //    }
+            //}
+
+            Debug.Log(GuidToStorage.Count());
         }
 
         #endregion
@@ -346,7 +270,6 @@ namespace Graph
             // Because we can't modify a collection we are iterating on
             List<KeyValuePair<string, string>> GuidFromToList = new List<KeyValuePair<string, string>>();
 
-            Debug.Log(this.GUID);
 
             foreach (var item in storageToCompile.PublicGUIDsToNames)
             {
@@ -354,7 +277,6 @@ namespace Graph
                 if (!ContainsGuid(item.Key) && ContainsName(storageToCompile.GetName(item.Key)) &&
                     storageToCompile.GetContainedType(item.Key) == GetContainedType(GetGUIDFromName(item.Value)))
                 {
-                    Debug.Log("was contained already " + item.Value);
                     // prepare to change an already existing item that we don't really need to re create
                     GuidFromToList.Add(new KeyValuePair<string, string>(
                         GetGUIDFromNameAndType(item.Value, storageToCompile.GetContainedType(item.Key)),
@@ -363,7 +285,6 @@ namespace Graph
                 // if doesn't contains it
                 else if (!ContainsGuid(item.Key))
                 {
-                    Debug.Log("wasn't contained already " + item.Value);
                     // brand new 
                     CreateCopy(storageToCompile.GetContainerInstance(item.Key), item.Key);
 
@@ -375,8 +296,6 @@ namespace Graph
             // we rename the ones that need renaming
             for (int i = 0; i < GuidFromToList.Count; i++)
             {
-                Debug.Log("Setting guid from : |" + GuidFromToList[i].Key + "| to |" + GuidFromToList[i].Value + "|");
-
                 SetGUID(GuidFromToList[i].Key, GuidFromToList[i].Value);
             }
 
@@ -404,14 +323,6 @@ namespace Graph
         #endregion
 
         #region Add
-
-        public override string Add(Type type, string name, object value, string GUID)
-        {
-            Add(type, name, GUID);
-            SetValue(GUID, value);
-
-            return GUID;
-        }
 
         public string CreateCopy(object variableInstanceToCopy, string optionalGUID = "")
         {
@@ -484,39 +395,6 @@ namespace Graph
         public string Add(Type typeToAdd, string Name = "", string guid = "")
         {
             List<Type> types = new List<Type>();
-            //System.Diagnostics.Stopwatch watch = new System.Diagnostics.Stopwatch();
-            //StringBuilder builder = new StringBuilder();
-            //watch.Start();
-
-            //var vals = Assembly.GetAssembly(typeof(VariableStorageRoot)).
-            //    GetTypes().
-            //    Where(t => typeof(VariableStorageRoot).
-            //    IsAssignableFrom(t)).
-            //    ToList();
-            ////builder.Append("looping for types " + watch.ElapsedMilliseconds * 100);
-
-            //vals.ForEach(x =>
-            //{
-            //    // TODO add a break if adding to types
-            //    if (x != typeof(VariableStorageRoot) && x != typeof(VariableStorage<>))
-            //    {
-            //        if (((StorableType)Attribute.GetCustomAttribute(
-            //            x,
-            //            typeof(StorableType))).ReferenceType == typeToAdd)
-            //        {
-            //            types.Add(x);
-            //        }
-            //    }
-            //});
-            ////builder.Append("\nfinding type " + watch.ElapsedMilliseconds * 100);
-
-            //IList toto =
-            //    (IList)this.GetType().
-            //    GetFields().
-            //    Select(x => x.GetValue(this)).
-            //    Where(x => x.ToString().Contains(types[0].ToString())).
-            //    First();
-            //builder.Append("\nretrieving list " + watch.ElapsedMilliseconds * 100);
 
             IList toto = ListPerRealType[typeToAdd];
             object newvalue = Activator.CreateInstance(StorageTypesPerRealType[typeToAdd]);
@@ -534,9 +412,6 @@ namespace Graph
             GuidToNames.Add(newval.GUID, newval.Name);
             GuidToType.Add(newval.GUID, GetVariableTypeInContainer(newval));
             GuidToValue.Add(newval.GUID, GetValue<object>(newval.GUID));
-            //builder.Append("\nstoring metadatas " + watch.ElapsedMilliseconds * 100);
-            //Debug.Log(builder.ToString());
-            //Debug.Log("Added " + Name + " to " + toto.GetType());
 
             return newval.GUID;
         }
@@ -551,19 +426,11 @@ namespace Graph
                 IsAssignableFrom(t)).
                 ToList();
 
-            //Debug.Log("||||||||||||||||||||||||||||" + type);
             vals.ForEach(x =>
             {
                 
                 if (x != typeof(VariableStorageRoot) && x != typeof(VariableStorage<>))
                 {
-                    //Debug.Log(x);
-                    //Debug.Log(((StorableType)Attribute.GetCustomAttribute(
-                    //        x,
-                    //        typeof(StorableType))).ReferenceType == type);
-                    //Debug.Log(((StorableType)Attribute.GetCustomAttribute(
-                    //        x,
-                    //        typeof(StorableType))).ReferenceType);
                     if (((StorableType)Attribute.GetCustomAttribute(
                         x,
                         typeof(StorableType))).ReferenceType == type)
@@ -635,42 +502,15 @@ namespace Graph
 
         public T GetValue<T>(string guid)
         {
-            //Debug.Log(guid);
             object container = GetContainerInstance(guid);
-            //Debug.Log((container) == null);
-            //Debug.Log((container.GetType()));
-            //Debug.Log(((VariableStorageRoot)container) == null);
-            //Debug.Log(((VariableStorageRoot)container).GetValue() == null);
 
             return (T)((VariableStorageRoot)container).GetValue();
-            //MethodInfo GetValueMethod = container.GetType().GetMethod("GetValue");
 
-            //return (T)GetValueMethod.Invoke(container, new object[] { });
         }
 
         public VariableStorageRoot GetContainerInstance(string guid)
         {
             return GuidToStorage[guid];
-            //// we get the list containing this instance
-            //Type TypeOfVariable = GetContainerContaningType(GuidToType[guid]);
-
-            //// couldn't find an appropriate type for this guid
-            //if (TypeOfVariable == typeof(VariableStorageRoot))
-            //{
-            //    return null;
-            //}
-
-            //IList container = GetListOfContainer(TypeOfVariable);
-
-            //foreach (var row in container)
-            //{
-            //    if (((VariableStorageRoot)row).GUID == guid)
-            //    {
-            //        return (VariableStorageRoot)row;
-            //    }
-            //}
-
-            //return null;
         }
 
         private Type GetContainerContaningType(Type type)
@@ -826,8 +666,6 @@ namespace Graph
             }
             builder.Append("\nCreate variable instance " + watch.ElapsedMilliseconds);
 
-            Debug.Log((newvalue == null));
-            Debug.Log(newvalue.GetType());
             for (int i = 0; i < Amount; i++)
             {
                 var guid = Guid.NewGuid().ToString();
@@ -859,15 +697,21 @@ namespace Graph
             UnityEngine.Debug.Log(builder.ToString());
         }
 
-        private Dictionary<Type, Type> StorageTypesPerRealType;
-        private Dictionary<Type, IList> ListPerRealType;
+        private static Dictionary<Type, Type> StorageTypesPerRealType;
+        private static Dictionary<Type, IList> ListPerRealType;
 
         private void FillSelfStorageMetadatas()
         {
             var types = FindAllStorableRealTypes();
 
-            FillStorageTypesPerRealType(types);
-            FillListPerRealType(types);
+            if (StorageTypesPerRealType == null)
+            {
+                FillStorageTypesPerRealType(types);
+            }
+            if (ListPerRealType == null)
+            {
+                FillListPerRealType(types);
+            }
         }
 
         private void FillListPerRealType(List<Type> types)
@@ -911,11 +755,6 @@ namespace Graph
                 if (x != typeof(VariableStorageRoot) && x != typeof(VariableStorage<>))
                 {
                     types.Add(GetAttributeFromContainerType(x));
-                    //if (((StorableType)Attribute.GetCustomAttribute(
-                    //    x,
-                    //    typeof(StorableType))).ReferenceType == typeof(int))
-                    //{
-                    //}
                 }
             });
 
@@ -924,8 +763,6 @@ namespace Graph
 
         public string GetGUIDFromNameAndType(string name, Type type)
         {
-            Debug.Log(name + " " + type);
-
             var possibleCandidate = GuidToNames.Where(x => x.Value == name); 
             
             return possibleCandidate.Where(x => GuidToType[x.Key] == type).First().Key;
@@ -1075,6 +912,7 @@ namespace Graph
 
         public void DebugDictionnaries()
         {
+            Debug.Log("DebugDictionnaries = " + ListPerRealType[typeof(int)].Count);
             foreach (var item in GuidToNames)
             {
                 Debug.Log("[" + item.Key + "] [" + item.Value + "] [" + GuidToType[item.Key] + "]");
