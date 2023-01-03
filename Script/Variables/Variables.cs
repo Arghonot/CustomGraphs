@@ -108,7 +108,6 @@ namespace Graph
         public override object Clone()
         {
             VariableStorage<T> newVariable = (VariableStorage<T>)Activator.CreateInstance(this.GetType());
-            Debug.Log("Cloning T " + GUID + " " + Name);
 
             newVariable.Name = Name;
             newVariable.GUID = GUID;

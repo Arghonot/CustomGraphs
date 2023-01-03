@@ -187,7 +187,6 @@ namespace Graph
             // Because we can't modify a collection we are iterating on
             List<KeyValuePair<string, string>> GuidFromToList = new List<KeyValuePair<string, string>>();
 
-
             foreach (var item in storageToCompile.PublicGUIDsToNames)
             {
                 // if contains the same type and name
@@ -235,6 +234,7 @@ namespace Graph
             GuidToNames.Clear();
             GuidToType.Clear();
             GuidToValue.Clear();
+            GuidToStorage.Clear();
         }
 
         #endregion
@@ -305,6 +305,7 @@ namespace Graph
             GuidToNames.Add(newVal.GUID, newVal.Name);
             GuidToType.Add(newVal.GUID, GetVariableTypeInContainer(newVal));
             GuidToValue.Add(newVal.GUID, newVal.GetValue());
+            GuidToStorage.Add(newVal.GUID, newVal);
 
             return newVal.GUID;
         }
@@ -433,7 +434,6 @@ namespace Graph
         {
             return ((StorableType)Attribute.GetCustomAttribute(containerType, typeof(StorableType))).ReferenceType;
         }
-
 
         private IEnumerable<IList> GetAllListOfContainers()
         {
@@ -573,10 +573,12 @@ namespace Graph
             GuidToNames.Remove(from);
             GuidToValue.Remove(from);
             GuidToType.Remove(from);
+            GuidToStorage.Remove(from);
 
             GuidToNames.Add(to, container.Name);
             GuidToValue.Add(to, containedValue);
             GuidToType.Add(to, containedType);
+            GuidToStorage.Add(to, container);
         }
 
         public void SetName(string guid, string name)
@@ -605,30 +607,6 @@ namespace Graph
         }
 
         #endregion
-
-        //private List<Type> GetStorableTypes()
-        //{
-        //    List<Type> types = new List<Type>();
-
-        //    var vals = Assembly.GetAssembly(typeof(VariableStorageRoot)).
-        //        GetTypes().
-        //        Where(t => typeof(VariableStorageRoot).
-        //        IsAssignableFrom(t)).
-        //        ToList();
-
-
-        //    vals.ForEach(x =>
-        //    {
-        //        if (x != typeof(VariableStorageRoot) && x != typeof(VariableStorage<>))
-        //        {
-        //            types.Add(((StorableType)Attribute.GetCustomAttribute(
-        //                x,
-        //                typeof(StorableType))).ReferenceType);
-        //        }
-        //    });
-
-        //    return types;
-        //}
 
         #region DEBUG
 
@@ -736,7 +714,6 @@ namespace Graph
 
         private void AddRow(GraphVariableStorage newStorage, Type type, IList list)
         {
-            //var vals = FindCorrespondingList(type);
             VariableStorageRoot tmp;
 
             foreach (var item in list)
