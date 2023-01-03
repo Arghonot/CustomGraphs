@@ -334,35 +334,18 @@ namespace Graph
 
         private IList FindCorrespondingList(Type type)
         {
-            List<Type> types = new List<Type>();
+            var ilists = this.GetType().GetFields().Where(x => x.FieldType.IsGenericType && x.FieldType.GetGenericTypeDefinition() == typeof(List<>));
 
-            var vals = Assembly.GetAssembly(typeof(VariableStorageRoot)).
-                GetTypes().
-                Where(t => typeof(VariableStorageRoot).
-                IsAssignableFrom(t)).
-                ToList();
-
-            vals.ForEach(x =>
+            foreach (var ilist in ilists)
             {
-                
-                if (x != typeof(VariableStorageRoot) && x != typeof(VariableStorage<>))
+                var listInnerType = (ilist.GetValue(this)).GetType().GenericTypeArguments[0];
+
+                if (listInnerType == StorageTypesPerRealType[type])
                 {
-                    if (((StorableType)Attribute.GetCustomAttribute(
-                        x,
-                        typeof(StorableType))).ReferenceType == type)
-                    {
-                        types.Add(x);
-
-                    }
+                    return (IList)ilist.GetValue(this);
                 }
-            });
-
-            return
-                (IList)this.GetType().
-                GetFields().
-                Select(x => x.GetValue(this)).
-                Where(x => x.ToString().Contains(types[0].ToString())).
-                First();
+            }
+            return null;
         }
 
         #endregion
@@ -514,9 +497,6 @@ namespace Graph
             return containerMetadata.ReferenceType;
         }
 
-        Dictionary<Type, Type> RealTypeToContainerType;
-        Dictionary<Type, IList> RealTypeToList;
-
         public void StressTestContainer(int Amount)
         {
             System.Diagnostics.Stopwatch watch = new System.Diagnostics.Stopwatch();
@@ -613,14 +593,8 @@ namespace Graph
         {
             var types = FindAllStorableRealTypes();
 
-            if (StorageTypesPerRealType == null)
-            {
-                FillStorageTypesPerRealType(types);
-            }
-            if (ListPerRealType == null)
-            {
-                FillListPerRealType(types);
-            }
+            FillStorageTypesPerRealType(types);
+            FillListPerRealType(types);
         }
 
         private void FillListPerRealType(List<Type> types)
