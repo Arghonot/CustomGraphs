@@ -2,78 +2,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Text;
-using UnityEditor.SceneManagement;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.AI;
-using static UnityEditor.Progress;
 
 namespace Graph
 {
-    // TODO make the load subgraph work
-    public class GraphVariableStorageHelper
-    {
-        [HideInInspector] protected Action OnFinishedSerializationProcess;
-        [HideInInspector] public Dictionary<string, string> GuidToNames;
-        [HideInInspector] public Dictionary<string, Type> GuidToType;
-        [HideInInspector] public Dictionary<string, object> GuidToValue;
-        [HideInInspector] public Dictionary<string, VariableStorageRoot> GuidToStorage;
-
-        [HideInInspector] public Dictionary<string, string> PublicGUIDsToNames
-        {
-            get
-            {
-                return GuidToNames;
-            }
-        }
-        [HideInInspector] public Dictionary<string, Type> PublicGUIDsToType
-        {
-            get
-            {
-                return GuidToType;
-            }
-        }
-
-        // to be implemented
-        protected Dictionary<KeyValuePair<string, Type>, string> NameTypeToGuid;
-
-        [SerializeField] protected string[] guids;
-        [SerializeField] protected string[] names;
-        [SerializeField] protected Type[] types;
-        // This is basically a backup in case a compilation occured since the last serialization
-        // pass, if so 'types' will always be null, so we can still recover it's value by storing its 
-        // stored type's name and execute a less performance effective alogrythm to find the type.
-        [SerializeField] protected string[] typeString;
-
-        public GraphVariableStorageHelper()
-        {
-            GuidToNames = new Dictionary<string, string>();
-            GuidToType = new Dictionary<string, Type>();
-            GuidToStorage = new Dictionary<string, VariableStorageRoot>();
-        }
-
-
-        private void SetTypes()
-        {
-            types = new Type[typeString.Length];
-
-            for (int i = 0; i < typeString.Length; i++)
-            {
-                types[i] = Type.GetType(typeString[i]);
-            }
-        }
-    }
-
-    // TODO use the dictionnaries as much as possible for every classes
     // TODO decide what should be public and what should be private
-    // TODO do a system of event for variable modification so we don't get their value every frames
-    // TODO Should all the set and get handled directly by this class or the class that contains this class ?
     [Serializable]
-    public partial class GraphVariableStorage : GraphVariableStorageHelper, ISerializationCallbackReceiver
+    public partial class GraphVariableStorage : ISerializationCallbackReceiver
     {
         public string GUID = Guid.NewGuid().ToString();
 
@@ -93,59 +30,53 @@ namespace Graph
         [SerializeField] public List<Vector3Variable> Vector3s = new List<Vector3Variable>();
         [SerializeField] public List<QuaternionVariable> Quaternions = new List<QuaternionVariable>();
 
+        [HideInInspector] public Dictionary<string, string> GuidToNames;
+        [HideInInspector] public Dictionary<string, Type> GuidToType;
+        [HideInInspector] public Dictionary<string, object> GuidToValue;
+        [HideInInspector] public Dictionary<string, VariableStorageRoot> GuidToStorage;
+        private static Dictionary<Type, Type> StorageTypesPerRealType;
+        private Dictionary<Type, IList> ListPerRealType;
+        [HideInInspector]
+        public Dictionary<string, string> PublicGUIDsToNames
+        {
+            get
+            {
+                return GuidToNames;
+            }
+        }
+        [HideInInspector]
+        public Dictionary<string, Type> PublicGUIDsToType
+        {
+            get
+            {
+                return GuidToType;
+            }
+        }
+
+        protected Dictionary<KeyValuePair<string, Type>, string> NameTypeToGuid;
         #region Inner storage management
 
         public GraphVariableStorage()
         {
-            ReinitObjectDictionnary();
-            OnFinishedSerializationProcess += ReinitObjectDictionnary;
-
-            GuidToValue = new Dictionary<string, object>();
-
             FillSelfStorageMetadatas();
+            ReinitObjectDictionnary();
         }
 
-        ~GraphVariableStorage()
-        {
-            OnFinishedSerializationProcess -= ReinitObjectDictionnary;
-        }
-
-
-        // we save the GUIDs as a fast way to restore the object.
-        // later we just have to retrieve the object instance from the list and add its
-        // GUID in the dictionnary.
-        public void OnBeforeSerialize()
-        {
-        }
+        public void OnBeforeSerialize() { }
 
         public void OnAfterDeserialize()
         {
-            GuidToNames.Clear();
-            GuidToType.Clear();
-            GuidToValue.Clear();
-            GuidToStorage.Clear();
-
             ReinitObjectDictionnary();
-
-            //if (types == null)
-            //{
-            //    SetTypes();
-            //}
-
-            //for (int i = 0; i < guids.Length; i++)
-            //{
-            //    GuidToNames.Add(guids[i], names[i]);
-            //    GuidToType.Add(guids[i], types[i]);
-            //}
-
-            //OnFinishedSerializationProcess?.Invoke();
         }
 
         [ContextMenu("ReinitObjectDictionnary")]
         private void ReinitObjectDictionnary()
         {
-            GuidToValue = new Dictionary<string, object>();
+            GuidToNames = new Dictionary<string, string>();
+            GuidToType = new Dictionary<string, Type>();
             GuidToStorage = new Dictionary<string, VariableStorageRoot>();
+            GuidToValue = new Dictionary<string, object>();
+
             FillSelfStorageMetadatas();
 
             foreach (var list in ListPerRealType)
@@ -158,20 +89,6 @@ namespace Graph
                     GuidToValue.Add(((VariableStorageRoot)item).GUID, ((VariableStorageRoot)item).GetValue());
                 }
             }
-
-            //foreach (var item in GuidToNames)
-            //{
-            //    if (!GuidToStorage.ContainsKey(item.Key))
-            //    {
-            //        GuidToStorage.Add(item.Key, getContainerFromListFromID(item.Key));
-            //    }
-            //    if (!GuidToValue.ContainsKey(item.Key))
-            //    {
-            //        GuidToValue.Add(item.Key, GetValue<object>(item.Key));
-            //    }
-            //}
-
-            Debug.Log(GuidToStorage.Count());
         }
 
         #endregion
@@ -402,7 +319,6 @@ namespace Graph
             VariableStorageRoot newval = (VariableStorageRoot)newvalue;
             newval.Name = Name;
 
-            // TODO shouldn't it be == instead of !=
             if (guid != "")
             {
                 newval.GUID = guid;
@@ -502,10 +418,7 @@ namespace Graph
 
         public T GetValue<T>(string guid)
         {
-            object container = GetContainerInstance(guid);
-
-            return (T)((VariableStorageRoot)container).GetValue();
-
+            return (T)GuidToStorage[guid].GetValue();
         }
 
         public VariableStorageRoot GetContainerInstance(string guid)
@@ -519,7 +432,6 @@ namespace Graph
 
             foreach (var item in containers)
             {
-                // we might have debug variables that are not variable storage
                 if (item != null)
                 {
                     var storedType = item.GetType().GetGenericArguments().Single();
@@ -696,9 +608,6 @@ namespace Graph
             builder.Append("\nGenerating GUIDs " + (watch.ElapsedMilliseconds));
             UnityEngine.Debug.Log(builder.ToString());
         }
-
-        private static Dictionary<Type, Type> StorageTypesPerRealType;
-        private static Dictionary<Type, IList> ListPerRealType;
 
         private void FillSelfStorageMetadatas()
         {
