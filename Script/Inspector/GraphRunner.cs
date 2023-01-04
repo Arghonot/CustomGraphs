@@ -12,24 +12,5 @@ namespace Graph
 
         [SerializeField]
         public GraphVariableStorage storage = new GraphVariableStorage();
-
-        public void BuildValueDictionnary()
-        {
-            if (graph.blackboard == null)
-            {
-                graph = null;
-                return;
-            }
-            if (storage != null)
-            {
-                storage.Flush();
-            }
-            else
-            {
-                storage = new GraphVariableStorage();
-            }
-
-            storage.Merge(graph.CompileAllBlackboard());
-        }
     }
 }

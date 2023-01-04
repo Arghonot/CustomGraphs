@@ -18,19 +18,5 @@ namespace Graph
         /// Organized as follow : GUID - Value's datas
         /// </summary>
         public GraphVariableStorage storage = new GraphVariableStorage();
-
-        public void BuildValueDictionnary()
-        {
-            if (storage != null)
-            {
-                storage.Flush();
-            }
-            else
-            {
-                storage = new GraphVariableStorage();
-            }
-
-            storage.Merge(graph.CompileAllBlackboard());
-        }
     }
 }

@@ -178,42 +178,6 @@ namespace Graph
             GuidToType.Remove(Guid);
         }
 
-        public GraphVariableStorage Merge(GraphVariableStorage storageToCompile)
-        {
-            // Because we can't modify a collection we are iterating on
-            List<KeyValuePair<string, string>> GuidFromToList = new List<KeyValuePair<string, string>>();
-
-            foreach (var item in storageToCompile.PublicGUIDsToNames)
-            {
-                // if contains the same type and name
-                if (!ContainsGuid(item.Key) && ContainsName(storageToCompile.GetName(item.Key)) &&
-                    storageToCompile.GetContainedType(item.Key) == GetContainedType(GetGUIDFromName(item.Value)))
-                {
-                    // prepare to change an already existing item that we don't really need to re create
-                    GuidFromToList.Add(new KeyValuePair<string, string>(
-                        GetGUIDFromNameAndType(item.Value, storageToCompile.GetContainedType(item.Key)),
-                        item.Key));
-                }
-                // if doesn't contains it
-                else if (!ContainsGuid(item.Key))
-                {
-                    // brand new 
-                    CreateCopy(storageToCompile.GetContainerInstance(item.Key), item.Key);
-
-                    //GuidToType.Add(item.Key, item.Value);
-                    //GuidToNames.Add(item.Key, storageToCompile.GetName(item.Key));
-                }
-            }
-
-            // we rename the ones that need renaming
-            for (int i = 0; i < GuidFromToList.Count; i++)
-            {
-                SetGUID(GuidFromToList[i].Key, GuidFromToList[i].Value);
-            }
-
-            return this;
-        }
-
         public void Flush()
         {
             IEnumerable<object> correspondingArrayRow =

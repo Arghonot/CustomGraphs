@@ -15,8 +15,8 @@ namespace Graph
         public DefaultGraph targetSubGraph;
 
         private GraphVariableStorage targetBlackboard() => targetSubGraph.blackboard.storage;
-        [SerializeField] private string[] _fieldNames;
-        [SerializeField] private string[] _guids;
+        [HideInInspector] [SerializeField] private string[] _fieldNames;
+        [HideInInspector] [SerializeField] private string[] _guids;
 
         [ContextMenu("FlushFieldNames")]
         public void FlushFieldNames()

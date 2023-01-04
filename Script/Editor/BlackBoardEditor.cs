@@ -32,8 +32,6 @@ namespace GraphEditor
 
             DebugGraph(blackboard);
             DisplayAll(blackboard);
-            // -- load system
-            LoadSubgraphBlackboard();
         }
 
         private void DebugGraph(Graph.Blackboard blackboard)
@@ -41,27 +39,6 @@ namespace GraphEditor
             if (GUILayout.Button("debug blackboard"))
             {
                 blackboard.storage.DebugDictionnaries();
-            }
-        }
-
-        private void LoadSubgraphBlackboard()
-        {
-            Graph.Blackboard blackboard = target as Graph.Blackboard;
-
-            // TODO How to handle a variable being renamed ? it will keep the same GUID so it will never 
-            // TODO handle a recursivity problem if a subgraph contain itself as a subgraph
-            // TODO add a boolean on graph add node instead of a linq request
-            if (blackboard.graph.nodes.Where(x => x.GetType().IsSubclassOf(typeof(Graph.SubGraphMaster))).Count() != 0)
-            {
-                GUILayout.Space(10);
-
-                if (GUILayout.Button("load subgraphs blackboard"))
-                {
-                    ((Graph.DefaultGraph)blackboard.graph).EncapsulateSubGraphDictionaries();
-
-                    //((Graph.DefaultGraph)blackboard.graph).UpdateDictionnary(
-                    //    ((Graph.DefaultGraph)blackboard.graph).CompileAllBlackboard());
-                }
             }
         }
 

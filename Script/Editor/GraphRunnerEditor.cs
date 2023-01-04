@@ -46,8 +46,6 @@ namespace GraphEditor
             {
                 runner.graph = TmpGraph;
             }
-
-            runner.BuildValueDictionnary();
         }
 
         //void DrawValidity()
