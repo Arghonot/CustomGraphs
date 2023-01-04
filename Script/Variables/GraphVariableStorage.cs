@@ -32,7 +32,6 @@ namespace Graph
 
         [HideInInspector] public Dictionary<string, string> GuidToNames;
         [HideInInspector] public Dictionary<string, Type> GuidToType;
-        [HideInInspector] public Dictionary<string, object> GuidToValue;
         [HideInInspector] public Dictionary<string, VariableStorageRoot> GuidToStorage;
         private static Dictionary<Type, Type> StorageTypesPerRealType;
         private Dictionary<Type, IList> ListPerRealType;
@@ -75,7 +74,6 @@ namespace Graph
             GuidToNames = new Dictionary<string, string>();
             GuidToType = new Dictionary<string, Type>();
             GuidToStorage = new Dictionary<string, VariableStorageRoot>();
-            GuidToValue = new Dictionary<string, object>();
 
             FillSelfStorageMetadatas();
 
@@ -86,7 +84,6 @@ namespace Graph
                     GuidToStorage.Add(((VariableStorageRoot)item).GUID, (VariableStorageRoot)item);
                     GuidToNames.Add(((VariableStorageRoot)item).GUID, ((VariableStorageRoot)item).Name);
                     GuidToType.Add(((VariableStorageRoot)item).GUID, GetVariableTypeInContainer((VariableStorageRoot)item));
-                    GuidToValue.Add(((VariableStorageRoot)item).GUID, ((VariableStorageRoot)item).GetValue());
                 }
             }
         }
@@ -179,7 +176,6 @@ namespace Graph
 
             GuidToNames.Remove(Guid);
             GuidToType.Remove(Guid);
-            GuidToValue.Remove(Guid);
         }
 
         public GraphVariableStorage Merge(GraphVariableStorage storageToCompile)
@@ -233,7 +229,6 @@ namespace Graph
 
             GuidToNames.Clear();
             GuidToType.Clear();
-            GuidToValue.Clear();
             GuidToStorage.Clear();
         }
 
@@ -292,7 +287,6 @@ namespace Graph
 
             GuidToNames.Add(variableContainerAsGenericType.GUID, variableContainerAsGenericType.Name);
             GuidToType.Add(variableContainerAsGenericType.GUID, GetVariableTypeInContainer(variableContainerAsGenericType));
-            GuidToValue.Add(variableContainerAsGenericType.GUID, GetValue<object>(variableContainerAsGenericType.GUID));
 
             return variableContainerAsGenericType.GUID;
         }
@@ -304,7 +298,6 @@ namespace Graph
             vals.Add(newVal);
             GuidToNames.Add(newVal.GUID, newVal.Name);
             GuidToType.Add(newVal.GUID, GetVariableTypeInContainer(newVal));
-            GuidToValue.Add(newVal.GUID, newVal.GetValue());
             GuidToStorage.Add(newVal.GUID, newVal);
 
             return newVal.GUID;
@@ -327,7 +320,6 @@ namespace Graph
             GuidToStorage.Add(newVariableStorage.GUID, newVariableStorage);
             GuidToNames.Add(newVariableStorage.GUID, newVariableStorage.Name);
             GuidToType.Add(newVariableStorage.GUID, GetVariableTypeInContainer(newVariableStorage));
-            GuidToValue.Add(newVariableStorage.GUID, GetValue<object>(newVariableStorage.GUID));
 
             return newVariableStorage.GUID;
         }
@@ -576,12 +568,10 @@ namespace Graph
             container.setGuid(to);
 
             GuidToNames.Remove(from);
-            GuidToValue.Remove(from);
             GuidToType.Remove(from);
             GuidToStorage.Remove(from);
 
             GuidToNames.Add(to, container.Name);
-            GuidToValue.Add(to, containedValue);
             GuidToType.Add(to, containedType);
             GuidToStorage.Add(to, container);
         }
