@@ -25,59 +25,8 @@ namespace Graph
 
         public void InitializeBlackboard()
         {
-            Debug.Log("InitializeBlackboard");
             storage = ((DefaultGraph)graph).originalStorage;
         }
-
-        //public bool AddVariable(string guid, string type)
-        //{
-        //    if (storage.ContainName(name))
-        //    {
-        //        return false;
-        //    }
-            
-        //    storage.Add(guid, Variable.CreateType(type));
-
-        //    return true;
-        //}
-
-        //public bool RemoveVariable(string guid)
-        //{
-        //    if (!storage.ContainsKey(guid))
-        //    {
-        //        return false;
-        //    }
-
-        //    storage.Remove(guid);
-        //    ((DefaultGraph)graph).OnDeleteVariable(guid);
-
-        //    return true;
-        //}
-
-        //public Type GetVariableType(string guid)
-        //{
-        //    return storage[guid].GetValueType();
-        //}
-
-        //public string GetTypeFromGUID(string guid)
-        //{
-        //    if (!storage.ContainsKey(guid))
-        //    {
-        //        return "int";
-        //    }
-
-        //    return Variable.GetType(storage[guid].GetValueType());
-        //}
-
-        //public string GetName(string guid)
-        //{
-        //    if (!storage.ContainsKey(guid))
-        //    {
-        //        return null;
-        //    }
-
-        //    return storage[guid].Name;
-        //}
 
         public Type GetVariableType(string guid)
         {

@@ -16,6 +16,19 @@ namespace GraphEditor
             typeof(Graph.Single)
         };
 
+        public Node ContainsNodeOfType(Type type)
+        {
+            foreach (var node in ((Graph.DefaultGraph)target).nodes)
+            {
+                if (node.GetType() == type)
+                {
+                    return node;
+                }
+            }
+
+            return null;
+        }
+
         public override void OnCreate()
         {
             base.OnCreate();

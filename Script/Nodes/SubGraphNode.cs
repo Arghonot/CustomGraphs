@@ -15,8 +15,8 @@ namespace Graph
         public DefaultGraph targetSubGraph;
 
         private GraphVariableStorage targetBlackboard() => targetSubGraph.blackboard.storage;
-        [HideInInspector] [SerializeField] private string[] _fieldNames;
-        [HideInInspector] [SerializeField] private string[] _guids;
+        /*[HideInInspector] */[SerializeField] private string[] _fieldNames;
+        /*[HideInInspector] */[SerializeField] private string[] _guids;
 
         [ContextMenu("FlushFieldNames")]
         public void FlushFieldNames()
@@ -88,10 +88,17 @@ namespace Graph
         public GraphVariableStorage GenerateProperStorage()
         {
             var storage = targetSubGraph.originalStorage.CreateDeepCopy();
-
+            object value = null;
             for (int i = 0; i < _guids.Length; i++)
             {
-                storage.SetValue(_guids[i], GetInputValue<object>(_fieldNames[i]));
+                value = GetInputValue<object>(_fieldNames[i]);
+
+                if (value == null)
+                {
+                    value = Activator.CreateInstance(storage.GetVariableType(_guids[i]));
+                }
+
+                storage.SetValue(_guids[i], value);
             }
 
             return storage;

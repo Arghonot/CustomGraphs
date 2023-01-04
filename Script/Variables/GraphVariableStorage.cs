@@ -526,7 +526,6 @@ namespace Graph
         public void SetGUID(string from, string to)
         {
             VariableStorageRoot container = GetContainerInstance(from);
-            object containedValue = GetValue<object>(from);
             Type containedType = GuidToType[from];
 
             container.setGuid(to);
