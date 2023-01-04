@@ -8,17 +8,14 @@ namespace Graph
     public class DefaultGraph : NodeGraph
     {
         [SerializeField] public Blackboard blackboard;
-        public GraphVariableStorage storage = new GraphVariableStorage();
+        public GraphVariableStorage originalStorage = new GraphVariableStorage();
+        public GraphVariableStorage runtimeStorage;
         public bool CanRun;
-
         public Root root;
 
         public object Run(GraphVariableStorage newstorage = null)
         {
-            if (newstorage != null)
-            {
-                this.storage = newstorage;
-            }
+            this.runtimeStorage = newstorage;
 
             return root.GetValue(root.Ports.First());
         }
@@ -36,13 +33,13 @@ namespace Graph
             {
                 if (node.GetType().IsSubclassOf(typeof(SubGraphMaster)))
                 {
-                    ((SubGraphMaster)node).SubGraph.EncapsulateSubGraphDictionaries(CompiledDictionnary);
+                    ((SubGraphMaster)node).targetSubGraph.EncapsulateSubGraphDictionaries(CompiledDictionnary);
                 }
             }
 
-            CompiledDictionnary.Merge(storage);
-            storage = CompiledDictionnary;
-            blackboard.storage = storage;
+            CompiledDictionnary.Merge(originalStorage);
+            originalStorage = CompiledDictionnary;
+            blackboard.storage = originalStorage;
             UpdateGraphBlackBoardVariables();
         }
 
@@ -53,9 +50,9 @@ namespace Graph
                 if (variable.GetType() == typeof(BlackBoardVariable))
                 {
                     // If we just changed this guid
-                    if (!storage.ContainsGuid(((BlackBoardVariable)variable).guid))
+                    if (!originalStorage.ContainsGuid(((BlackBoardVariable)variable).guid))
                     {
-                        string newGUID = storage.GetGUIDFromNameAndType(
+                        string newGUID = originalStorage.GetGUIDFromNameAndType(
                             ((BlackBoardVariable)variable).Name,
                             ((BlackBoardVariable)variable).VariableType);
                         Debug.Log("<color=green> GUID for " + ((BlackBoardVariable)variable).Name + " wasn't found, updating it from [" + ((BlackBoardVariable)variable).guid + "] to [" + newGUID + "]</color>");
@@ -72,8 +69,8 @@ namespace Graph
         public void UpdateDictionnary(GraphVariableStorage newstorage)
         {
             MergeDictionnaries(blackboard.storage, newstorage);
-            Debug.Log("UpdateDictionnary " + storage.PublicGUIDsToNames.Count);
-            blackboard.storage = storage;
+            Debug.Log("UpdateDictionnary " + originalStorage.PublicGUIDsToNames.Count);
+            blackboard.storage = originalStorage;
         }
 
         public GraphVariableStorage   CompileAllBlackboard()
@@ -84,11 +81,11 @@ namespace Graph
             {
                 if (node.GetType().IsSubclassOf(typeof(SubGraphMaster)))
                 {
-                    if (((SubGraphMaster)node).SubGraph != null)
+                    if (((SubGraphMaster)node).targetSubGraph != null)
                     {
                         MergeDictionnaries(
                             CompiledDictionnary,
-                            ((SubGraphMaster)node).SubGraph.CompileAllBlackboard());
+                            ((SubGraphMaster)node).targetSubGraph.CompileAllBlackboard());
                     }
                 }
             }
@@ -102,28 +99,7 @@ namespace Graph
         void MergeDictionnaries(GraphVariableStorage compiled, GraphVariableStorage subgraphDictionnary)
         {
             compiled.Merge(subgraphDictionnary);
-
-            //foreach (var item in subgraphDictionnary)
-            //{
-            //    if (!compiled.ContainsKey(item.Key) && !ContainName(compiled, item.Value.Name))
-            //    {
-            //        compiled.Add(item.Key, item.Value);
-            //    }
-            //}
         }
-
-        //bool ContainName(GraphVariableStorage dic, string name)
-        //{
-        //    foreach (var item in dic)
-        //    {
-        //        if (item.Value.Name == name)
-        //        {
-        //            return true;
-        //        }
-        //    }
-
-        //    return false;
-        //}
 
         public void OnDeleteVariable(string uid)
         {

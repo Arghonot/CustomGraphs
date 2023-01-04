@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using UnityEngine;
 
 namespace Graph
@@ -18,6 +19,8 @@ namespace Graph
         protected override void Init()
         {
             Blackboard = ((DefaultGraph)graph).blackboard;
+
+            ChooseFirstVariable();
         }
 
         public void UpdateNode()
@@ -25,6 +28,18 @@ namespace Graph
             RemoveDynamicPort(Name);
             Name = string.Empty;
             guid = string.Empty;
+        }
+
+        private void ChooseFirstVariable()
+        {
+            if (Ports.Count() != 0)
+            {
+                return;
+            }
+
+            string guid = Blackboard.storage.getAllGuids()[0];
+
+            SetVariable(Blackboard.storage.GetName(guid), guid, 0);
         }
 
         public void SetVariable(string newname, string newuid, int newIndex)
@@ -49,7 +64,6 @@ namespace Graph
 
         private void UpdateGUID(string to)
         {
-            Debug.Log("UpdateGUID");
             // if already had a GUID stored
             if (guid != string.Empty && guid != "")
             {
@@ -67,7 +81,7 @@ namespace Graph
 
         public override object Run()
         {
-            return ((DefaultGraph)graph).storage.Get(guid);
+            return ((DefaultGraph)graph).runtimeStorage.Get(guid);
         }
     }
 }

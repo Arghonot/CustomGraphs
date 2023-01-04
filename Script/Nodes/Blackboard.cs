@@ -26,7 +26,7 @@ namespace Graph
         public void InitializeBlackboard()
         {
             Debug.Log("InitializeBlackboard");
-            storage = ((DefaultGraph)graph).storage;
+            storage = ((DefaultGraph)graph).originalStorage;
         }
 
         //public bool AddVariable(string guid, string type)

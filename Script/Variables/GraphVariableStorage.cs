@@ -363,6 +363,11 @@ namespace Graph
             return GuidToNames.ContainsValue(name);
         }
 
+        public Type GetVariableType(string guid)
+        {
+            return GuidToType[guid];
+        }
+
         public int Count()
         {
             return GuidToNames.Count();
@@ -370,7 +375,7 @@ namespace Graph
 
         public object Get(string Guid)
         {
-            return GuidToValue[Guid];
+            return GuidToStorage[Guid].GetValue();
         }
 
         public T GetVariableStorage<T>(string Guid) where T : VariableStorageRoot
@@ -683,8 +688,16 @@ namespace Graph
 
         public void DebugDictionnaryInDepth()
         {
-            DebugList(typeof(float));
-            DebugList(typeof(int));
+            foreach (var item in ListPerRealType)
+            {
+                if (item.Value.Count > 0)
+                {
+                    foreach (var elem in item.Value)
+                    {
+                        UnityEngine.Debug.Log(((VariableStorageRoot)elem).ToString());
+                    }
+                }
+            }
         }
 
         public void DebugList(Type type)

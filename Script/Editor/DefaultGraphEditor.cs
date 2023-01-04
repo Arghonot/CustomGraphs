@@ -21,6 +21,11 @@ namespace GraphEditor
             base.OnCreate();
         }
 
+        public override string GetPortTooltip(XNode.NodePort port)
+        {
+            return port.ValueType.ToString();
+        }
+
         public override Texture2D GetGridTexture()
         {
             NodeEditorWindow.current.titleContent = new GUIContent(((Graph.DefaultGraph)target).name);

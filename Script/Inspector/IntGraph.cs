@@ -10,7 +10,7 @@ namespace Graph
         {
             if (newStorage != null)
             {
-                this.storage = newStorage;
+                this.originalStorage = newStorage;
             }
 
             return (int)Root.GetValue(Root.Ports.First());
