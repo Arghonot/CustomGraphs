@@ -42,7 +42,7 @@ namespace Graph
             GUID = Guid.NewGuid().ToString();
         }
 
-        public virtual string ToString()
+        public override string ToString()
         {
             return string.Join(" ", new string[]
             {

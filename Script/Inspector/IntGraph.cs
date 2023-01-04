@@ -6,7 +6,7 @@ namespace Graph
     {
         public RootInt Root;
 
-        public int Run(GraphVariableStorage newStorage = null)
+        public new int Run(GraphVariableStorage newStorage = null)
         {
             if (newStorage != null)
             {
