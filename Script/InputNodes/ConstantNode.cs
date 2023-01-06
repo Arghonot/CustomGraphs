@@ -11,6 +11,7 @@ namespace Graph
 
         public override object Run()
         {
+            Debug.Log("GetValue " + value);
             return value;
         }
     }

@@ -81,7 +81,12 @@ namespace Graph
 
         public override object Run()
         {
-            return ((DefaultGraph)graph).runtimeStorage.Get(guid);
+            if (((DefaultGraph)graph).runtimeStorage.ContainsGuid(guid))
+            {
+                return ((DefaultGraph)graph).runtimeStorage.Get(guid);
+            }
+
+            return ((DefaultGraph)graph).originalStorage.Get(guid);
         }
     }
 }

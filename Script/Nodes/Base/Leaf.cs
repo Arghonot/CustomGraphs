@@ -9,7 +9,7 @@ namespace Graph
     [HideInInspector]
     public class Leaf<T> : NodeBase
     {
-        public void Awake()
+        public virtual void Awake()
         {
             if (GetOutputPort("Output") == null)
             {
