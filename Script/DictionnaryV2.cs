@@ -39,11 +39,11 @@ public class DictionnaryV2 : MonoBehaviour
         storage.Add(typeof(string), NameToApply);
     }
 
-    [ContextMenu("CreateCopy string")]
-    public void CreateCopyString()
-    {
-        storage.CreateCopy(storage.Strings.First());
-    }
+    //[ContextMenu("CreateCopy string")]
+    //public void CreateCopyString()
+    //{
+    //    storage.CreateCopy(storage.Strings.First());
+    //}
 
 
 

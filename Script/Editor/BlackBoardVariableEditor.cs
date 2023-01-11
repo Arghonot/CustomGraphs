@@ -39,7 +39,6 @@ namespace GraphEditor
         void DisplayNameSelection(BlackBoardVariable variablenode)
         {
             if (variablenode.Blackboard == null) return;
-            // TODO really bad use a list from graphVariableStorage instead
             string[] GUIDs = variablenode.Blackboard.GetGUIDS();
             string[] names = variablenode.Blackboard.GetAllNames();
 

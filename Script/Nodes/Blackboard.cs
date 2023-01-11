@@ -33,7 +33,6 @@ namespace Graph
             return storage.GetContainedType(guid);
         }
 
-        // TODO decide if storage should be exposed
         public string[] GetGUIDS()
         {
             return storage.getAllGuids();
@@ -44,7 +43,6 @@ namespace Graph
             return storage.GetAllNames();
         }
 
-        // TODO decide if storage should be exposed
         public string[] GetVariableNames(string[] guids)
         {
             return storage.GetNames(guids);
