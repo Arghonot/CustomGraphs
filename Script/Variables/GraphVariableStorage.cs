@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using UnityEngine;
 
 namespace Graph
@@ -200,6 +199,16 @@ namespace Graph
 
         #region Add
 
+        public string Set<T>(string name, object obj)
+        {
+            Type variableType = typeof(T);
+
+            var guid = Add(variableType, name);
+            GuidToStorage[guid].SetValue(obj);
+
+            return guid;
+        }
+
         public string CreateCopy(object variableInstanceToCopy, string optionalGUID = "")
         {
             List<Type> containerType = new List<Type>();
@@ -309,6 +318,22 @@ namespace Graph
 
         #region Getters
 
+        public object TryGet(string name)
+        {
+            string guid = string.Empty;
+
+            if (!GuidToNames.ContainsValue(name)) return null;
+            guid = GetGUIDFromName(name);
+            if (!GuidToStorage.ContainsKey(guid)) return null;
+
+            return GuidToStorage[guid].GetValue();
+        }
+
+        public T Get<T>(string name)
+        {
+            return (T)GetFromGUID(GetGUIDFromName(name));
+        }
+
         public string GetGUIDFromName(string name)
         {
             return GuidToNames.Where(x => x.Value == name).First().Key;
@@ -329,7 +354,7 @@ namespace Graph
             return GuidToNames.Count();
         }
 
-        public object Get(string Guid)
+        public object GetFromGUID(string Guid)
         {
             return GuidToStorage[Guid].GetValue();
         }

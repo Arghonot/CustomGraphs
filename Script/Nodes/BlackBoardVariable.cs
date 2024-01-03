@@ -83,10 +83,10 @@ namespace Graph
         {
             if (((DefaultGraph)graph).runtimeStorage.ContainsGuid(guid))
             {
-                return ((DefaultGraph)graph).runtimeStorage.Get(guid);
+                return ((DefaultGraph)graph).runtimeStorage.GetFromGUID(guid);
             }
 
-            return ((DefaultGraph)graph).originalStorage.Get(guid);
+            return ((DefaultGraph)graph).originalStorage.GetFromGUID(guid);
         }
     }
 }
