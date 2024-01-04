@@ -4,15 +4,15 @@ using UnityEngine;
 using XNode;
 using XNodeEditor;
 
-namespace GraphEditor
+namespace Graph
 {
-    [CustomNodeGraphEditor(typeof(Graph.DefaultGraph))]
+    [CustomNodeGraphEditor(typeof(DefaultGraph))]
     public class DefaultGraphEditor : XNodeEditor.NodeGraphEditor
     {
         List<Type> HiddenTypes = new List<Type>()
         {
             typeof(Graph.Blackboard),
-            typeof(Graph.RootInt),
+            typeof(Graph.Root),
             typeof(Graph.Single)
         };
 
@@ -32,6 +32,29 @@ namespace GraphEditor
         public override void OnCreate()
         {
             base.OnCreate();
+
+            DefaultGraph graph = target as DefaultGraph;
+            NodeEditorWindow.current.graphEditor = this;
+
+            if (graph.blackboard == null)
+            {
+                var bb = CreateNode(typeof(Graph.Blackboard), new Vector2(0, 0));
+                graph.blackboard = bb as Graph.Blackboard;
+                graph.blackboard.InitializeBlackboard();
+            }
+
+            var graphRootNodeType = graph.GetRootNodeType();
+
+            // we do not want to have two outputs
+            if (graph.root == null && ContainsNodeOfType(graphRootNodeType) != null)
+            {
+                graph.root = (Root)ContainsNodeOfType(graphRootNodeType);
+            }
+            else if (graph.root == null)
+            {
+                var root = CreateNode(graphRootNodeType, new Vector2(500, 150));
+                graph.root = root as Root;
+            }
         }
 
         public override string GetPortTooltip(XNode.NodePort port)
@@ -62,15 +85,10 @@ namespace GraphEditor
 
         public override void RemoveNode(Node node)
         {
-            if (node != ((Graph.DefaultGraph)target).blackboard)
+            if (node != ((DefaultGraph)target).blackboard )
             {
                 base.RemoveNode(node);
             }
-        }
-
-        public override void OnGUI()
-        {
-            NodeEditorWindow.current.Repaint();
         }
     }
 }

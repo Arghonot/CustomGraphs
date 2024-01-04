@@ -88,5 +88,7 @@ namespace Graph
 
             return ((DefaultGraph)graph).originalStorage.GetFromGUID(guid);
         }
+
+        public string GetGUID() => guid;
     }
 }

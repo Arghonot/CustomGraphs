@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using XNode;
@@ -12,8 +13,9 @@ namespace Graph
         public GraphVariableStorage runtimeStorage;
         public bool CanRun;
         public Root root;
+        public virtual Type GetRootNodeType() => typeof(Root);
 
-        public object Run(GraphVariableStorage newstorage = null)
+        public virtual object Run(GraphVariableStorage newstorage = null)
         {
             this.runtimeStorage = newstorage;
 

@@ -199,16 +199,6 @@ namespace Graph
 
         #region Add
 
-        public string Set<T>(string name, object obj)
-        {
-            Type variableType = typeof(T);
-
-            var guid = Add(variableType, name);
-            GuidToStorage[guid].SetValue(obj);
-
-            return guid;
-        }
-
         public string CreateCopy(object variableInstanceToCopy, string optionalGUID = "")
         {
             List<Type> containerType = new List<Type>();
@@ -218,25 +208,19 @@ namespace Graph
                 Where(t => typeof(VariableStorageRoot).IsAssignableFrom(t)).
                 ToList();
 
-            Type valAttribute = ((StorableType)Attribute.GetCustomAttribute(
-                        variableInstanceToCopy.GetType(),
-                        typeof(StorableType))).ReferenceType;
+            Type valAttribute = ((StorableType)Attribute.GetCustomAttribute(variableInstanceToCopy.GetType(),typeof(StorableType))).ReferenceType;
             typesThatCanStoreVariable.ForEach(x =>
             {
                 if (x != typeof(VariableStorageRoot) && x != typeof(VariableStorage<>))
                 {
-                    if (((StorableType)Attribute.GetCustomAttribute(
-                        x,
-                        typeof(StorableType))).ReferenceType == valAttribute)
+                    if (((StorableType)Attribute.GetCustomAttribute(x, typeof(StorableType))).ReferenceType == valAttribute)
                     {
                         containerType.Add(x);
                     }
                 }
             });
 
-            IList correspondingArrayRow =
-                (IList)this.GetType().
-                GetFields().
+            IList correspondingArrayRow = (IList)this.GetType().GetFields().
                 Select(x => x.GetValue(this)).
                 Where(x => x.ToString().Contains(containerType[0].ToString())).
                 First();
@@ -336,7 +320,7 @@ namespace Graph
 
         public string GetGUIDFromName(string name)
         {
-            return GuidToNames.Where(x => x.Value == name).First().Key;
+            return GuidToNames.Where(x => x.Value == name).FirstOrDefault().Key;
         }
 
         public bool ContainsName(string name)
@@ -548,6 +532,27 @@ namespace Graph
 
         #region Setters
 
+        public string SetWithGUID<T>(string guid, object obj)
+        {
+            if (!GuidToStorage.ContainsKey(guid)) guid = Add(typeof(T), "", guid);
+            SetValue(guid, obj);
+
+            Debug.Log($"setting with GUID {GetName(guid)} to {((T)obj).ToString()}");
+
+            return guid;
+        }
+
+        public string Set<T>(string name, object obj)
+        {
+            string guid = GetGUIDFromName(name);
+
+            if (guid == null)
+                guid = Add(typeof(T), name);
+            SetValue(guid, obj);
+
+            return guid;
+        }
+
         public void SetGUID(string from, string to)
         {
             VariableStorageRoot container = GetContainerInstance(from);
@@ -651,6 +656,8 @@ namespace Graph
                 {
                     Debug.Log("container equal itself.");
                 }
+
+                Debug.Log($"{(GuidToNames.ContainsKey(item) ? $"guid for {GuidToNames[item]} do match at least" : "guid don't event match")}");
             }
 
         }
