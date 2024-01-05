@@ -10,7 +10,7 @@ namespace Graph
     {
         [SerializeField] public Blackboard blackboard;
         public GraphVariableStorage originalStorage = new GraphVariableStorage();
-        public GraphVariableStorage runtimeStorage;
+        [HideInInspector] public GraphVariableStorage runtimeStorage;
         public bool CanRun;
         public Root root;
         public virtual Type GetRootNodeType() => typeof(Root);

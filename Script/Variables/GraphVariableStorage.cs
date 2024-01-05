@@ -262,6 +262,20 @@ namespace Graph
 
         public string Add(Type typeToAdd, string Name = "", string guid = "")
         {
+#if UNITY_EDITOR
+            FillSelfStorageMetadatas();
+
+            if (ListPerRealType == null || StorageTypesPerRealType == null)
+            {
+                FillSelfStorageMetadatas();
+            }
+
+            if (ListPerRealType.Where(x => x.Value == null).Count() >= 0)
+            { 
+            
+            }
+#endif
+
             List<Type> types = new List<Type>();
             IList listContainingType = ListPerRealType[typeToAdd];
             VariableStorageRoot newVariableStorage = (VariableStorageRoot)Activator.CreateInstance(StorageTypesPerRealType[typeToAdd]);
@@ -407,10 +421,7 @@ namespace Graph
 
         private IEnumerable<IList> GetAllListOfContainers()
         {
-            return
-                this.GetType().
-                GetFields().
-                Select(x => x.GetValue(this) as IList);
+            return this.GetType().GetFields().Select(x => x.GetValue(this) as IList); ;
         }
 
         private IList GetListOfContainer(Type type)
