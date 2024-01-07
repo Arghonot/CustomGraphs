@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using XNode;
+﻿using XNode;
 using System;
 using UnityEngine;
 
@@ -15,8 +14,19 @@ namespace Graph
 
         public int width = 300;
 
-        [SerializeField]
-        public GraphVariableStorage storage;
+        [SerializeField] public GraphVariableStorage storage;
+        public event Action<string> OnStorageDataAddedOrRemoved;
+
+        [ContextMenu("Register")]
+        private void Awake()
+        {
+            storage.OnDataAddedOrRemoved += OnStorageDataAddedOrRemoved;
+        }
+
+        private void OnDestroy()
+        {
+            storage.OnDataAddedOrRemoved -= OnStorageDataAddedOrRemoved;
+        }
 
         public string[] GetVariableNames()
         {

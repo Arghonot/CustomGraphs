@@ -52,6 +52,9 @@ namespace Graph
         }
 
         protected Dictionary<KeyValuePair<string, Type>, string> NameTypeToGuid;
+
+        public event Action<string> OnDataAddedOrRemoved;
+
         #region Inner storage management
 
         public GraphVariableStorage()
@@ -104,18 +107,11 @@ namespace Graph
         public static Type[] getPossibleTypes()
         {
             List<Type> possibleTypes = new List<Type>();
-            var vals = Assembly.GetAssembly(typeof(VariableStorageRoot)).
-                GetTypes().
-                Where(t => typeof(VariableStorageRoot).
-                IsAssignableFrom(t)).
-                ToList();
+            var storedTypes = GetAllStorableTypes();
 
-            vals.ForEach(x =>
+            storedTypes.ForEach(x =>
             {
-                if (x != typeof(VariableStorageRoot) && x != typeof(VariableStorage<>))
-                {
-                    possibleTypes.Add(((StorableType)Attribute.GetCustomAttribute(x, typeof(StorableType))).ReferenceType);
-                }
+                possibleTypes.Add(((StorableType)Attribute.GetCustomAttribute(x, typeof(StorableType))).ReferenceType);
             });
 
             return possibleTypes.ToArray();
@@ -124,18 +120,11 @@ namespace Graph
         public static string[] GetPossibleTypesName()
         {
             List<string> PossibleTypeNames = new List<string>();
-            var vals = Assembly.GetAssembly(typeof(VariableStorageRoot)).
-                GetTypes().
-                Where(t => typeof(VariableStorageRoot).
-                IsAssignableFrom(t)).
-                ToList();
+            var storableTypeContainers = GetAllStorableTypes();
 
-            vals.ForEach(x =>
+            storableTypeContainers.ForEach(x =>
             {
-                if (x != typeof(VariableStorageRoot) && x != typeof(VariableStorage<>))
-                {
-                    PossibleTypeNames.Add(((StorableType)Attribute.GetCustomAttribute(x, typeof(StorableType))).ReferenceType.Name);
-                }
+                PossibleTypeNames.Add(((StorableType)Attribute.GetCustomAttribute(x, typeof(StorableType))).ReferenceType.Name);
             });
 
             return PossibleTypeNames.ToArray();
@@ -154,6 +143,17 @@ namespace Graph
         public string[] GetNames(string[] guids)
         {
             return GuidToNames.Where(x => guids.Contains(x.Key)).Select(x => x.Value).ToArray();
+        }
+
+        public string[] GetGUIDsForType(Type type)
+        {
+            return (GetListOfContainer(GetContainerContaningType(type)).Cast<VariableStorageRoot>()).Select(x => (x).GUID).ToArray();
+        }
+
+        // TODO store this in a static list on GraphVariableStorage's constructor
+        private static List<Type> GetAllStorableTypes()
+        {
+            return Assembly.GetAssembly(typeof(VariableStorageRoot)).GetTypes().Where(t => typeof(VariableStorageRoot).IsAssignableFrom(t) && t != typeof(VariableStorageRoot) && t != typeof(VariableStorage<>)).ToList();
         }
 
         #endregion
@@ -175,6 +175,7 @@ namespace Graph
 
             GuidToNames.Remove(Guid);
             GuidToType.Remove(Guid);
+            OnDataAddedOrRemoved?.Invoke(Guid);
         }
 
         public void Flush()
@@ -203,21 +204,12 @@ namespace Graph
         {
             List<Type> containerType = new List<Type>();
             // get the field that contains val and add a copy with activator
-            var typesThatCanStoreVariable = Assembly.GetAssembly(typeof(VariableStorageRoot)).
-                GetTypes().
-                Where(t => typeof(VariableStorageRoot).IsAssignableFrom(t)).
-                ToList();
+            var typesThatCanStoreVariable = GetAllStorableTypes();
 
             Type valAttribute = ((StorableType)Attribute.GetCustomAttribute(variableInstanceToCopy.GetType(),typeof(StorableType))).ReferenceType;
             typesThatCanStoreVariable.ForEach(x =>
             {
-                if (x != typeof(VariableStorageRoot) && x != typeof(VariableStorage<>))
-                {
-                    if (((StorableType)Attribute.GetCustomAttribute(x, typeof(StorableType))).ReferenceType == valAttribute)
-                    {
-                        containerType.Add(x);
-                    }
-                }
+                if (((StorableType)Attribute.GetCustomAttribute(x, typeof(StorableType))).ReferenceType == valAttribute) containerType.Add(x);
             });
 
             IList correspondingArrayRow = (IList)this.GetType().GetFields().
@@ -245,6 +237,7 @@ namespace Graph
             GuidToNames.Add(variableContainerAsGenericType.GUID, variableContainerAsGenericType.Name);
             GuidToType.Add(variableContainerAsGenericType.GUID, GetVariableTypeInContainer(variableContainerAsGenericType));
 
+            OnDataAddedOrRemoved?.Invoke(variableContainerAsGenericType.GUID);
             return variableContainerAsGenericType.GUID;
         }
 
@@ -256,6 +249,7 @@ namespace Graph
             GuidToNames.Add(newVal.GUID, newVal.Name);
             GuidToType.Add(newVal.GUID, GetVariableTypeInContainer(newVal));
             GuidToStorage.Add(newVal.GUID, newVal);
+            OnDataAddedOrRemoved?.Invoke(newVal.GUID);
 
             return newVal.GUID;
         }
@@ -263,16 +257,14 @@ namespace Graph
         public string Add(Type typeToAdd, string Name = "", string guid = "")
         {
 #if UNITY_EDITOR
-            FillSelfStorageMetadatas();
-
             if (ListPerRealType == null || StorageTypesPerRealType == null)
             {
                 FillSelfStorageMetadatas();
             }
 
             if (ListPerRealType.Where(x => x.Value == null).Count() >= 0)
-            { 
-            
+            {
+                FillSelfStorageMetadatas();
             }
 #endif
 
@@ -428,25 +420,12 @@ namespace Graph
         {
             List<Type> containerType = new List<Type>();
             // get the field that contains val and add a copy with activator
-            var typesThatCanStoreVariable = Assembly.GetAssembly(typeof(VariableStorageRoot)).
-                GetTypes().
-                Where(t => typeof(VariableStorageRoot).IsAssignableFrom(t)).
-                ToList();
+            var variableStorageTypes = GetAllStorableTypes();
 
-            Type valAttribute = ((StorableType)Attribute.GetCustomAttribute(
-                        type,
-                        typeof(StorableType))).ReferenceType;
-            typesThatCanStoreVariable.ForEach(x =>
+            Type valAttribute = ((StorableType)Attribute.GetCustomAttribute(type, typeof(StorableType))).ReferenceType;
+            variableStorageTypes.ForEach(x =>
             {
-                if (x != typeof(VariableStorageRoot) && x != typeof(VariableStorage<>))
-                {
-                    if (((StorableType)Attribute.GetCustomAttribute(
-                        x,
-                        typeof(StorableType))).ReferenceType == valAttribute)
-                    {
-                        containerType.Add(x);
-                    }
-                }
+                if (((StorableType)Attribute.GetCustomAttribute(x, typeof(StorableType))).ReferenceType == valAttribute) containerType.Add(x);
             });
 
             return
@@ -506,27 +485,15 @@ namespace Graph
             }
         }
 
-        private List<Type> FindAllStorageTypes()
-        {
-            return Assembly.GetAssembly(typeof(VariableStorageRoot)).
-                GetTypes().
-                Where(t => typeof(VariableStorageRoot).
-                IsAssignableFrom(t)).
-                ToList();
-        }
-
         private List<Type> FindAllStorableRealTypes()
         {
             List<Type> vals = new List<Type>();
             List<Type> types = new List<Type>();
 
-            vals = FindAllStorageTypes();
+            vals = GetAllStorableTypes();
             vals.ForEach(x =>
             {
-                if (x != typeof(VariableStorageRoot) && x != typeof(VariableStorage<>))
-                {
                     types.Add(GetAttributeFromContainerType(x));
-                }
             });
 
             return types;
