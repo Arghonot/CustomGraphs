@@ -1,4 +1,6 @@
-﻿using XNode;
+﻿using System;
+using UnityEngine;
+using XNode;
 
 namespace Graph
 {
