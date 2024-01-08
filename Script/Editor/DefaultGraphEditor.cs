@@ -71,9 +71,13 @@ namespace Graph
 
         public override string GetNodeMenuName(Type type)
         {
+            var typeToString = type.ToString();
+
             if (!HiddenTypes.Contains(type) &&
-                !type.ToString().Contains("Root") &&
-                !type.ToString().Contains("Leaf"))
+                !typeToString.Contains("Root") &&
+                !typeToString.Contains("Leaf") &&
+                !typeToString.Contains("[T]") &&
+                !typeToString.Contains("NodeBase"))
             {
                 return base.GetNodeMenuName(type);
             }
