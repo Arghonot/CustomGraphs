@@ -14,7 +14,7 @@ namespace Graph
 
         public int width = 300;
 
-        [SerializeField] public GraphVariableStorage storage;
+        [SerializeField] public GraphVariableStorage storage = new GraphVariableStorage();
         public event Action<string> OnStorageDataAddedOrRemoved;
 
         [ContextMenu("Register")]
