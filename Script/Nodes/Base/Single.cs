@@ -1,12 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-namespace Graph
+﻿namespace Graph
 {
     [NodeTint(ColorProfile.Debug)]
-    public class Single : XNode.Node
-    {
-
-    }
+    [HideFromNodeMenu]
+    public class Single : XNode.Node { }
 }

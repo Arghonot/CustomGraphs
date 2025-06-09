@@ -6,6 +6,7 @@ namespace Graph
 {
     [NodeTint(ColorProfile.Blackboard)]
     [Serializable]
+    [HideFromNodeMenu]
     public class Blackboard : Node
     {
         public int TextWidth = 130;

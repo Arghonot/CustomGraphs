@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 using XNode;
 using XNodeEditor;
@@ -7,18 +7,11 @@ using XNodeEditor;
 namespace Graph
 {
     [CustomNodeGraphEditor(typeof(DefaultGraph))]
-    public class DefaultGraphEditor : XNodeEditor.NodeGraphEditor
+    public class DefaultGraphEditor : NodeGraphEditor
     {
-        List<Type> HiddenTypes = new List<Type>()
-        {
-            typeof(Graph.Blackboard),
-            typeof(Graph.Root),
-            typeof(Graph.Single)
-        };
-
         public Node ContainsNodeOfType(Type type)
         {
-            foreach (var node in ((Graph.DefaultGraph)target).nodes)
+            foreach (var node in ((DefaultGraph)target).nodes)
             {
                 if (node.GetType() == type)
                 {
@@ -73,11 +66,7 @@ namespace Graph
         {
             var typeToString = type.ToString();
 
-            if (!HiddenTypes.Contains(type) &&
-                !typeToString.Contains("Root") &&
-                !typeToString.Contains("Leaf") &&
-                !typeToString.Contains("[T]") &&
-                !typeToString.Contains("NodeBase"))
+            if (type.GetCustomAttribute<HideFromNodeMenu>(false) == null)
             {
                 return base.GetNodeMenuName(type);
             }

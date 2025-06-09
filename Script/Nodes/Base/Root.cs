@@ -16,9 +16,6 @@
     }
 
     [NodeTint(ColorProfile.Root)]
-    public class Root : NodeBase
-    {
-        //[Input(ShowBackingValue.Never, ConnectionType.Override, TypeConstraint.Strict)]
-        //public T Input;
-    }
+    [HideFromNodeMenu]
+    public class Root : NodeBase { }
 }

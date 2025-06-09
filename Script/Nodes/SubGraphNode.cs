@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections;
-using System.Diagnostics;
-using System.Linq;
-using UnityEditor;
 using UnityEngine;
-using static UnityEditor.Progress;
 using static XNodeEditor.NodeEditor;
 
 namespace Graph
 {
     [CustomNodeEditor(typeof(Graph.SubGraphMaster))]
+    [HideFromNodeMenu]
     public class SubGraphMaster : NodeBase
     {
         public DefaultGraph targetSubGraph;
@@ -105,17 +101,14 @@ namespace Graph
         }
     }
 
+    [HideFromNodeMenu]
     public class SubGraphNode<T> : SubGraphMaster
     {
         public void Awake()
         {
             if (GetOutputPort("Output") == null)
             {
-                AddDynamicOutput(
-                    typeof(T),
-                    ConnectionType.Multiple,
-                    TypeConstraint.None,
-                    "Output");
+                AddDynamicOutput(typeof(T), ConnectionType.Multiple, TypeConstraint.None, "Output");
             }
         }
     }
