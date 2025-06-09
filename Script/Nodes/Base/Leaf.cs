@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Graph
+namespace CustomGraph
 {
     [NodeTint(ColorProfile.Leaf)]
     [HideInInspector]

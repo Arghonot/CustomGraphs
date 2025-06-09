@@ -1,6 +1,6 @@
 ﻿using XNode;
 
-namespace Graph
+namespace CustomGraph
 {
     [HideFromNodeMenu]
     public class NodeBase : Node

@@ -6,22 +6,22 @@ using UnityEditor;
 
 namespace GraphEditor
 {
-    [CustomNodeEditor(typeof(Graph.Blackboard))]
+    [CustomNodeEditor(typeof(CustomGraph.Blackboard))]
     public class BlackBoardEditor : XNodeEditor.NodeEditor
     {
         int Selected = 0;
-        public string[] options = Graph.GraphVariableStorage.GetPossibleTypesName();
-        public Type[] optionsType = Graph.GraphVariableStorage.getPossibleTypes();
+        public string[] options = CustomGraph.GraphVariableStorage.GetPossibleTypesName();
+        public Type[] optionsType = CustomGraph.GraphVariableStorage.getPossibleTypes();
         string UIDToDelete = string.Empty;
 
         public override int GetWidth()
         {
-            return ((Graph.Blackboard)target).width;
+            return ((CustomGraph.Blackboard)target).width;
         }
 
         public override void OnBodyGUI()
         {
-            Graph.Blackboard blackboard = target as Graph.Blackboard;
+            CustomGraph.Blackboard blackboard = target as CustomGraph.Blackboard;
 
             AddVariable(blackboard);
 
@@ -34,7 +34,7 @@ namespace GraphEditor
             DisplayAll(blackboard);
         }
 
-        private void DebugGraph(Graph.Blackboard blackboard)
+        private void DebugGraph(CustomGraph.Blackboard blackboard)
         {
             if (GUILayout.Button("debug blackboard"))
             {
@@ -42,7 +42,7 @@ namespace GraphEditor
             }
         }
 
-        void DisplayAll(Graph.Blackboard blackboard)
+        void DisplayAll(CustomGraph.Blackboard blackboard)
         {
             if (blackboard.storage == null ||
                 blackboard.storage.Count() == 0)
@@ -64,7 +64,7 @@ namespace GraphEditor
             }
         }
 
-        void DisplayLine(Graph.Blackboard blackboard, Graph.VariableStorageRoot elem)
+        void DisplayLine(CustomGraph.Blackboard blackboard, CustomGraph.VariableStorageRoot elem)
         {
             GUILayout.BeginHorizontal("box");
 
@@ -88,7 +88,7 @@ namespace GraphEditor
             GUILayout.EndHorizontal();
         }
 
-        void AddVariable(Graph.Blackboard blackboard)
+        void AddVariable(CustomGraph.Blackboard blackboard)
         {
             GUILayout.BeginHorizontal();
 

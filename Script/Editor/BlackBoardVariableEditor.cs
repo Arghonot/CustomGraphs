@@ -1,11 +1,11 @@
-﻿using Graph;
+﻿using CustomGraph;
 using UnityEditor;
 using UnityEngine;
 using XNodeEditor;
 
 namespace GraphEditor
 {
-    [CustomNodeEditor(typeof(Graph.BlackBoardVariable))]
+    [CustomNodeEditor(typeof(CustomGraph.BlackBoardVariable))]
     public class BlackBoardVariableEditor : XNodeEditor.NodeEditor
     {
         int selected = 0;

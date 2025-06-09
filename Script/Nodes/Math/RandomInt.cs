@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using XNode;
 
-namespace Graph
+namespace CustomGraph
 {
     [CreateNodeMenu("Graph/Math/RandomInt")]
     public class RandomInt : Leaf<int>

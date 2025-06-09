@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Graph
+namespace CustomGraph
 {
     /// <summary>
     /// Use that attribute if you don't want a class to be visible in the node creation ui.

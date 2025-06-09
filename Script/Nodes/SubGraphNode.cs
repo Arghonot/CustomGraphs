@@ -2,9 +2,9 @@
 using UnityEngine;
 using static XNodeEditor.NodeEditor;
 
-namespace Graph
+namespace CustomGraph
 {
-    [CustomNodeEditor(typeof(Graph.SubGraphMaster))]
+    [CustomNodeEditor(typeof(CustomGraph.SubGraphMaster))]
     [HideFromNodeMenu]
     public class SubGraphMaster : NodeBase
     {

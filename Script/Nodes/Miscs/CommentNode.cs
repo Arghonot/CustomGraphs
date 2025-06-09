@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Graph
+namespace CustomGraph
 {
     // TODO create a node without input or output
     [CreateNodeMenu("Graph/Misc/Comment")]

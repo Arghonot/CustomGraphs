@@ -4,17 +4,17 @@ using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
-[CustomPropertyDrawer(typeof(Graph.BlackboardableVariableAttribute))]
+[CustomPropertyDrawer(typeof(CustomGraph.BlackboardableVariableAttribute))]
 public class BlackboardableVariableDrawer : PropertyDrawer
 {
-    private static Graph.GraphVariableStorage GetStorage(Graph.NodeBase node) => ((Graph.DefaultGraph)node.graph).blackboard.storage;
+    private static CustomGraph.GraphVariableStorage GetStorage(CustomGraph.NodeBase node) => ((CustomGraph.DefaultGraph)node.graph).blackboard.storage;
 
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
         object parentObject = GetParentObjectOfProperty(property.propertyPath, property.serializedObject.targetObject);
 
-        Graph.NodeBase myNode = parentObject as Graph.NodeBase;
-        Graph.BlackboardableVariableAttribute attr = attribute as Graph.BlackboardableVariableAttribute;
+        CustomGraph.NodeBase myNode = parentObject as CustomGraph.NodeBase;
+        CustomGraph.BlackboardableVariableAttribute attr = attribute as CustomGraph.BlackboardableVariableAttribute;
         if (attr == null)
         {
             EditorGUI.LabelField(position, label.text, "Attribute not found.");
@@ -36,7 +36,7 @@ public class BlackboardableVariableDrawer : PropertyDrawer
         return obj;
     }
 
-    public static void DrawDropdownForType(Graph.NodeBase node, Type type, SerializedProperty property)
+    public static void DrawDropdownForType(CustomGraph.NodeBase node, Type type, SerializedProperty property)
     {
         if (!GetStorage(node).ContainsGuid(property.stringValue))
         {
@@ -56,7 +56,7 @@ public class BlackboardableVariableDrawer : PropertyDrawer
         GUILayout.Space(12);
     }
 
-    private static void SetupMenu(Graph.NodeBase node, Type type, GenericMenu menu, SerializedProperty property)
+    private static void SetupMenu(CustomGraph.NodeBase node, Type type, GenericMenu menu, SerializedProperty property)
     {
         string[] guids = GetStorage(node).GetGUIDsForType(type);
         string[] names = GetStorage(node).GetNames(guids);

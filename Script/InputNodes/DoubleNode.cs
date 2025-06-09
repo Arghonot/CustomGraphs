@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using XNode;
 
-namespace Graph
+namespace CustomGraph
 {
     [CreateNodeMenu("Graph/Constants/DoubleInputNode")]
     public class DoubleNode : ConstantNode<double>

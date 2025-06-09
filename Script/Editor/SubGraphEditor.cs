@@ -6,15 +6,15 @@ using static XNodeEditor.NodeEditor;
 
 namespace GraphEditor
 {
-    [CustomNodeEditor(typeof(Graph.SubGraphMaster))]
+    [CustomNodeEditor(typeof(CustomGraph.SubGraphMaster))]
     public class SubGraphEditor : XNodeEditor.NodeEditor
     {
         public override void OnBodyGUI()
         {
-            Graph.SubGraphMaster SubGraph = target as Graph.SubGraphMaster;
-            Graph.DefaultGraph owngraph = (Graph.DefaultGraph)SubGraph.graph;
+            CustomGraph.SubGraphMaster SubGraph = target as CustomGraph.SubGraphMaster;
+            CustomGraph.DefaultGraph owngraph = (CustomGraph.DefaultGraph)SubGraph.graph;
 
-            Graph.DefaultGraph prevGraph = SubGraph.targetSubGraph;
+            CustomGraph.DefaultGraph prevGraph = SubGraph.targetSubGraph;
 
             base.OnBodyGUI();
 

@@ -4,7 +4,7 @@ using UnityEngine;
 using XNode;
 using XNodeEditor;
 
-namespace Graph
+namespace CustomGraph
 {
     [CustomNodeGraphEditor(typeof(DefaultGraph))]
     public class DefaultGraphEditor : NodeGraphEditor
@@ -31,8 +31,8 @@ namespace Graph
 
             if (graph.blackboard == null)
             {
-                var bb = CreateNode(typeof(Graph.Blackboard), new Vector2(0, 0));
-                graph.blackboard = bb as Graph.Blackboard;
+                var bb = CreateNode(typeof(CustomGraph.Blackboard), new Vector2(0, 0));
+                graph.blackboard = bb as CustomGraph.Blackboard;
                 graph.blackboard.InitializeBlackboard();
             }
 
@@ -57,7 +57,7 @@ namespace Graph
 
         public override Texture2D GetGridTexture()
         {
-            NodeEditorWindow.current.titleContent = new GUIContent(((Graph.DefaultGraph)target).name);
+            NodeEditorWindow.current.titleContent = new GUIContent(((CustomGraph.DefaultGraph)target).name);
 
             return base.GetGridTexture();
         }

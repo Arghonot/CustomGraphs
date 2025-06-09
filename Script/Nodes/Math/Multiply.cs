@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static XNode.Node;
 
-namespace Graph
+namespace CustomGraph
 {
     [CreateNodeMenu("Graph/Math/Multiply")]
     public class Multiply : Leaf<double>

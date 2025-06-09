@@ -1,6 +1,6 @@
 ﻿namespace GraphEditor
 {
-    [CustomNodeEditor(typeof(Graph.RootInt))]
+    [CustomNodeEditor(typeof(CustomGraph.RootInt))]
     public class RootIntEditor : XNodeEditor.NodeEditor
     {
         public override void OnHeaderGUI()

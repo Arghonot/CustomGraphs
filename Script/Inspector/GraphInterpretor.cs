@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Graph
+namespace CustomGraph
 {
     ///// <summary>
     ///// This class is interesting if you need to set variables for your 

@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace Graph
+namespace CustomGraph
 {
     public class IntGraph : DefaultGraph
     {

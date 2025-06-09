@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using XNode;
 
-namespace Graph
+namespace CustomGraph
 {
     public class DefaultGraph : NodeGraph
     {
@@ -18,7 +17,6 @@ namespace Graph
         public virtual object Run(GraphVariableStorage newstorage = null)
         {
             this.runtimeStorage = newstorage;
-
             return root.GetValue(root.Ports.First());
         }
 

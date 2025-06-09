@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Graph
+namespace CustomGraph
 {
-    public class GraphRunner<T> : MonoBehaviour where T: Graph.DefaultGraph
+    public class GraphRunner<T> : MonoBehaviour where T: CustomGraph.DefaultGraph
     {
         public ScriptableObject So;
         public T graph;

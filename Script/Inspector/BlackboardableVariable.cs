@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Graph
+namespace CustomGraph
 {
     public class BlackboardableVariableAttribute : PropertyAttribute
     {

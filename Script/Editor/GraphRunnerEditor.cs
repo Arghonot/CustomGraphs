@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using UnityEditor;
-using Graph;
+using CustomGraph;
 using System;
 
 namespace GraphEditor
@@ -36,7 +36,7 @@ namespace GraphEditor
         void    HandleNewGraph()
         {
             var TmpGraph = runner.graph;
-            TmpGraph = (Graph.DefaultGraph)EditorGUILayout.ObjectField(runner.graph, typeof(Graph.DefaultGraph), true);
+            TmpGraph = (CustomGraph.DefaultGraph)EditorGUILayout.ObjectField(runner.graph, typeof(CustomGraph.DefaultGraph), true);
 
             if (TmpGraph == null)
             {

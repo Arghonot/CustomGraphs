@@ -5,7 +5,7 @@ using UnityEngine;
 using XNode;
 using XNodeEditor;
 
-namespace Graph
+namespace CustomGraph
 {
     [CustomNodeGraphEditor(typeof(IntGraph))]
     public class LibnoiseGraphEditor : XNodeEditor.NodeGraphEditor

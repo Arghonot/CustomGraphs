@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Graph
+namespace CustomGraph
 {
     [CreateNodeMenu("Graph/Math/Divide")]
     public class Divide : Leaf<double>

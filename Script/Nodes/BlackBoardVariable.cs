@@ -2,7 +2,7 @@
 using System.Linq;
 using UnityEngine;
 
-namespace Graph
+namespace CustomGraph
 {
     [System.Serializable]
     [CreateNodeMenu("Graph/BlackboardVariable")]

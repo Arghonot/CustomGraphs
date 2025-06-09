@@ -5,7 +5,7 @@ using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
-namespace Graph
+namespace CustomGraph
 {
     public static class VariableRect
     {

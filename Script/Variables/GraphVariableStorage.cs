@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using UnityEngine;
 
-namespace Graph
+namespace CustomGraph
 {
     // TODO decide what should be public and what should be private
     [Serializable]

@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using Type = System.Type;
 
-namespace Graph
+namespace CustomGraph
 {
     [Serializable]
     [System.AttributeUsage(System.AttributeTargets.Class | System.AttributeTargets.Struct)]
