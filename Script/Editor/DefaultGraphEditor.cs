@@ -18,7 +18,6 @@ namespace CustomGraph
                     return node;
                 }
             }
-
             return null;
         }
 
@@ -50,10 +49,7 @@ namespace CustomGraph
             }
         }
 
-        public override string GetPortTooltip(XNode.NodePort port)
-        {
-            return port.ValueType.ToString();
-        }
+        public override string GetPortTooltip(XNode.NodePort port) => port.ValueType.ToString();
 
         public override Texture2D GetGridTexture()
         {
