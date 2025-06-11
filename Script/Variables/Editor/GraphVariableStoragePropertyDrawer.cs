@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using UnityEditor;
@@ -99,13 +98,11 @@ namespace CustomGraph
     [CustomPropertyDrawer(typeof(GraphVariableStorage))]
     public class GraphVariableStoragePropertyDrawer : PropertyDrawer
     {
-        private int fieldHeight = 16;
+        private int fieldHeight = 20;
         private float fieldSize = 20;
         private float padding = 2;
 
-        private int LabelWidth = 100;
-
-        private static string[] controlNames = new string[] {
+        private static readonly string[] controlNames = new string[] {
             "names",
             "size",
             "data",
@@ -128,7 +125,7 @@ namespace CustomGraph
             EditorGUI.BeginProperty(position, label, property);
             //Don't make child fields be indented
             var indent = EditorGUI.indentLevel;
-            EditorGUI.indentLevel = 0;
+            //EditorGUI.indentLevel = 0;
             position.height = fieldHeight;
 
             SerializedProperty iterator = property.Copy();
@@ -139,59 +136,57 @@ namespace CustomGraph
             // maybe the solution would be to just ask to draw for every list 
             // containing more than 0 elements and create another property drawer
             // for each type of variable.
+
             while (iterator.Next(true))
             {
-                if (!controlNames.Contains(iterator.name))
-                {
-                    var props = PropertyDrawerUtils.GetVisibleChildren(iterator);
-
-                    if (props.Count() > 1)
-                    {
-                        // write type's name here
-                        //Debug.Log("iterator : " + iterator.name);
-
-                        //GUILayout.Label(iterator.name);
-                        //position.y += fieldHeight + (padding * 4);
-                        EditorGUI.LabelField(position, iterator.name);
-                        position.y += fieldHeight + (padding * 3);
-                        foreach (var item in props)
-                        {
-                            // foreach metadata in this list container
-                            if (item.name == "data")
-                            {
-                                var listContainer = PropertyDrawerUtils.GetVisibleChildren(item);
-
-                                foreach (var metas in listContainer)
-                                {
-                                    var variable = PropertyDrawerUtils.GetVisibleChildren(metas);
-
-                                    if (metas.name == "Name")
-                                    {
-                                        EditorGUI.LabelField(position, metas.stringValue);
-                                        position.x -= LabelWidth;
-
-                                        //Debug.Log("metas's name : " + metas.name + " " + metas.stringValue);
-                                    }
-                                    else if (metas.name == "Value")
-                                    {
-                                        position.width = EditorGUIUtility.currentViewWidth - position.x - 19;
-
-                                        // TODO bad way of doing this should be changed in the future (along with the -labelwidth)
-                                        // but on the other hand it allows to have Value<T> custom proptery drawer ...
-                                        EditorGUI.PropertyField(position, metas);
-                                        position.x = posx;
-                                        position.y += fieldHeight + padding;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+                if (!controlNames.Contains(iterator.name)) DrawTypeData(iterator, ref position, posx);
             }
 
             //Set indent back to what it was
             EditorGUI.indentLevel = indent;
             EditorGUI.EndProperty();
+        }
+
+        private void DrawTypeData(SerializedProperty iterator, ref Rect position, float posX)
+        {
+            var props = PropertyDrawerUtils.GetVisibleChildren(iterator);
+
+            if (props.Count() > 1)
+            {
+                GUIStyle boldLabel = new GUIStyle(EditorStyles.boldLabel);
+                EditorGUI.LabelField(position, iterator.displayName, boldLabel);
+                position.y += fieldHeight + (padding * 3);
+
+                foreach (var item in props)
+                {
+                    if (item.name == "data")
+                    {
+                        var listContainer = PropertyDrawerUtils.GetVisibleChildren(item);
+
+                        var name = "";
+                        foreach (var metas in listContainer)
+                        {
+                            DrawTypeInstanceData(metas, ref name, ref position, posX);
+                        }
+                    }
+                }
+            }
+        }
+
+        private void DrawTypeInstanceData(SerializedProperty metas, ref string name, ref Rect position, float posX)
+        {
+            var variable = PropertyDrawerUtils.GetVisibleChildren(metas);
+            if (metas.name == "Name")
+            {
+                name = metas.stringValue;
+            }
+            else if (metas.name == "Value")
+            {
+                position.width = EditorGUIUtility.currentViewWidth - position.x - 19;
+                EditorGUI.PropertyField(position, metas, new GUIContent(name));
+                position.x = posX;
+                position.y += fieldHeight + padding;
+            }
         }
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
