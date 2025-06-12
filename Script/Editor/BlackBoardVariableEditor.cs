@@ -1,6 +1,5 @@
 ﻿using CustomGraph;
 using UnityEditor;
-using UnityEngine;
 using XNodeEditor;
 
 namespace GraphEditor

@@ -88,7 +88,6 @@ namespace CustomGraph
             for (int i = 0; i < _guids.Length; i++)
             {
                 value = GetInputValue<object>(_fieldNames[i]);
-                //UnityEngine.Debug.Log(_fieldNames[i] + " " + _guids[i] + " " + storage.ContainsGuid(_guids[i]));
                 if (value == null)
                 {
                     value = Activator.CreateInstance(storage.GetVariableType(_guids[i]));

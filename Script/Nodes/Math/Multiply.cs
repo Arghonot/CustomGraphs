@@ -8,7 +8,6 @@ namespace CustomGraph
     {
         [Input(ShowBackingValue.Always, ConnectionType.Override, TypeConstraint.Inherited)]
         public double A;
-
         [Input(ShowBackingValue.Always, ConnectionType.Override, TypeConstraint.Inherited)]
         public double B;
 

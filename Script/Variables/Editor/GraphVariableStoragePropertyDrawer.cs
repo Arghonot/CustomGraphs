@@ -12,7 +12,7 @@ namespace CustomGraph
         public static float YSpacing = 2f;
 
         public static float Width = 300f;
-        public static float Height = 0; // 100
+        public static float Height = 0;
     }
 
     public static class PropertyDrawerUtils

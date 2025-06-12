@@ -2,7 +2,5 @@
 {
     [CreateNodeMenu("Graph/Constants/DoubleInputNode")]
     [NodeTint(ColorProfile.Input)]
-    public class DoubleNode : ConstantNode<double>
-    {
-    }
+    public class DoubleNode : ConstantNode<double> { }
 }

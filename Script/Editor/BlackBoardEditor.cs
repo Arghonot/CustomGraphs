@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using UnityEngine;
-using System.Linq;
 using UnityEditor;
 using CustomGraph;
-using XNodeEditor;
 
 namespace GraphEditor
 {
@@ -75,7 +72,6 @@ namespace GraphEditor
             blackboard.storage.SetName(elem.GUID, newName);
 
 
-            // V2 TODO static cache all the names 
             // Display type
             EditorGUILayout.LabelField(GraphTypeNameCache.GetFormattedName(blackboard.storage.GetContainedType(elem.GUID)), GUILayout.Width(blackboard.TypeWidth));
 
