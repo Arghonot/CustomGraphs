@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
+using XNodeEditor;
 
 namespace CustomGraph
 {
@@ -121,10 +122,9 @@ namespace CustomGraph
         {
             List<string> PossibleTypeNames = new List<string>();
             var storableTypeContainers = GetAllStorableTypes();
-
             storableTypeContainers.ForEach(x =>
             {
-                PossibleTypeNames.Add(((StorableType)Attribute.GetCustomAttribute(x, typeof(StorableType))).ReferenceType.Name);
+                PossibleTypeNames.Add(NodeEditorUtilities.PrettyName(((StorableType)Attribute.GetCustomAttribute(x, typeof(StorableType))).ReferenceType));
             });
 
             return PossibleTypeNames.ToArray();

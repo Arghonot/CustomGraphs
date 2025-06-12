@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using UnityEditor;
+using CustomGraph;
+using XNodeEditor;
 
 namespace GraphEditor
 {
@@ -64,7 +66,7 @@ namespace GraphEditor
             }
         }
 
-        void DisplayLine(CustomGraph.Blackboard blackboard, CustomGraph.VariableStorageRoot elem)
+        void DisplayLine(Blackboard blackboard, VariableStorageRoot elem)
         {
             GUILayout.BeginHorizontal("box");
 
@@ -72,8 +74,10 @@ namespace GraphEditor
             string newName = EditorGUILayout.TextField(elem.Name, GUILayout.Width(blackboard.TextWidth));
             blackboard.storage.SetName(elem.GUID, newName);
 
+
+            // V2 TODO static cache all the names 
             // Display type
-            EditorGUILayout.LabelField(blackboard.storage.GetContainedType(elem.GUID).Name, GUILayout.Width(blackboard.TypeWidth));
+            EditorGUILayout.LabelField(GraphTypeNameCache.GetFormattedName(blackboard.storage.GetContainedType(elem.GUID)), GUILayout.Width(blackboard.TypeWidth));
 
             // Allow variable removal
             if (GUILayout.Button("-", GUILayout.Width(blackboard.MinusWidth)))
@@ -84,7 +88,7 @@ namespace GraphEditor
             GUILayout.EndHorizontal();
         }
 
-        void AddVariable(CustomGraph.Blackboard blackboard)
+        void AddVariable(Blackboard blackboard)
         {
             GUILayout.BeginHorizontal();
 
