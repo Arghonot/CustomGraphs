@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using UnityEditor;
 using CustomGraph;
-using System;
 
 namespace GraphEditor
 {
@@ -26,11 +25,6 @@ namespace GraphEditor
         void HandleNewSo()
         {
             runner.So = (ScriptableObject)EditorGUILayout.ObjectField(runner.So, typeof(ScriptableObject), true);
-
-            //if (runner.So != null && runner.graph != null)
-            //{
-            //    DrawValidity();
-            //}
         }
 
         void    HandleNewGraph()
@@ -47,48 +41,5 @@ namespace GraphEditor
                 runner.graph = TmpGraph;
             }
         }
-
-        //void DrawValidity()
-        //{
-        //    DrawValidityGraphSo();
-        //}
-
-        //void DrawValidityGraphSo()
-        //{
-        //    runner.isReady = true;
-
-        //    foreach (var item in runner.storage.Values)
-        //    {
-        //        GUILayout.BeginHorizontal();
-        //        EditorGUILayout.LabelField(item.Name);
-
-        //        if (DoesSoContainsValue(item.Name, item.GetValueType()))
-        //        {
-        //            EditorGUILayout.LabelField("    OK");
-        //        }
-        //        else
-        //        {
-        //            runner.isReady = false;
-        //            EditorGUILayout.LabelField("    NOK");
-        //        }
-
-        //        GUILayout.EndHorizontal();
-        //    }
-        //}
-
-        //bool DoesSoContainsValue(string name, Type valueType)
-        //{
-        //    var properties = runner.So.GetType().GetProperties();
-
-        //    foreach (var property in runner.So.GetType().GetFields())
-        //    {
-        //        if (property.Name == name && property.FieldType == valueType)
-        //        {
-        //            return true;
-        //        }
-        //    }
-
-        //    return false;
-        //}
     }
 }

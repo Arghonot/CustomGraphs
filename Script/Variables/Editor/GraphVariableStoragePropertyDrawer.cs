@@ -123,6 +123,25 @@ namespace CustomGraph
             //Using BeginProperty / EndProperty on the parent property means that
             //prefab override logic works on the entire property.
             EditorGUI.BeginProperty(position, label, property);
+            GUIStyle boldFoldout = new GUIStyle(EditorStyles.foldout);
+            boldFoldout.fontStyle = FontStyle.Bold;
+            bool isFolded = EditorPrefs.GetBool("GraphVariableFoldout", false);
+            Rect foldoutRect = new Rect(position.x, position.y, position.width, EditorGUIUtility.singleLineHeight);
+            isFolded = EditorGUI.Foldout(foldoutRect, isFolded, "Graph Variables", true, boldFoldout);
+            EditorPrefs.SetBool("GraphVariableFoldout", isFolded);
+
+            if (isFolded)
+            {
+                // Indent content and move it below the foldout
+                Rect contentPos = new Rect(position.x, position.y + EditorGUIUtility.singleLineHeight + padding, position.width, position.height);
+
+                DrawVariables(contentPos, property);
+            }
+            EditorGUI.EndProperty();
+        }
+
+        private void DrawVariables(Rect position, SerializedProperty property)
+        {
             //Don't make child fields be indented
             var indent = EditorGUI.indentLevel;
             //EditorGUI.indentLevel = 0;
@@ -130,7 +149,7 @@ namespace CustomGraph
 
             SerializedProperty iterator = property.Copy();
             float posx = position.x;
-            // TODO, the problem here is the layout pass of the IMGUI
+            // the problem here is the layout pass of the IMGUI
             // seems like it's trying to register the amount of properties
             // but it's "changing between the layout pass and the paint pass"
             // maybe the solution would be to just ask to draw for every list 
@@ -144,7 +163,6 @@ namespace CustomGraph
 
             //Set indent back to what it was
             EditorGUI.indentLevel = indent;
-            EditorGUI.EndProperty();
         }
 
         private void DrawTypeData(SerializedProperty iterator, ref Rect position, float posX)
@@ -191,10 +209,13 @@ namespace CustomGraph
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            GraphVariableStorage targetObject =(GraphVariableStorage)GetTargetObjectOfProperty(property);
-            int amountOfFields = targetObject.GetAmountOfGUIFields();
+            bool isFolded = EditorPrefs.GetBool("GraphVariableFoldout", false);
+            if (!isFolded)
+                return EditorGUIUtility.singleLineHeight;
 
-            return (fieldSize * amountOfFields) + (padding * amountOfFields);
+            GraphVariableStorage targetObject = (GraphVariableStorage)GetTargetObjectOfProperty(property);
+            int fieldCount = targetObject.GetAmountOfGUIFields();
+            return EditorGUIUtility.singleLineHeight + padding + (fieldCount * fieldSize) + (padding * fieldCount);
         }
 
         public static object GetTargetObjectOfProperty(SerializedProperty prop)
@@ -246,9 +267,6 @@ namespace CustomGraph
             var enumerable = GetValue_Imp(source, name) as System.Collections.IEnumerable;
             if (enumerable == null) return null;
             var enm = enumerable.GetEnumerator();
-            //while (index-- >= 0)
-            //    enm.MoveNext();
-            //return enm.Current;
 
             for (int i = 0; i <= index; i++)
             {
@@ -256,6 +274,5 @@ namespace CustomGraph
             }
             return enm.Current;
         }
-
     }
 }
