@@ -69,15 +69,11 @@ namespace GraphEditor
             GUILayout.BeginHorizontal("box");
 
             // Display name and allow change
-            string newName = EditorGUILayout.TextField(
-                elem.Name,
-                GUILayout.Width(blackboard.TextWidth));
+            string newName = EditorGUILayout.TextField(elem.Name, GUILayout.Width(blackboard.TextWidth));
             blackboard.storage.SetName(elem.GUID, newName);
 
             // Display type
-            EditorGUILayout.LabelField(
-                blackboard.storage.GetContainedType(elem.GUID).Name,
-                GUILayout.Width(blackboard.TypeWidth));
+            EditorGUILayout.LabelField(blackboard.storage.GetContainedType(elem.GUID).Name, GUILayout.Width(blackboard.TypeWidth));
 
             // Allow variable removal
             if (GUILayout.Button("-", GUILayout.Width(blackboard.MinusWidth)))
@@ -93,7 +89,6 @@ namespace GraphEditor
             GUILayout.BeginHorizontal();
 
             Selected = EditorGUILayout.Popup(Selected, options);
-
             if (GUILayout.Button("Add"))
             {
                 blackboard.storage.Add(optionsType[Selected]);
