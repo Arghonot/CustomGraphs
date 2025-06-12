@@ -1,11 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using static XNode.Node;
+﻿using UnityEngine;
 
 namespace CustomGraph
 {
     [CreateNodeMenu("Graph/Math/Multiply")]
+    [NodeTint(ColorProfile.Mathematics)]
     public class Multiply : Leaf<double>
     {
         [Input(ShowBackingValue.Always, ConnectionType.Override, TypeConstraint.Inherited)]

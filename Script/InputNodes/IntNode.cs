@@ -1,10 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using XNode;
-
-namespace CustomGraph
+﻿namespace CustomGraph
 {
     [CreateNodeMenu("Graph/Constants/IntInputNode")]
+    [NodeTint(ColorProfile.Input)]
     public class IntNode : ConstantNode<int>{ }
 }

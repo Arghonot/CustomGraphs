@@ -6,7 +6,7 @@ namespace CustomGraph
 {
     [System.Serializable]
     [CreateNodeMenu("Graph/BlackboardVariable")]
-    [NodeTint(ColorProfile.other1)]
+    [NodeTint(ColorProfile.Input)]
     public class BlackBoardVariable : NodeBase
     {
         [SerializeField] public int VariableIndex;

@@ -3,6 +3,7 @@
 namespace CustomGraph
 {
     [CreateNodeMenu("Graph/Math/Divide")]
+    [NodeTint(ColorProfile.Mathematics)]
     public class Divide : Leaf<double>
     {
         [Input(ShowBackingValue.Always, ConnectionType.Override, TypeConstraint.Inherited)]

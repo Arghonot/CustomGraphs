@@ -1,11 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using XNode;
+﻿using UnityEngine;
 
 namespace CustomGraph
 {
     [CreateNodeMenu("Graph/Math/RandomInt")]
+    [NodeTint(ColorProfile.Mathematics)]
     public class RandomInt : Leaf<int>
     {
         [Input(ShowBackingValue.Always, ConnectionType.Override, TypeConstraint.Strict)]

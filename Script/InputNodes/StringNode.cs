@@ -1,11 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using XNode;
-
-namespace CustomGraph
+﻿namespace CustomGraph
 {
     [CreateNodeMenu("Graph/Constants/StringNode")]
+    [NodeTint(ColorProfile.Input)]
     public class StringNode : Leaf<string>
     {
         public string value;
