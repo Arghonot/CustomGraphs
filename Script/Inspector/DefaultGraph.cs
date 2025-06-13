@@ -7,11 +7,11 @@ namespace CustomGraph
 {
     public class DefaultGraph : NodeGraph
     {
-        [SerializeField] public Blackboard blackboard;
+        [HideInInspector] public Blackboard blackboard;
         public GraphVariableStorage originalStorage = new GraphVariableStorage();
         [HideInInspector] public GraphVariableStorage runtimeStorage;
-        public bool CanRun;
-        public Root root;
+        [HideInInspector] public bool CanRun;
+        [HideInInspector] public Root root;
         public virtual Type GetRootNodeType() => typeof(Root);
 
         public virtual object Run(GraphVariableStorage newstorage = null)

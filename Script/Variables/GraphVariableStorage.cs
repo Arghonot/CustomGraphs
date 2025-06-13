@@ -175,6 +175,7 @@ namespace CustomGraph
 
             GuidToNames.Remove(Guid);
             GuidToType.Remove(Guid);
+            GuidToStorage.Remove(Guid);
             OnDataAddedOrRemoved?.Invoke(Guid);
         }
 
@@ -413,7 +414,7 @@ namespace CustomGraph
 
         private IEnumerable<IList> GetAllListOfContainers()
         {
-            return this.GetType().GetFields().Select(x => x.GetValue(this) as IList); ;
+            return this.GetType().GetFields().Select(x => x.GetValue(this) as IList);
         }
 
         private IList GetListOfContainer(Type type)
