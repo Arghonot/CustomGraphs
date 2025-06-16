@@ -18,7 +18,7 @@ namespace CustomGraph
 
         protected override void Init()
         {
-            Blackboard = ((DefaultGraph)graph).blackboard;
+            Blackboard = ((GraphBase)graph).blackboard;
 
             ChooseFirstVariable();
         }
@@ -76,17 +76,17 @@ namespace CustomGraph
 
         public string[] GetPossibleVariables()
         {
-            return ((DefaultGraph)graph).blackboard.GetVariableNames();
+            return ((GraphBase)graph).blackboard.GetVariableNames();
         }
 
         public override object Run()
         {
-            if (((DefaultGraph)graph).runtimeStorage.ContainsGuid(guid))
+            if (((GraphBase)graph).runtimeStorage.ContainsGuid(guid))
             {
-                return ((DefaultGraph)graph).runtimeStorage.GetFromGUID(guid);
+                return ((GraphBase)graph).runtimeStorage.GetFromGUID(guid);
             }
 
-            return ((DefaultGraph)graph).originalStorage.GetFromGUID(guid);
+            return ((GraphBase)graph).originalStorage.GetFromGUID(guid);
         }
 
         public string GetGUID() => guid;

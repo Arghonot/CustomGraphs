@@ -6,12 +6,12 @@ using XNodeEditor;
 
 namespace CustomGraph
 {
-    [CustomNodeGraphEditor(typeof(DefaultGraph))]
+    [CustomNodeGraphEditor(typeof(GraphBase))]
     public class DefaultGraphEditor : NodeGraphEditor
     {
         public Node ContainsNodeOfType(Type type)
         {
-            foreach (var node in ((DefaultGraph)target).nodes)
+            foreach (var node in ((GraphBase)target).nodes)
             {
                 if (node.GetType() == type)
                 {
@@ -25,7 +25,7 @@ namespace CustomGraph
         {
             base.OnCreate();
 
-            DefaultGraph graph = target as DefaultGraph;
+            GraphBase graph = target as GraphBase;
             NodeEditorWindow.current.graphEditor = this;
 
             if (graph.blackboard == null)
@@ -53,7 +53,7 @@ namespace CustomGraph
 
         public override Texture2D GetGridTexture()
         {
-            NodeEditorWindow.current.titleContent = new GUIContent(((CustomGraph.DefaultGraph)target).name);
+            NodeEditorWindow.current.titleContent = new GUIContent(((CustomGraph.GraphBase)target).name);
 
             return base.GetGridTexture();
         }
@@ -74,7 +74,7 @@ namespace CustomGraph
 
         public override void RemoveNode(Node node)
         {
-            if (node != ((DefaultGraph)target).blackboard )
+            if (node != ((GraphBase)target).blackboard )
             {
                 base.RemoveNode(node);
             }

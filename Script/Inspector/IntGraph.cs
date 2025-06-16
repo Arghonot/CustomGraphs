@@ -2,7 +2,7 @@
 
 namespace CustomGraph
 {
-    public class IntGraph : DefaultGraph
+    public class IntGraph : GraphBase
     {
         public RootInt Root;
 

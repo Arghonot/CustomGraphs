@@ -8,7 +8,7 @@ namespace CustomGraph
     [HideFromNodeMenu]
     public class SubGraphMaster : NodeBase
     {
-        public DefaultGraph targetSubGraph;
+        public GraphBase targetSubGraph;
 
         private GraphVariables targetBlackboard() => targetSubGraph.blackboard.storage;
         [HideInInspector][SerializeField] private string[] _fieldNames;

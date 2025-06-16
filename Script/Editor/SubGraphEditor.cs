@@ -8,9 +8,9 @@ namespace GraphEditor
         public override void OnBodyGUI()
         {
             CustomGraph.SubGraphMaster SubGraph = target as CustomGraph.SubGraphMaster;
-            CustomGraph.DefaultGraph owngraph = (CustomGraph.DefaultGraph)SubGraph.graph;
+            CustomGraph.GraphBase owngraph = (CustomGraph.GraphBase)SubGraph.graph;
 
-            CustomGraph.DefaultGraph prevGraph = SubGraph.targetSubGraph;
+            CustomGraph.GraphBase prevGraph = SubGraph.targetSubGraph;
 
             base.OnBodyGUI();
 

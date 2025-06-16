@@ -36,7 +36,7 @@ namespace CustomGraph
 
         public void InitializeBlackboard()
         {
-            storage = ((DefaultGraph)graph).originalStorage;
+            storage = ((GraphBase)graph).originalStorage;
         }
 
         public Type GetVariableType(string guid)
