@@ -8,13 +8,13 @@ namespace CustomGraph
     public class DefaultGraph : NodeGraph
     {
         [HideInInspector] public Blackboard blackboard;
-        public GraphVariableStorage originalStorage = new GraphVariableStorage();
-        [HideInInspector] public GraphVariableStorage runtimeStorage;
+        public GraphVariables originalStorage = new GraphVariables();
+        [HideInInspector] public GraphVariables runtimeStorage;
         [HideInInspector] public bool CanRun;
         [HideInInspector] public Root root;
         public virtual Type GetRootNodeType() => typeof(Root);
 
-        public virtual object Run(GraphVariableStorage newstorage = null)
+        public virtual object Run(GraphVariables newstorage = null)
         {
             this.runtimeStorage = newstorage;
             return root.GetValue(root.Ports.First());

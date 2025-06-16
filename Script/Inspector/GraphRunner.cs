@@ -9,6 +9,6 @@ namespace CustomGraph
         public bool isReady;
 
         [SerializeField]
-        public GraphVariableStorage storage = new GraphVariableStorage();
+        public GraphVariables storage = new GraphVariables();
     }
 }

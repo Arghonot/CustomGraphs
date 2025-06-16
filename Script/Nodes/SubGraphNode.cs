@@ -10,7 +10,7 @@ namespace CustomGraph
     {
         public DefaultGraph targetSubGraph;
 
-        private GraphVariableStorage targetBlackboard() => targetSubGraph.blackboard.storage;
+        private GraphVariables targetBlackboard() => targetSubGraph.blackboard.storage;
         [HideInInspector][SerializeField] private string[] _fieldNames;
         [HideInInspector][SerializeField] private string[] _guids;
 
@@ -81,7 +81,7 @@ namespace CustomGraph
             }
         }
 
-        public GraphVariableStorage GenerateProperStorage()
+        public GraphVariables GenerateProperStorage()
         {
             var storage = targetSubGraph.originalStorage.CreateDeepCopy();
             object value = null;

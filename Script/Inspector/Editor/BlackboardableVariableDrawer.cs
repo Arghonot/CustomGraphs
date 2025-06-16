@@ -7,7 +7,7 @@ using UnityEngine;
 [CustomPropertyDrawer(typeof(CustomGraph.BlackboardableVariableAttribute))]
 public class BlackboardableVariableDrawer : PropertyDrawer
 {
-    private static CustomGraph.GraphVariableStorage GetStorage(CustomGraph.NodeBase node) => ((CustomGraph.DefaultGraph)node.graph).blackboard.storage;
+    private static CustomGraph.GraphVariables GetStorage(CustomGraph.NodeBase node) => ((CustomGraph.DefaultGraph)node.graph).blackboard.storage;
 
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {

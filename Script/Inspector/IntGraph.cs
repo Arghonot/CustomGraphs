@@ -6,7 +6,7 @@ namespace CustomGraph
     {
         public RootInt Root;
 
-        public new int Run(GraphVariableStorage newStorage = null)
+        public new int Run(GraphVariables newStorage = null)
         {
             if (newStorage != null)
             {

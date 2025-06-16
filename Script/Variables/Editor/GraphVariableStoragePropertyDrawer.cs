@@ -95,7 +95,7 @@ namespace CustomGraph
         //}
     }
 
-    [CustomPropertyDrawer(typeof(GraphVariableStorage))]
+    [CustomPropertyDrawer(typeof(GraphVariables))]
     public class GraphVariableStoragePropertyDrawer : PropertyDrawer
     {
         private int fieldHeight = 20;
@@ -213,7 +213,7 @@ namespace CustomGraph
             if (!isFolded)
                 return EditorGUIUtility.singleLineHeight;
 
-            GraphVariableStorage targetObject = (GraphVariableStorage)GetTargetObjectOfProperty(property);
+            GraphVariables targetObject = (GraphVariables)GetTargetObjectOfProperty(property);
             int fieldCount = targetObject.GetAmountOfGUIFields();
             return EditorGUIUtility.singleLineHeight + padding + (fieldCount * fieldSize) + (padding * fieldCount);
         }

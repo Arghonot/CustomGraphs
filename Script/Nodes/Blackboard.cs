@@ -15,7 +15,7 @@ namespace CustomGraph
 
         public int width = 300;
 
-        [SerializeField] public GraphVariableStorage storage = new GraphVariableStorage();
+        [SerializeField] public GraphVariables storage = new GraphVariables();
         public event Action<string> OnStorageDataAddedOrRemoved;
 
         [ContextMenu("Register")]
@@ -59,7 +59,7 @@ namespace CustomGraph
             return storage.GetNames(guids);
         }
 
-        public void PrintStorageGUID(GraphVariableStorage otherstorage)
+        public void PrintStorageGUID(GraphVariables otherstorage)
         {
             storage.CompareDictionnaries(otherstorage);
         }

@@ -8,9 +8,10 @@ using XNodeEditor;
 
 namespace CustomGraph
 {
-    // TODO decide what should be public and what should be private
+    // NOTE: This class is functional but in early-stage design. 
+    // It will be progressively refactored post-release (V2+) for performance, clarity, and encapsulation.
     [Serializable]
-    public partial class GraphVariableStorage : ISerializationCallbackReceiver
+    public partial class GraphVariables : ISerializationCallbackReceiver
     {
         public string GUID = Guid.NewGuid().ToString();
 
@@ -58,7 +59,7 @@ namespace CustomGraph
 
         #region Inner storage management
 
-        public GraphVariableStorage()
+        public GraphVariables()
         {
             FillSelfStorageMetadatas();
             ReinitObjectDictionnary();
@@ -577,7 +578,7 @@ namespace CustomGraph
 
         #region DEBUG
 
-        public void CompareDictionnaries(GraphVariableStorage otherStorage)
+        public void CompareDictionnaries(GraphVariables otherStorage)
         {
             IEnumerable<IList> list = otherStorage.GetAllListOfContainers();
             var Containers = GetAllListOfContainers();
@@ -677,9 +678,9 @@ namespace CustomGraph
             }
         }
 
-        public GraphVariableStorage CreateDeepCopy()
+        public GraphVariables CreateDeepCopy()
         {
-            GraphVariableStorage newStorage = new GraphVariableStorage();
+            GraphVariables newStorage = new GraphVariables();
 
             foreach (var pair in ListPerRealType)
             {
@@ -689,7 +690,7 @@ namespace CustomGraph
             return newStorage;
         }
 
-        private void AddRow(GraphVariableStorage newStorage, Type type, IList list)
+        private void AddRow(GraphVariables newStorage, Type type, IList list)
         {
             VariableStorageRoot tmp;
 

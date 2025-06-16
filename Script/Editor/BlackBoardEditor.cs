@@ -9,8 +9,8 @@ namespace GraphEditor
     public class BlackBoardEditor : XNodeEditor.NodeEditor
     {
         int Selected = 0;
-        public string[] options = CustomGraph.GraphVariableStorage.GetPossibleTypesName();
-        public Type[] optionsType = CustomGraph.GraphVariableStorage.getPossibleTypes();
+        public string[] options = CustomGraph.GraphVariables.GetPossibleTypesName();
+        public Type[] optionsType = CustomGraph.GraphVariables.getPossibleTypes();
         string UIDToDelete = string.Empty;
 
         public override int GetWidth()
