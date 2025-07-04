@@ -11,7 +11,7 @@ namespace CustomGraph
     // NOTE: This class is functional but in early-stage design. 
     // It will be progressively refactored post-release (V2+) for performance, clarity, and encapsulation.
     [Serializable]
-    public partial class GraphVariables : ISerializationCallbackReceiver
+    public partial class GraphVariables : ISerializationCallbackReceiver, IEnumerable
     {
         public string GUID = Guid.NewGuid().ToString();
 
@@ -309,6 +309,22 @@ namespace CustomGraph
         #endregion
 
         #region Getters
+
+        public IEnumerator<VariableStorageRoot> GetEnumerator()
+        {
+            foreach (var list in ListPerRealType.Values)
+            {
+                foreach (VariableStorageRoot item in list)
+                {
+                    yield return item;
+                }
+            }
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
 
         public object TryGet(string name)
         {

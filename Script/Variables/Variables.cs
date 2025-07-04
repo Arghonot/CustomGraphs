@@ -3,6 +3,8 @@ using UnityEngine;
 using UnityEngine.AI;
 using Type = System.Type;
 
+//TODO add event for variable changes ?
+
 namespace CustomGraph
 {
     [Serializable]
@@ -110,26 +112,6 @@ namespace CustomGraph
 
             return newVariable;
         }
-
-        //public override object Clone()
-        //{
-        //    var item = (VariableStorage<T>)MemberwiseClone();
-
-        //    item.Name = this.Name;
-        //    item.GUID = Guid.NewGuid().ToString();
-        //    item.Value = this.Value;
-
-        //    return item;
-        //}
-
-
-
-        //public VariableStorage(VariableStorage<T> original)
-        //{
-        //    Debug.Log("Copy constructor");
-        //    this.Name = original.Name;
-        //    this.Value = original.Value;
-        //}
     }
 
     #region C# types
