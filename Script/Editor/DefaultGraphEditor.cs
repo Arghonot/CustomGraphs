@@ -25,28 +25,28 @@ namespace CustomGraph
         {
             base.OnCreate();
 
-            GraphBase graph = target as GraphBase;
-            NodeEditorWindow.current.graphEditor = this;
+            //GraphBase graph = target as GraphBase;
+            //NodeEditorWindow.current.graphEditor = this;
 
-            if (graph.blackboard == null)
-            {
-                var bb = CreateNode(typeof(CustomGraph.Blackboard), new Vector2(0, 0));
-                graph.blackboard = bb as CustomGraph.Blackboard;
-                graph.blackboard.InitializeBlackboard();
-            }
+            //if (graph.blackboard == null)
+            //{
+            //    var bb = CreateNode(typeof(CustomGraph.Blackboard), new Vector2(0, 0));
+            //    graph.blackboard = bb as CustomGraph.Blackboard;
+            //    graph.blackboard.InitializeBlackboard();
+            //}
 
-            var graphRootNodeType = graph.GetRootNodeType();
+            //var graphRootNodeType = graph.GetRootNodeType();
 
-            // we do not want to have two outputs
-            if (graph.root == null && ContainsNodeOfType(graphRootNodeType) != null)
-            {
-                graph.root = (Root)ContainsNodeOfType(graphRootNodeType);
-            }
-            else if (graph.root == null)
-            {
-                var root = CreateNode(graphRootNodeType, new Vector2(500, 150));
-                graph.root = root as Root;
-            }
+            //// we do not want to have two outputs
+            //if (graph.root == null && ContainsNodeOfType(graphRootNodeType) != null)
+            //{
+            //    graph.root = (Root)ContainsNodeOfType(graphRootNodeType);
+            //}
+            //else if (graph.root == null)
+            //{
+            //    var root = CreateNode(graphRootNodeType, new Vector2(500, 150));
+            //    graph.root = root as Root;
+            //}
         }
 
         public override string GetPortTooltip(XNode.NodePort port) => port.ValueType.ToString();
