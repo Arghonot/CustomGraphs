@@ -1,4 +1,7 @@
-﻿namespace CustomGraph
+﻿using System.Collections.Generic;
+using XNode;
+
+namespace CustomGraph
 {
     public static class ColorProfile
     {
@@ -11,10 +14,22 @@
         public const string Mathematics = "#5c677d";
     }
 
+    public interface IRoot
+    {
+        public bool CanRun();
+        public object Run();
+        IEnumerable<NodePort> Ports { get; }
+        object GetValue(NodePort port);
+    }
+
     [NodeTint(ColorProfile.Root)]
     [HideFromNodeMenu]
-    public abstract class Root : NodeBase
+    public class Root<T> : NodeBase, IRoot
     {
-        public abstract bool CanRun();// => throw new System.NotImplementedException();
+        [Input(ShowBackingValue.Never, ConnectionType.Override, TypeConstraint.Strict)]
+        public T Input;
+
+        public bool CanRun() => GetInputPort("Input").IsConnected;
+        public override object Run() => GetInputValue<T>("Input", Input);
     }
 }

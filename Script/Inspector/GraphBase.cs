@@ -13,8 +13,9 @@ namespace CustomGraph
         public GraphVariables originalStorage = new GraphVariables();
         [HideInInspector] public GraphVariables runtimeStorage;
         [HideInInspector] public bool CanRun;
-        [HideInInspector] public Root root;
-        public virtual Type GetRootNodeType() => typeof(Root);
+        [HideInInspector] public IRoot rootNode;
+
+        public virtual Type GetRootNodeType() => typeof(Root<int>);
 
         public virtual void Initialize()
         {
@@ -23,20 +24,21 @@ namespace CustomGraph
             {
                 blackboard = CreateNode(typeof(Blackboard)) as Blackboard;
             }
-            if (root == null && ContainsNodeOfType(type) != null)
+            if (rootNode == null && ContainsNodeOfType(type) != null)
             {
-                root = (Root)ContainsNodeOfType(type);
+                rootNode = ContainsNodeOfType(type) as IRoot;
             }
-            else if (root == null)
+            else if (rootNode == null)
             {
-                root = CreateNode(GetRootNodeType()) as Root;
+                rootNode = CreateNode(GetRootNodeType()) as Root<int>;
             }
             if (NodeEditorPreferences.GetSettings().autoSave) AssetDatabase.SaveAssets();
         }
+
         public virtual object Run(GraphVariables newstorage = null)
         {
             runtimeStorage = newstorage;
-            return root.GetValue(root.Ports.First());
+            return ((Root<int>)rootNode).GetValue(((Root<int>)rootNode).Ports.First());
         }
 
         private object CreateNode(Type type)

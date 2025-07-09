@@ -25,10 +25,7 @@ namespace CustomGraph
 
         private void ChooseFirstVariable()
         {
-            if (Ports.Count() != 0)
-            {
-                return;
-            }
+            if (Ports.Count() != 0) return;
 
             string guid = Blackboard.storage.getAllGuids()[0];
 
