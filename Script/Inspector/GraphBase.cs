@@ -21,8 +21,7 @@ namespace CustomGraph
             var type = GetRootNodeType();
             if (blackboard == null)
             {
-                var newBlackboard = AddNode<Blackboard>();
-                blackboard = newBlackboard;
+                blackboard = CreateNode(typeof(Blackboard)) as Blackboard;
             }
             if (root == null && ContainsNodeOfType(type) != null)
             {
@@ -30,13 +29,7 @@ namespace CustomGraph
             }
             else if (root == null)
             {
-                XNode.Node node = AddNode(type);
-                if (node == null) return;
-                Undo.RegisterCreatedObjectUndo(node, "Create Node");
-                node.position = new Vector2(500, 150);
-                if (node.name == null || node.name.Trim() == "") node.name = NodeEditorUtilities.NodeDefaultName(type);
-                if (!string.IsNullOrEmpty(AssetDatabase.GetAssetPath(this))) AssetDatabase.AddObjectToAsset(node, this);
-                root = node as Root;
+                root = CreateNode(GetRootNodeType()) as Root;
             }
             if (NodeEditorPreferences.GetSettings().autoSave) AssetDatabase.SaveAssets();
         }
@@ -44,6 +37,19 @@ namespace CustomGraph
         {
             runtimeStorage = newstorage;
             return root.GetValue(root.Ports.First());
+        }
+
+        private object CreateNode(Type type)
+        {
+            Node node = AddNode(type);
+
+            if (node == null) return null;
+            Undo.RegisterCreatedObjectUndo(node, "Create Node");
+            node.position = new Vector2(500, 150);
+            if (node.name == null || node.name.Trim() == "") node.name = NodeEditorUtilities.NodeDefaultName(type);
+            if (!string.IsNullOrEmpty(AssetDatabase.GetAssetPath(this))) AssetDatabase.AddObjectToAsset(node, this);
+
+            return node;
         }
 
         public Node ContainsNodeOfType(Type type)

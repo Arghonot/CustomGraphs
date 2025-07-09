@@ -169,6 +169,7 @@ namespace CustomGraph
             {
                 if (((VariableStorageRoot)item).GUID == Guid)
                 {
+                    ((VariableStorageRoot)item).OnDestroy();
                     container.Remove(item);
                     break;
                 }

@@ -26,6 +26,8 @@ namespace CustomGraph
         [SerializeField] public string Name;
 
         public Action<string> OnUpdateGUID;
+        public Action OnRemoveInstance;
+
 
         public void setGuid(string to)
         {
@@ -37,6 +39,11 @@ namespace CustomGraph
         public VariableStorageRoot()
         {
             GUID = Guid.NewGuid().ToString();
+        }
+
+        public void OnDestroy()
+        {
+            OnRemoveInstance?.Invoke();
         }
 
         public override string ToString()

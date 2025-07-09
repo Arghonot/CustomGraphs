@@ -13,5 +13,8 @@
 
     [NodeTint(ColorProfile.Root)]
     [HideFromNodeMenu]
-    public class Root : NodeBase { }
+    public abstract class Root : NodeBase
+    {
+        public abstract bool CanRun();// => throw new System.NotImplementedException();
+    }
 }

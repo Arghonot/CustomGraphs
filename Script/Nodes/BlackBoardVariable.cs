@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using UnityEngine;
 
 namespace CustomGraph
@@ -10,9 +9,10 @@ namespace CustomGraph
     public class BlackBoardVariable : NodeBase
     {
         [SerializeField] public int VariableIndex;
-        [SerializeField] public string guid = string.Empty;
-        [SerializeField] public string Name = string.Empty;
-        [SerializeField] public Type VariableType = null;
+        public string guid => _guid;
+        [SerializeField] private string _guid = string.Empty;
+        public string name => _name;
+        [SerializeField] private string _name = string.Empty;
 
         public Blackboard Blackboard;
 
@@ -21,13 +21,6 @@ namespace CustomGraph
             Blackboard = ((GraphBase)graph).blackboard;
 
             ChooseFirstVariable();
-        }
-
-        public void UpdateNode()
-        {
-            RemoveDynamicPort(Name);
-            Name = string.Empty;
-            guid = string.Empty;
         }
 
         private void ChooseFirstVariable()
@@ -44,51 +37,49 @@ namespace CustomGraph
 
         public void SetVariable(string newname, string newuid, int newIndex)
         {
-            if (Name != string.Empty || Name != "")
+            if (_name != string.Empty || _name != "")
             {
                 RemoveDynamicPort("Output");
             }
 
-            this.AddDynamicOutput(
-                Blackboard.GetVariableType(newuid),
-                ConnectionType.Multiple,
-                TypeConstraint.Strict,
-                "Output");
+            this.AddDynamicOutput(Blackboard.GetVariableType(newuid), ConnectionType.Multiple, TypeConstraint.Strict, "Output");
 
             UpdateGUID(newuid);
 
             VariableIndex = newIndex;
-            Name = newname;
-            VariableType = Blackboard.GetVariableType(newuid);
+            _name = newname;
         }
 
         private void UpdateGUID(string to)
         {
-            // if already had a GUID stored
-            if (guid != string.Empty && guid != "")
-            {
-                Blackboard.storage.GetContainerInstance(guid).OnUpdateGUID -= UpdateGUID;
-            }
-
-            Blackboard.storage.GetContainerInstance(to).OnUpdateGUID += UpdateGUID;
-            guid = to;
+            UnregisterPreviousVariable();
+            var toVariableInstance = Blackboard.storage.GetContainerInstance(to);
+            toVariableInstance.OnUpdateGUID += UpdateGUID;
+            toVariableInstance.OnRemoveInstance += UnregisterPreviousVariable;
+            _guid = to;
         }
 
-        public string[] GetPossibleVariables()
+        private void UnregisterPreviousVariable()
         {
-            return ((GraphBase)graph).blackboard.GetVariableNames();
+            if (_guid == string.Empty || _guid == "") return;
+            // if already had a GUID stored
+            var toVariableInstance = Blackboard.storage.GetContainerInstance(_guid);
+
+            toVariableInstance.OnUpdateGUID -= UpdateGUID;
+            toVariableInstance.OnRemoveInstance -= UnregisterPreviousVariable;
         }
+
+        // todo we could cache the graph's variable in the graph instead of recomputing that every time
+        public string[] GetPossibleVariables() => ((GraphBase)graph).blackboard.GetVariableNames();
 
         public override object Run()
         {
-            if (((GraphBase)graph).runtimeStorage.ContainsGuid(guid))
+            if (((GraphBase)graph).runtimeStorage.ContainsGuid(_guid))
             {
-                return ((GraphBase)graph).runtimeStorage.GetFromGUID(guid);
+                return ((GraphBase)graph).runtimeStorage.GetFromGUID(_guid);
             }
 
-            return ((GraphBase)graph).originalStorage.GetFromGUID(guid);
+            return ((GraphBase)graph).originalStorage.GetFromGUID(_guid);
         }
-
-        public string GetGUID() => guid;
     }
 }
