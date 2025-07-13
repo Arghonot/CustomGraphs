@@ -11,17 +11,22 @@ namespace CustomGraph
         [SerializeField] public int VariableIndex;
         public string guid => _guid;
         [SerializeField] private string _guid = string.Empty;
-        public string name => _name;
-        [SerializeField] private string _name = string.Empty;
+        public string variableName => _variableName;
+        [SerializeField] private string _variableName = string.Empty;
 
-        public Blackboard Blackboard;
+        public Blackboard Blackboard => ((GraphBase)graph).blackboard;
+        private bool isGuidSet => string.IsNullOrWhiteSpace(_guid);
+        private bool isNameSet => string.IsNullOrWhiteSpace(_variableName);
 
-        protected override void Init()
+        private void OnEnable()
         {
-            Blackboard = ((GraphBase)graph).blackboard;
-
-            ChooseFirstVariable();
+            if (isGuidSet)
+            {
+                _variableName = Blackboard.storage.GetName(guid);
+            }
         }
+
+        protected override void Init() => ChooseFirstVariable();
 
         private void ChooseFirstVariable()
         {
@@ -34,7 +39,7 @@ namespace CustomGraph
 
         public void SetVariable(string newname, string newuid, int newIndex)
         {
-            if (_name != string.Empty || _name != "")
+            if (isNameSet)
             {
                 RemoveDynamicPort("Output");
             }
@@ -44,7 +49,7 @@ namespace CustomGraph
             UpdateGUID(newuid);
 
             VariableIndex = newIndex;
-            _name = newname;
+            _variableName = newname;
         }
 
         private void UpdateGUID(string to)
@@ -58,7 +63,7 @@ namespace CustomGraph
 
         private void UnregisterPreviousVariable()
         {
-            if (_guid == string.Empty || _guid == "") return;
+            if (isGuidSet) return;
             // if already had a GUID stored
             var toVariableInstance = Blackboard.storage.GetContainerInstance(_guid);
 

@@ -14,22 +14,20 @@ namespace CustomGraph
         public const string Mathematics = "#5c677d";
     }
 
-    public interface IRoot
+    public abstract class RootBase : NodeBase
     {
-        public bool CanRun();
-        public object Run();
-        IEnumerable<NodePort> Ports { get; }
-        object GetValue(NodePort port);
+        public abstract bool CanRun();
+        public override abstract object Run();
     }
 
     [NodeTint(ColorProfile.Root)]
     [HideFromNodeMenu]
-    public class Root<T> : NodeBase, IRoot
+    public class Root<T> : RootBase
     {
         [Input(ShowBackingValue.Never, ConnectionType.Override, TypeConstraint.Strict)]
         public T Input;
 
-        public bool CanRun() => GetInputPort("Input").IsConnected;
+        public override bool CanRun() => GetInputPort("Input").IsConnected;
         public override object Run() => GetInputValue<T>("Input", Input);
     }
 }

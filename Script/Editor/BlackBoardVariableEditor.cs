@@ -52,10 +52,7 @@ namespace GraphEditor
 
                 if (selected != variablenode.VariableIndex)
                 {
-                    variablenode.SetVariable(
-                        variablenode.Blackboard.storage.GetName(GUIDs[selected]),
-                        GUIDs[selected],
-                        selected);
+                    variablenode.SetVariable(variablenode.Blackboard.storage.GetName(GUIDs[selected]), GUIDs[selected], selected);
                 }
             }
             else
