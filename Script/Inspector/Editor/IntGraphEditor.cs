@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Reflection;
 using UnityEngine;
 using XNode;
@@ -38,20 +37,9 @@ namespace CustomGraph
         public override void OnCreate()
         {
             base.OnCreate();
-
             IntGraph graph = target as IntGraph;
             NodeEditorWindow.current.graphEditor = this;
-
-            if (graph.blackboard == null)
-            {
-                CreateNode(typeof(Blackboard), new Vector2(0, 0));
-                graph.blackboard = (Blackboard)graph.nodes.Where(x => x.GetType() == typeof(Blackboard)).First();
-            }
-            if (graph.Root == null)
-            {
-                CreateNode(typeof(RootInt), new Vector2(0, 0));
-                graph.Root = (RootInt)graph.nodes.Where(x => x.GetType() == typeof(RootInt)).First();
-            }
+            graph.Initialize();
         }
     }
 }

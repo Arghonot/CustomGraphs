@@ -7,7 +7,7 @@ using XNodeEditor;
 
 namespace CustomGraph
 {
-    public class GraphBase : NodeGraph
+    public class GraphBase : NodeGraph, ISerializationCallbackReceiver
     {
         [HideInInspector] public Blackboard blackboard;
         public GraphVariables originalStorage = new GraphVariables();
@@ -61,6 +61,16 @@ namespace CustomGraph
                 if (node.GetType() == type) return node;
             }
             return null;
+        }
+
+        public virtual void OnAfterDeserialize() { }
+
+        public virtual void OnBeforeSerialize()
+        {
+            if (blackboard != null && originalStorage != null)
+            {
+                blackboard.storage = originalStorage;
+            }
         }
     }
 }

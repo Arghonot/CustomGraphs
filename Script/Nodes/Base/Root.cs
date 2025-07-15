@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using XNode;
-
 namespace CustomGraph
 {
     public static class ColorProfile
