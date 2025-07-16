@@ -42,10 +42,10 @@ namespace CustomGraph
         {
             if (isNameSet)
             {
-                RemoveDynamicPort("Output");
+                if (GetOutputPort("Output") != null) RemoveDynamicPort("Output");
             }
 
-            this.AddDynamicOutput(Blackboard.GetVariableType(newuid), ConnectionType.Multiple, TypeConstraint.Strict, "Output");
+            if (GetOutputPort("Output") == null) AddDynamicOutput(Blackboard.GetVariableType(newuid), ConnectionType.Multiple, TypeConstraint.Strict, "Output");
 
             UpdateGUID(newuid);
 
@@ -79,9 +79,11 @@ namespace CustomGraph
         {
             if (((GraphBase)graph).runtimeStorage.ContainsGuid(_guid))
             {
+                Debug.Log($"<color=green>Run getting {_variableName} from RUNTIME.</color>");
                 return ((GraphBase)graph).runtimeStorage.GetFromGUID(_guid);
             }
 
+            Debug.Log($"<color=red>Run getting {_variableName} from ORIGINAL.</color>");
             return ((GraphBase)graph).originalStorage.GetFromGUID(_guid);
         }
     }
