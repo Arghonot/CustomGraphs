@@ -18,8 +18,9 @@ namespace CustomGraph
         private bool isGuidSet => string.IsNullOrWhiteSpace(_guid);
         private bool isNameSet => string.IsNullOrWhiteSpace(_variableName);
 
-        private void OnEnable()
+        private new void OnEnable()
         {
+            base.OnEnable();
             if (isGuidSet)
             {
                 _variableName = Blackboard.storage.GetName(guid);
