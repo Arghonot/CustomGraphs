@@ -70,29 +70,6 @@ namespace CustomGraph
                 }
             }
         }
-
-        //public static void DisplayChildrens(IEnumerable<SerializedProperty> listofchilds, Rect position)
-        //{
-        //    StringBuilder builder = new StringBuilder();
-        //    var NameRect = new Rect(
-        //        position.x,
-        //        position.y + VariableRect.YSpacing,
-        //        VariableRect.Width,
-        //        position.height + VariableRect.Height);
-        //    foreach (var item in listofchilds)
-        //    {
-        //        if (item.name != "size")
-        //        {
-        //            EditorGUI.PropertyField(
-        //                NameRect,
-        //                item.FindPropertyRelative(item.name), true);
-        //        }
-        //        builder.Append(item.name);
-        //        builder.Append("\n");
-        //    }
-
-        //    Debug.Log(builder.ToString());
-        //}
     }
 
     [CustomPropertyDrawer(typeof(GraphVariables))]

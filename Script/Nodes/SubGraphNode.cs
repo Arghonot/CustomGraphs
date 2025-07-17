@@ -54,13 +54,10 @@ namespace CustomGraph
         {
             _guids = targetBlackboard().getAllGuids();
             _fieldNames = new string[_guids.Length];
-            UnityEngine.Debug.Log("CreateInputs " + _guids.Length);
 
             for (int i = 0; i < _guids.Length; i++)
             {
                 _fieldNames[i] = targetBlackboard().GetName(_guids[i]);
-                UnityEngine.Debug.Log("in for " + _fieldNames[i]);
-
                 AddDynamicInput(targetBlackboard().GetVariableType(_guids[i]), ConnectionType.Override, TypeConstraint.Strict, _fieldNames[i]);
             }
         }
