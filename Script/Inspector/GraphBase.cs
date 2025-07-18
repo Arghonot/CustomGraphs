@@ -37,7 +37,9 @@ namespace CustomGraph
 
         public virtual object Run(GraphVariables newstorage = null)
         {
-            runtimeStorage = newstorage;
+            if (newstorage != null) runtimeStorage = newstorage;
+            else
+                runtimeStorage = originalStorage.CreateDeepCopy();
             return rootNode.GetValue((rootNode).Ports.First());
         }
 

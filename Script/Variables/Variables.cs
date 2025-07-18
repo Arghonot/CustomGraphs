@@ -115,7 +115,12 @@ namespace CustomGraph
 
             newVariable.Name = Name;
             newVariable.GUID = GUID;
-            newVariable.Value = Value;
+            if (Value is ICloneable cloneable)
+                newVariable.Value = (T)cloneable.Clone();
+            else
+                newVariable.Value = Value; // fallback to shallow copy
+
+            Debug.Log($"{ReferenceEquals(newVariable, this)} ==== {ReferenceEquals(newVariable.Value, Value)}");
 
             return newVariable;
         }
