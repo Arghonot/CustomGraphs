@@ -16,7 +16,7 @@ namespace CustomGraph
 
         public Blackboard Blackboard => ((GraphBase)graph).blackboard;
         private bool isGuidSet => string.IsNullOrWhiteSpace(_guid);
-        private bool isNameSet => string.IsNullOrWhiteSpace(_variableName);
+        private bool isNameSet => !string.IsNullOrWhiteSpace(_variableName);
 
         private new void OnEnable()
         {

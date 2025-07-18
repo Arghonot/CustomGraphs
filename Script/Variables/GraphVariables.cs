@@ -402,6 +402,7 @@ namespace CustomGraph
 
         public VariableStorageRoot GetContainerInstance(string guid)
         {
+            Debug.Log($"{guid} {GuidToStorage.Select(x => x.Key).ToString()}");
             return GuidToStorage[guid];
         }
 
