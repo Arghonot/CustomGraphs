@@ -120,8 +120,6 @@ namespace CustomGraph
             else
                 newVariable.Value = Value; // fallback to shallow copy
 
-            Debug.Log($"{ReferenceEquals(newVariable, this)} ==== {ReferenceEquals(newVariable.Value, Value)}");
-
             return newVariable;
         }
     }
