@@ -1,10 +1,10 @@
 ﻿using System;
 using UnityEngine;
-using static XNodeEditor.NodeEditor;
+//using static XNodeEditor.NodeEditor;
 
 namespace CustomGraph
 {
-    [CustomNodeEditor(typeof(CustomGraph.SubGraphMaster))]
+    //[CustomNodeEditor(typeof(CustomGraph.SubGraphMaster))]
     [HideFromNodeMenu]
     public class SubGraphMaster : NodeBase
     {

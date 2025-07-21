@@ -37,7 +37,7 @@ namespace GraphEditor
         {
             if (GUILayout.Button("debug blackboard"))
             {
-                blackboard.storage.DebugDictionnaries();
+                blackboard.storage.DebugDictionnary();
             }
         }
 

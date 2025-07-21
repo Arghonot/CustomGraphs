@@ -11,6 +11,7 @@ namespace CustomGraph
         private static Dictionary<Type, string> _formattedNames = new();
 
         // Static constructor: called on domain reload
+#if UNITY_EDITOR
         static GraphTypeNameCache()
         {
             EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
@@ -74,5 +75,6 @@ namespace CustomGraph
             }
             return input;
         }
+#endif
     }
 }

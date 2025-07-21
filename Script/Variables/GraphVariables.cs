@@ -3,8 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using UnityEngine;
+#if UNITY_EDITOR
 using XNodeEditor;
+#endif
 
 namespace CustomGraph
 {
@@ -125,7 +128,11 @@ namespace CustomGraph
             var storableTypeContainers = GetAllStorableTypes();
             storableTypeContainers.ForEach(x =>
             {
+#if UNITY_EDITOR
                 PossibleTypeNames.Add(NodeEditorUtilities.PrettyName(((StorableType)Attribute.GetCustomAttribute(x, typeof(StorableType))).ReferenceType));
+#else
+                PossibleTypeNames.Add(((StorableType)Attribute.GetCustomAttribute(x, typeof(StorableType))).ReferenceType.Name);
+#endif
             });
 
             return PossibleTypeNames.ToArray();
@@ -402,7 +409,15 @@ namespace CustomGraph
 
         public VariableStorageRoot GetContainerInstance(string guid)
         {
-            return GuidToStorage[guid];
+            try
+            {
+                return GuidToStorage[guid];
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"Error getting container instance for GUID !!!{guid}: {e.Message} \n {e.StackTrace}");
+                return GuidToStorage.First().Value;
+            }
         }
 
         private Type GetContainerContaningType(Type type)
@@ -659,7 +674,7 @@ namespace CustomGraph
 
         }
 
-        public void DebugDictionnaries()
+        public void DebugDictionnary()
         {
             Debug.Log("DebugDictionnaries = " + ListPerRealType[typeof(int)].Count);
             foreach (var item in GuidToNames)
@@ -667,6 +682,32 @@ namespace CustomGraph
                 Debug.Log("[" + item.Key + "] [" + item.Value + "] [" + GuidToType[item.Key] + "]");
             }
         }
+
+
+        public new string ToString()
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.Append("DebugDictionnaries = " + ListPerRealType[typeof(int)].Count);
+            builder.AppendLine();
+            foreach (var item in GuidToNames)
+            {
+                builder.Append(string.Join("", new string[]
+                {
+                    "[GUID][",
+                    item.Key,
+                    "] [Name][",
+                    item.Value,
+                    "] [Type][",
+                    GuidToType[item.Key].ToString(),
+                    "] [Value] [",
+                GuidToStorage[item.Key].GetValue().ToString(),
+                "]\n"
+                }));
+            }
+
+            return builder.ToString();
+        }
+
 
         public void DebugDictionnaryInDepth()
         {
