@@ -18,19 +18,23 @@ namespace CustomGraph
 
         public virtual void Initialize()
         {
+            CreateBlackboard();
+            CreateRoot();
+        }
+
+        public virtual Node CreateBlackboard()
+        {
+            if (blackboard == null) blackboard = CreateNode(typeof(Blackboard)) as Blackboard;
+            return blackboard;
+        }
+
+        public virtual Node CreateRoot()
+        {
             var type = GetRootNodeType();
-            if (blackboard == null)
-            {
-                blackboard = CreateNode(typeof(Blackboard)) as Blackboard;
-            }
-            if (rootNode == null && ContainsNodeOfType(type) != null)
-            {
-                rootNode = ContainsNodeOfType(type) as RootBase;
-            }
+            if (rootNode == null && ContainsNodeOfType(type) != null) rootNode = ContainsNodeOfType(type) as RootBase;
             else if (rootNode == null)
-            {
                 rootNode = CreateNode(GetRootNodeType()) as RootBase;
-            }
+            return rootNode;
         }
 
         public virtual object Run(GraphVariables newstorage = null)
@@ -46,13 +50,7 @@ namespace CustomGraph
             Node node = AddNode(type);
 
             if (node == null) return null;
-//#if UNITY_EDITOR
-//            Undo.RegisterCreatedObjectUndo(node, "Create Node");
-//            if (node.name == null || node.name.Trim() == "") node.name = NodeEditorUtilities.NodeDefaultName(type);
-//            if (!string.IsNullOrEmpty(AssetDatabase.GetAssetPath(this))) AssetDatabase.AddObjectToAsset(node, this);
-//#endif
             node.position = new Vector2(500, 150);
-
             return node;
         }
 
