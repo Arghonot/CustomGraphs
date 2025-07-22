@@ -5,9 +5,10 @@ using System.Reflection;
 using static XNode.Node;
 using UnityEngine;
 using System;
+using CustomGraph;
 
 
-namespace CustomGraph
+namespace GraphHelpers.Editor
 {
     [CustomNodeEditor(typeof(NodeBase))]
     public class NodeBaseEditor : NodeEditor

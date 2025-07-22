@@ -5,9 +5,6 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using UnityEngine;
-#if UNITY_EDITOR
-using XNodeEditor;
-#endif
 
 namespace CustomGraph
 {
@@ -122,22 +119,6 @@ namespace CustomGraph
             return possibleTypes.ToArray();
         }
 
-        public static string[] GetPossibleTypesName()
-        {
-            List<string> PossibleTypeNames = new List<string>();
-            var storableTypeContainers = GetAllStorableTypes();
-            storableTypeContainers.ForEach(x =>
-            {
-#if UNITY_EDITOR
-                PossibleTypeNames.Add(NodeEditorUtilities.PrettyName(((StorableType)Attribute.GetCustomAttribute(x, typeof(StorableType))).ReferenceType));
-#else
-                PossibleTypeNames.Add(((StorableType)Attribute.GetCustomAttribute(x, typeof(StorableType))).ReferenceType.Name);
-#endif
-            });
-
-            return PossibleTypeNames.ToArray();
-        }
-
         public string GetName(string guid)
         {
             return GuidToNames[guid];
@@ -159,7 +140,7 @@ namespace CustomGraph
         }
 
         // TODO store this in a static list on GraphVariableStorage's constructor
-        private static List<Type> GetAllStorableTypes()
+        public static List<Type> GetAllStorableTypes()
         {
             return Assembly.GetAssembly(typeof(VariableStorageRoot)).GetTypes().Where(t => typeof(VariableStorageRoot).IsAssignableFrom(t) && t != typeof(VariableStorageRoot) && t != typeof(VariableStorage<>)).ToList();
         }

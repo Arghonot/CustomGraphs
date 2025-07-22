@@ -5,7 +5,7 @@ using XNodeEditor;
 namespace GraphEditor
 {
     [CustomNodeEditor(typeof(CustomGraph.BlackBoardVariable))]
-    public class BlackBoardVariableEditor : XNodeEditor.NodeEditor
+    public class BlackBoardVariableEditor : NodeEditor
     {
         int selected = 0;
 

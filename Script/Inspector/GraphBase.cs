@@ -3,9 +3,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using XNode;
-#if UNITY_EDITOR
-using XNodeEditor;
-#endif
+
 namespace CustomGraph
 {
     public class GraphBase : NodeGraph, ISerializationCallbackReceiver
@@ -33,9 +31,6 @@ namespace CustomGraph
             {
                 rootNode = CreateNode(GetRootNodeType()) as RootBase;
             }
-#if UNITY_EDITOR
-            if (NodeEditorPreferences.GetSettings().autoSave) AssetDatabase.SaveAssets();
-#endif
         }
 
         public virtual object Run(GraphVariables newstorage = null)
@@ -51,11 +46,11 @@ namespace CustomGraph
             Node node = AddNode(type);
 
             if (node == null) return null;
-#if UNITY_EDITOR
-            Undo.RegisterCreatedObjectUndo(node, "Create Node");
-            if (node.name == null || node.name.Trim() == "") node.name = NodeEditorUtilities.NodeDefaultName(type);
-            if (!string.IsNullOrEmpty(AssetDatabase.GetAssetPath(this))) AssetDatabase.AddObjectToAsset(node, this);
-#endif
+//#if UNITY_EDITOR
+//            Undo.RegisterCreatedObjectUndo(node, "Create Node");
+//            if (node.name == null || node.name.Trim() == "") node.name = NodeEditorUtilities.NodeDefaultName(type);
+//            if (!string.IsNullOrEmpty(AssetDatabase.GetAssetPath(this))) AssetDatabase.AddObjectToAsset(node, this);
+//#endif
             node.position = new Vector2(500, 150);
 
             return node;

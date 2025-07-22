@@ -2,16 +2,30 @@
 using UnityEngine;
 using UnityEditor;
 using CustomGraph;
+using System.Collections.Generic;
+using XNodeEditor;
 
 namespace GraphEditor
 {
-    [CustomNodeEditor(typeof(CustomGraph.Blackboard))]
+    [CustomNodeEditor(typeof(Blackboard))]
     public class BlackBoardEditor : XNodeEditor.NodeEditor
     {
         int Selected = 0;
-        public string[] options = CustomGraph.GraphVariables.GetPossibleTypesName();
-        public Type[] optionsType = CustomGraph.GraphVariables.getPossibleTypes();
+        public string[] options = GetPossibleTypesName();
+        public Type[] optionsType = GraphVariables.getPossibleTypes();
         string UIDToDelete = string.Empty;
+
+        public static string[] GetPossibleTypesName()
+        {
+            List<string> PossibleTypeNames = new List<string>();
+            var storableTypeContainers = GraphVariables.GetAllStorableTypes();
+            storableTypeContainers.ForEach(x =>
+            {
+                PossibleTypeNames.Add(NodeEditorUtilities.PrettyName(((StorableType)Attribute.GetCustomAttribute(x, typeof(StorableType))).ReferenceType));
+            });
+
+            return PossibleTypeNames.ToArray();
+        }
 
         public override int GetWidth()
         {

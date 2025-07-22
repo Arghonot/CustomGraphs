@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using UnityEditor;
 using UnityEngine;
 using XNode;
 using XNodeEditor;
@@ -34,12 +35,14 @@ namespace CustomGraph
             return string.Empty;
         }
 
-        public override void OnCreate()
-        {
-            base.OnCreate();
-            IntGraph graph = target as IntGraph;
-            NodeEditorWindow.current.graphEditor = this;
-            graph.Initialize();
-        }
+        //public override void OnCreate()
+        //{
+        //    base.OnCreate();
+        //    IntGraph graph = target as IntGraph;
+        //    NodeEditorWindow.current.graphEditor = this;
+        //    graph.Initialize();
+
+        //    if (NodeEditorPreferences.GetSettings().autoSave) AssetDatabase.SaveAssets();
+        //}
     }
 }
